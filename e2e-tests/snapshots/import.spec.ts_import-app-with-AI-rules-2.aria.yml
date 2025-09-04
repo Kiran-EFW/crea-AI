@@ -1,0 +1,4 @@
+- paragraph: "[dump]"
+- paragraph: "[[crea-dump-path=*]]"
+- button "Retry":
+  - img
