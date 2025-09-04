@@ -17,8 +17,8 @@ import { LanguageModel } from "ai";
 import { createOllamaProvider } from "./ollama_provider";
 import { getOllamaApiUrl } from "../handlers/local_model_ollama_handler";
 
-const creaEngineUrl = process.env.DYAD_ENGINE_URL;
-const creaGatewayUrl = process.env.DYAD_GATEWAY_URL;
+const creaEngineUrl = process.env.CREA_ENGINE_URL;
+const creaGatewayUrl = process.env.CREA_GATEWAY_URL;
 
 const AUTO_MODELS = [
   {

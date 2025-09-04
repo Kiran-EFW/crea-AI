@@ -18,14 +18,28 @@ import { useLanguageModelProviders } from "@/hooks/useLanguageModelProviders";
 import { useSettings } from "@/hooks/useSettings";
 import { useUserBudgetInfo } from "@/hooks/useUserBudgetInfo";
 import { PromoMessage } from "./PromoMessage";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface MessagesListProps {
   messages: Message[];
   messagesEndRef: React.RefObject<HTMLDivElement | null>;
+  isLoading?: boolean;
 }
 
+// Loading skeleton component for chat messages
+const ChatMessageSkeleton = () => (
+  <div className="flex gap-3 mb-4 animate-pulse">
+    <Skeleton className="h-8 w-8 rounded-full flex-shrink-0" />
+    <div className="flex-1 space-y-2">
+      <Skeleton className="h-4 w-24" />
+      <Skeleton className="h-4 w-full" />
+      <Skeleton className="h-4 w-3/4" />
+    </div>
+  </div>
+);
+
 export const MessagesList = forwardRef<HTMLDivElement, MessagesListProps>(
-  function MessagesList({ messages, messagesEndRef }, ref) {
+  function MessagesList({ messages, messagesEndRef, isLoading = false }, ref) {
     const appId = useAtomValue(selectedAppIdAtom);
     const { versions, revertVersion } = useVersions(appId);
     const { streamMessage, isStreaming } = useStreamChat();
@@ -43,7 +57,14 @@ export const MessagesList = forwardRef<HTMLDivElement, MessagesListProps>(
         ref={ref}
         data-testid="messages-list"
       >
-        {messages.length > 0 ? (
+        {isLoading ? (
+          // Show loading skeletons
+          <>
+            <ChatMessageSkeleton />
+            <ChatMessageSkeleton />
+            <ChatMessageSkeleton />
+          </>
+        ) : messages.length > 0 ? (
           messages.map((message, index) => (
             <ChatMessage
               key={index}

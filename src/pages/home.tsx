@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/dialog";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Button } from "@/components/ui/button";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Plus } from "lucide-react";
 import { ImportAppButton } from "@/components/ImportAppButton";
 import { showError } from "@/lib/toast";
 import { invalidateAppQuery } from "@/hooks/useLoadApp";
@@ -185,7 +185,17 @@ export default function HomePage() {
       <SetupBanner />
 
       <div className="w-full">
-        <ImportAppButton />
+        <div className="flex flex-col sm:flex-row gap-4 mb-6">
+          <ImportAppButton />
+          <Button
+            onClick={() => navigate({ to: "/" })}
+            variant="outline"
+            className="flex items-center gap-2 px-6 py-3 h-auto bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950 dark:to-indigo-950 border-blue-200 dark:border-blue-800 hover:from-blue-100 hover:to-indigo-100 dark:hover:from-blue-900 dark:hover:to-indigo-900"
+          >
+            <Plus className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+            <span className="font-medium">Create New App</span>
+          </Button>
+        </div>
         <HomeChatInput onSubmit={handleSubmit} />
 
         <div className="flex flex-col gap-4 mt-4">

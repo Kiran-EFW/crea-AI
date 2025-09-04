@@ -1,16 +1,16 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 import {
-  getDyadWriteTags,
-  getDyadRenameTags,
-  getDyadAddDependencyTags,
-  getDyadDeleteTags,
+  getCreaWriteTags,
+  getCreaRenameTags,
+  getCreaAddDependencyTags,
+  getCreaDeleteTags,
 } from "../ipc/utils/crea_tag_parser";
 
 import { processFullResponseActions } from "../ipc/processors/response_processor";
 import {
-  removeDyadTags,
-  hasUnclosedDyadWrite,
+  removeCreaTags,
+  hasUnclosedCreaWrite,
 } from "../ipc/handlers/chat_stream_handlers";
 import fs from "node:fs";
 import git from "isomorphic-git";
@@ -80,49 +80,49 @@ vi.mock("../db", () => ({
   },
 }));
 
-describe("getDyadAddDependencyTags", () => {
+describe("getCreaAddDependencyTags", () => {
   it("should return an empty array when no crea-add-dependency tags are found", () => {
-    const result = getDyadAddDependencyTags("No crea-add-dependency tags here");
+    const result = getCreaAddDependencyTags("No crea-add-dependency tags here");
     expect(result).toEqual([]);
   });
 
   it("should return an array of crea-add-dependency tags", () => {
-    const result = getDyadAddDependencyTags(
+    const result = getCreaAddDependencyTags(
       `<crea-add-dependency packages="uuid"></crea-add-dependency>`,
     );
     expect(result).toEqual(["uuid"]);
   });
 
   it("should return all the packages in the crea-add-dependency tags", () => {
-    const result = getDyadAddDependencyTags(
+    const result = getCreaAddDependencyTags(
       `<crea-add-dependency packages="pkg1 pkg2"></crea-add-dependency>`,
     );
     expect(result).toEqual(["pkg1", "pkg2"]);
   });
 
   it("should return all the packages in the crea-add-dependency tags", () => {
-    const result = getDyadAddDependencyTags(
+    const result = getCreaAddDependencyTags(
       `txt before<crea-add-dependency packages="pkg1 pkg2"></crea-add-dependency>text after`,
     );
     expect(result).toEqual(["pkg1", "pkg2"]);
   });
 
   it("should return all the packages in multiple crea-add-dependency tags", () => {
-    const result = getDyadAddDependencyTags(
+    const result = getCreaAddDependencyTags(
       `txt before<crea-add-dependency packages="pkg1 pkg2"></crea-add-dependency>txt between<crea-add-dependency packages="pkg3"></crea-add-dependency>text after`,
     );
     expect(result).toEqual(["pkg1", "pkg2", "pkg3"]);
   });
 });
-describe("getDyadWriteTags", () => {
+describe("getCreaWriteTags", () => {
   it("should return an empty array when no crea-write tags are found", () => {
-    const result = getDyadWriteTags("No crea-write tags here");
+    const result = getCreaWriteTags("No crea-write tags here");
     expect(result).toEqual([]);
   });
 
   it("should return a crea-write tag", () => {
     const result =
-      getDyadWriteTags(`<crea-write path="src/components/TodoItem.tsx" description="Creating a component for individual todo items">
+      getCreaWriteTags(`<crea-write path="src/components/TodoItem.tsx" description="Creating a component for individual todo items">
 import React from "react";
 console.log("TodoItem");
 </crea-write>`);
@@ -138,7 +138,7 @@ console.log("TodoItem");`,
 
   it("should strip out code fence (if needed) from a crea-write tag", () => {
     const result =
-      getDyadWriteTags(`<crea-write path="src/components/TodoItem.tsx" description="Creating a component for individual todo items">
+      getCreaWriteTags(`<crea-write path="src/components/TodoItem.tsx" description="Creating a component for individual todo items">
 \`\`\`tsx
 import React from "react";
 console.log("TodoItem");
@@ -156,7 +156,7 @@ console.log("TodoItem");`,
   });
 
   it("should handle missing description", () => {
-    const result = getDyadWriteTags(`
+    const result = getCreaWriteTags(`
       <crea-write path="src/pages/locations/neighborhoods/louisville/Highlands.tsx">
 import React from 'react';
 </crea-write>
@@ -171,7 +171,7 @@ import React from 'react';
   });
 
   it("should handle extra space", () => {
-    const result = getDyadWriteTags(
+    const result = getCreaWriteTags(
       cleanFullResponse(`
       <crea-write path="src/pages/locations/neighborhoods/louisville/Highlands.tsx" description="Updating Highlands neighborhood page to use <a> tags." >
 import React from 'react';
@@ -188,7 +188,7 @@ import React from 'react';
   });
 
   it("should handle nested tags", () => {
-    const result = getDyadWriteTags(
+    const result = getCreaWriteTags(
       cleanFullResponse(`
       BEFORE TAG
   <crea-write path="src/pages/locations/neighborhoods/louisville/Highlands.tsx" description="Updating Highlands neighborhood page to use <a> tags.">
@@ -218,7 +218,7 @@ AFTER TAG
 
     const cleanedInput = cleanFullResponse(inputWithNestedTags);
 
-    const result = getDyadWriteTags(cleanedInput);
+    const result = getCreaWriteTags(cleanedInput);
     expect(result).toEqual([
       {
         path: "src/pages/locations/neighborhoods/louisville/Highlands.tsx",
@@ -233,7 +233,7 @@ AFTER TAG
 
     // This simulates what cleanFullResponse should do
     const cleanedInput = cleanFullResponse(inputWithMultipleNestedTags);
-    const result = getDyadWriteTags(cleanedInput);
+    const result = getCreaWriteTags(cleanedInput);
     expect(result).toEqual([
       {
         path: "src/file.tsx",
@@ -249,7 +249,7 @@ AFTER TAG
     // This simulates what cleanFullResponse should do
     const cleanedInput = cleanFullResponse(inputWithNestedInMultipleAttrs);
 
-    const result = getDyadWriteTags(cleanedInput);
+    const result = getCreaWriteTags(cleanedInput);
     expect(result).toEqual([
       {
         path: "src/＜component＞.tsx",
@@ -260,7 +260,7 @@ AFTER TAG
   });
 
   it("should return an array of crea-write tags", () => {
-    const result = getDyadWriteTags(
+    const result = getCreaWriteTags(
       `I'll create a simple todo list app using React, TypeScript, and shadcn/ui components. Let's get started!
 
 First, I'll create the necessary files for our todo list application:
@@ -592,14 +592,14 @@ I've created a complete todo list application with the ability to add, complete,
   });
 });
 
-describe("getDyadRenameTags", () => {
+describe("getCreaRenameTags", () => {
   it("should return an empty array when no crea-rename tags are found", () => {
-    const result = getDyadRenameTags("No crea-rename tags here");
+    const result = getCreaRenameTags("No crea-rename tags here");
     expect(result).toEqual([]);
   });
 
   it("should return an array of crea-rename tags", () => {
-    const result = getDyadRenameTags(
+    const result = getCreaRenameTags(
       `<crea-rename from="src/components/UserProfile.jsx" to="src/components/ProfileCard.jsx"></crea-rename>
       <crea-rename from="src/utils/helpers.js" to="src/utils/utils.js"></crea-rename>`,
     );
@@ -613,14 +613,14 @@ describe("getDyadRenameTags", () => {
   });
 });
 
-describe("getDyadDeleteTags", () => {
+describe("getCreaDeleteTags", () => {
   it("should return an empty array when no crea-delete tags are found", () => {
-    const result = getDyadDeleteTags("No crea-delete tags here");
+    const result = getCreaDeleteTags("No crea-delete tags here");
     expect(result).toEqual([]);
   });
 
   it("should return an array of crea-delete paths", () => {
-    const result = getDyadDeleteTags(
+    const result = getCreaDeleteTags(
       `<crea-delete path="src/components/Analytics.jsx"></crea-delete>
       <crea-delete path="src/utils/unused.js"></crea-delete>`,
     );
@@ -958,39 +958,39 @@ describe("processFullResponse", () => {
   });
 });
 
-describe("removeDyadTags", () => {
+describe("removeCreaTags", () => {
   it("should return empty string when input is empty", () => {
-    const result = removeDyadTags("");
+    const result = removeCreaTags("");
     expect(result).toBe("");
   });
 
   it("should return the same text when no crea tags are present", () => {
     const text = "This is a regular text without any crea tags.";
-    const result = removeDyadTags(text);
+    const result = removeCreaTags(text);
     expect(result).toBe(text);
   });
 
   it("should remove a single crea-write tag", () => {
     const text = `Before text <crea-write path="src/file.js">console.log('hello');</crea-write> After text`;
-    const result = removeDyadTags(text);
+    const result = removeCreaTags(text);
     expect(result).toBe("Before text  After text");
   });
 
   it("should remove a single crea-delete tag", () => {
     const text = `Before text <crea-delete path="src/file.js"></crea-delete> After text`;
-    const result = removeDyadTags(text);
+    const result = removeCreaTags(text);
     expect(result).toBe("Before text  After text");
   });
 
   it("should remove a single crea-rename tag", () => {
     const text = `Before text <crea-rename from="old.js" to="new.js"></crea-rename> After text`;
-    const result = removeDyadTags(text);
+    const result = removeCreaTags(text);
     expect(result).toBe("Before text  After text");
   });
 
   it("should remove multiple different crea tags", () => {
     const text = `Start <crea-write path="file1.js">code here</crea-write> middle <crea-delete path="file2.js"></crea-delete> end <crea-rename from="old.js" to="new.js"></crea-rename> finish`;
-    const result = removeDyadTags(text);
+    const result = removeCreaTags(text);
     expect(result).toBe("Start  middle  end  finish");
   });
 
@@ -1006,19 +1006,19 @@ const Component = () => {
 export default Component;
 </crea-write>
 After`;
-    const result = removeDyadTags(text);
+    const result = removeCreaTags(text);
     expect(result).toBe("Before\n\nAfter");
   });
 
   it("should handle crea tags with complex attributes", () => {
     const text = `Text <crea-write path="src/file.js" description="Complex component with quotes" version="1.0">const x = "hello world";</crea-write> more text`;
-    const result = removeDyadTags(text);
+    const result = removeCreaTags(text);
     expect(result).toBe("Text  more text");
   });
 
   it("should remove crea tags and trim whitespace", () => {
     const text = `  <crea-write path="file.js">code</crea-write>  `;
-    const result = removeDyadTags(text);
+    const result = removeCreaTags(text);
     expect(result).toBe("");
   });
 
@@ -1027,19 +1027,19 @@ After`;
 const html = '<div>Hello</div>';
 const component = <Component />;
 </crea-write>`;
-    const result = removeDyadTags(text);
+    const result = removeCreaTags(text);
     expect(result).toBe("");
   });
 
   it("should handle self-closing crea tags", () => {
     const text = `Before <crea-delete path="file.js" /> After`;
-    const result = removeDyadTags(text);
+    const result = removeCreaTags(text);
     expect(result).toBe('Before <crea-delete path="file.js" /> After');
   });
 
   it("should handle malformed crea tags gracefully", () => {
     const text = `Before <crea-write path="file.js">unclosed tag After`;
-    const result = removeDyadTags(text);
+    const result = removeCreaTags(text);
     expect(result).toBe('Before <crea-write path="file.js">unclosed tag After');
   });
 
@@ -1048,51 +1048,51 @@ const component = <Component />;
 const regex = /<div[^>]*>.*?</div>/g;
 const special = "Special chars: @#$%^&*()[]{}|\\";
 </crea-write>`;
-    const result = removeDyadTags(text);
+    const result = removeCreaTags(text);
     expect(result).toBe("");
   });
 
   it("should handle multiple crea tags of the same type", () => {
     const text = `<crea-write path="file1.js">code1</crea-write> between <crea-write path="file2.js">code2</crea-write>`;
-    const result = removeDyadTags(text);
+    const result = removeCreaTags(text);
     expect(result).toBe("between");
   });
 
   it("should handle crea tags with custom tag names", () => {
     const text = `Before <crea-custom-action param="value">content</crea-custom-action> After`;
-    const result = removeDyadTags(text);
+    const result = removeCreaTags(text);
     expect(result).toBe("Before  After");
   });
 });
 
-describe("hasUnclosedDyadWrite", () => {
+describe("hasUnclosedCreaWrite", () => {
   it("should return false when there are no crea-write tags", () => {
     const text = "This is just regular text without any crea tags.";
-    const result = hasUnclosedDyadWrite(text);
+    const result = hasUnclosedCreaWrite(text);
     expect(result).toBe(false);
   });
 
   it("should return false when crea-write tag is properly closed", () => {
     const text = `<crea-write path="src/file.js">console.log('hello');</crea-write>`;
-    const result = hasUnclosedDyadWrite(text);
+    const result = hasUnclosedCreaWrite(text);
     expect(result).toBe(false);
   });
 
   it("should return true when crea-write tag is not closed", () => {
     const text = `<crea-write path="src/file.js">console.log('hello');`;
-    const result = hasUnclosedDyadWrite(text);
+    const result = hasUnclosedCreaWrite(text);
     expect(result).toBe(true);
   });
 
   it("should return false when crea-write tag with attributes is properly closed", () => {
     const text = `<crea-write path="src/file.js" description="A test file">console.log('hello');</crea-write>`;
-    const result = hasUnclosedDyadWrite(text);
+    const result = hasUnclosedCreaWrite(text);
     expect(result).toBe(false);
   });
 
   it("should return true when crea-write tag with attributes is not closed", () => {
     const text = `<crea-write path="src/file.js" description="A test file">console.log('hello');`;
-    const result = hasUnclosedDyadWrite(text);
+    const result = hasUnclosedCreaWrite(text);
     expect(result).toBe(true);
   });
 
@@ -1100,7 +1100,7 @@ describe("hasUnclosedDyadWrite", () => {
     const text = `<crea-write path="src/file1.js">code1</crea-write>
     Some text in between
     <crea-write path="src/file2.js">code2</crea-write>`;
-    const result = hasUnclosedDyadWrite(text);
+    const result = hasUnclosedCreaWrite(text);
     expect(result).toBe(false);
   });
 
@@ -1108,7 +1108,7 @@ describe("hasUnclosedDyadWrite", () => {
     const text = `<crea-write path="src/file1.js">code1</crea-write>
     Some text in between
     <crea-write path="src/file2.js">code2`;
-    const result = hasUnclosedDyadWrite(text);
+    const result = hasUnclosedCreaWrite(text);
     expect(result).toBe(true);
   });
 
@@ -1116,7 +1116,7 @@ describe("hasUnclosedDyadWrite", () => {
     const text = `<crea-write path="src/file1.js">code1
     Some text in between
     <crea-write path="src/file2.js">code2</crea-write>`;
-    const result = hasUnclosedDyadWrite(text);
+    const result = hasUnclosedCreaWrite(text);
     expect(result).toBe(false);
   });
 
@@ -1134,7 +1134,7 @@ const Component = () => {
 
 export default Component;
 </crea-write>`;
-    const result = hasUnclosedDyadWrite(text);
+    const result = hasUnclosedCreaWrite(text);
     expect(result).toBe(false);
   });
 
@@ -1151,7 +1151,7 @@ const Component = () => {
 };
 
 export default Component;`;
-    const result = hasUnclosedDyadWrite(text);
+    const result = hasUnclosedCreaWrite(text);
     expect(result).toBe(true);
   });
 
@@ -1160,7 +1160,7 @@ export default Component;`;
 const message = "Hello 'world'";
 const regex = /<div[^>]*>/g;
 </crea-write>`;
-    const result = hasUnclosedDyadWrite(text);
+    const result = hasUnclosedCreaWrite(text);
     expect(result).toBe(false);
   });
 
@@ -1168,7 +1168,7 @@ const regex = /<div[^>]*>/g;
     const text = `Some text before the tag
 <crea-write path="src/file.js">console.log('hello');</crea-write>
 Some text after the tag`;
-    const result = hasUnclosedDyadWrite(text);
+    const result = hasUnclosedCreaWrite(text);
     expect(result).toBe(false);
   });
 
@@ -1176,19 +1176,19 @@ Some text after the tag`;
     const text = `Some text before the tag
 <crea-write path="src/file.js">console.log('hello');
 Some text after the unclosed tag`;
-    const result = hasUnclosedDyadWrite(text);
+    const result = hasUnclosedCreaWrite(text);
     expect(result).toBe(true);
   });
 
   it("should handle empty crea-write tags", () => {
     const text = `<crea-write path="src/file.js"></crea-write>`;
-    const result = hasUnclosedDyadWrite(text);
+    const result = hasUnclosedCreaWrite(text);
     expect(result).toBe(false);
   });
 
   it("should handle unclosed empty crea-write tags", () => {
     const text = `<crea-write path="src/file.js">`;
-    const result = hasUnclosedDyadWrite(text);
+    const result = hasUnclosedCreaWrite(text);
     expect(result).toBe(true);
   });
 
@@ -1196,13 +1196,13 @@ Some text after the unclosed tag`;
     const text = `<crea-write path="src/file1.js">completed content</crea-write>
     <crea-write path="src/file2.js">unclosed content
     <crea-write path="src/file3.js">final content</crea-write>`;
-    const result = hasUnclosedDyadWrite(text);
+    const result = hasUnclosedCreaWrite(text);
     expect(result).toBe(false);
   });
 
   it("should handle tags with special characters in attributes", () => {
     const text = `<crea-write path="src/file-name_with.special@chars.js" description="File with special chars in path">content</crea-write>`;
-    const result = hasUnclosedDyadWrite(text);
+    const result = hasUnclosedCreaWrite(text);
     expect(result).toBe(false);
   });
 });

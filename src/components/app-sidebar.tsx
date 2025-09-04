@@ -11,6 +11,8 @@ import { useSidebar } from "@/components/ui/sidebar"; // import useSidebar hook
 import { useEffect, useState, useRef } from "react";
 import { useAtom } from "jotai";
 import { dropdownOpenAtom } from "@/atoms/uiAtoms";
+import { useTheme } from "@/contexts/ThemeContext";
+import { Moon, Sun } from "lucide-react";
 
 import {
   Sidebar,
@@ -32,7 +34,7 @@ import { SettingsList } from "./SettingsList";
 // Menu items.
 const items = [
   {
-    title: "Apps",
+    title: "Home",
     to: "/",
     icon: Home,
   },
@@ -40,11 +42,6 @@ const items = [
     title: "Chat",
     to: "/chat",
     icon: Inbox,
-  },
-  {
-    title: "Settings",
-    to: "/settings",
-    icon: Settings,
   },
   {
     title: "Library",
@@ -55,6 +52,11 @@ const items = [
     title: "Hub",
     to: "/hub",
     icon: Store,
+  },
+  {
+    title: "Settings",
+    to: "/settings",
+    icon: Settings,
   },
 ];
 
@@ -73,6 +75,7 @@ export function AppSidebar() {
   const expandedByHover = useRef(false);
   const [isHelpDialogOpen, setIsHelpDialogOpen] = useState(false); // State for dialog
   const [isDropdownOpen] = useAtom(dropdownOpenAtom);
+  const { theme, setTheme } = useTheme();
 
   useEffect(() => {
     if (hoverState.startsWith("start-hover") && state === "collapsed") {
@@ -149,6 +152,20 @@ export function AppSidebar() {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
+            <SidebarMenuButton
+              size="sm"
+              className="font-medium w-14 flex flex-col items-center gap-1 h-14 mb-2 rounded-2xl"
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            >
+              {theme === "dark" ? (
+                <Sun className="h-5 w-5" />
+              ) : (
+                <Moon className="h-5 w-5" />
+              )}
+              <span className={"text-xs"}>Theme</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
             {/* Change button to open dialog instead of linking */}
             <SidebarMenuButton
               size="sm"
@@ -182,7 +199,7 @@ function AppIcons({
   return (
     // When collapsed: only show the main menu
     <SidebarGroup className="pr-0">
-      {/* <SidebarGroupLabel>Dyad</SidebarGroupLabel> */}
+      {/* <SidebarGroupLabel>Crea</SidebarGroupLabel> */}
 
       <SidebarGroupContent>
         <SidebarMenu>

@@ -51,7 +51,7 @@ async function getSystemDebugInfo({
     console.error("Failed to get node path:", err);
   }
 
-  // Get Dyad version from package.json
+  // Get Crea version from package.json
   const packageJsonPath = path.resolve(__dirname, "..", "..", "package.json");
   let creaVersion = "unknown";
   try {

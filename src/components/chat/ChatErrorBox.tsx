@@ -18,7 +18,7 @@ export function ChatErrorBox({
         {error}
         <span className="ml-1">
           <ExternalLink href="https://crea.ai/pro">
-            Access with Dyad Pro
+            Access with Crea Pro
           </ExternalLink>
         </span>{" "}
         or switch to another model.
@@ -37,7 +37,7 @@ export function ChatErrorBox({
         {error}
         <span className="ml-1">
           <ExternalLink href="https://crea.ai/pro">
-            Upgrade to Dyad Pro
+            Upgrade to Crea Pro
           </ExternalLink>
         </span>{" "}
         or read the
@@ -54,9 +54,9 @@ export function ChatErrorBox({
     return (
       <ChatInfoContainer onDismiss={onDismiss}>
         <span>
-          Looks like you don't have a valid Dyad Pro key.{" "}
+          Looks like you don't have a valid Crea Pro key.{" "}
           <ExternalLink href="https://crea.ai/pro">
-            Upgrade to Dyad Pro
+            Upgrade to Crea Pro
           </ExternalLink>{" "}
           today.
         </span>

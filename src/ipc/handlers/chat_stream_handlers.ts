@@ -51,10 +51,10 @@ import { generateProblemReport } from "../processors/tsc";
 import { createProblemFixPrompt } from "@/shared/problem_prompt";
 import { AsyncVirtualFileSystem } from "../../../shared/VirtualFilesystem";
 import {
-  getDyadAddDependencyTags,
-  getDyadWriteTags,
-  getDyadDeleteTags,
-  getDyadRenameTags,
+  getCreaAddDependencyTags,
+  getCreaWriteTags,
+  getCreaDeleteTags,
+  getCreaRenameTags,
 } from "../utils/crea_tag_parser";
 import { fileExists } from "../utils/file_utils";
 import { FileUploadsState } from "../utils/file_uploads_state";
@@ -141,7 +141,7 @@ async function processStreamChunks({
         inThinkingBlock = true;
       }
 
-      chunk += escapeDyadTags(part.text);
+      chunk += escapeCreaTags(part.text);
     }
 
     if (!chunk) {
@@ -613,7 +613,7 @@ This conversation includes one or more image attachments. When the user uploads 
             // and eats up extra tokens.
             content:
               settings.selectedChatMode === "ask"
-                ? removeDyadTags(removeNonEssentialTags(msg.content))
+                ? removeCreaTags(removeNonEssentialTags(msg.content))
                 : removeNonEssentialTags(msg.content),
           })),
         ];
@@ -770,11 +770,11 @@ This conversation includes one or more image attachments. When the user uploads 
           if (
             !abortController.signal.aborted &&
             settings.selectedChatMode !== "ask" &&
-            hasUnclosedDyadWrite(fullResponse)
+            hasUnclosedCreaWrite(fullResponse)
           ) {
             let continuationAttempts = 0;
             while (
-              hasUnclosedDyadWrite(fullResponse) &&
+              hasUnclosedCreaWrite(fullResponse) &&
               continuationAttempts < 2 &&
               !abortController.signal.aborted
             ) {
@@ -806,7 +806,7 @@ This conversation includes one or more image attachments. When the user uploads 
               }
             }
           }
-          const addDependencies = getDyadAddDependencyTags(fullResponse);
+          const addDependencies = getCreaAddDependencyTags(fullResponse);
           if (
             !abortController.signal.aborted &&
             // If there are dependencies, we don't want to auto-fix problems
@@ -853,9 +853,9 @@ ${problemReport.problems
                     readFile: (fileName: string) => readFileWithCache(fileName),
                   },
                 );
-                const writeTags = getDyadWriteTags(fullResponse);
-                const renameTags = getDyadRenameTags(fullResponse);
-                const deletePaths = getDyadDeleteTags(fullResponse);
+                const writeTags = getCreaWriteTags(fullResponse);
+                const renameTags = getCreaRenameTags(fullResponse);
+                const deletePaths = getCreaDeleteTags(fullResponse);
                 virtualFileSystem.applyResponseChanges({
                   deletePaths,
                   renameTags,
@@ -1235,12 +1235,12 @@ export function removeProblemReportTags(text: string): string {
   return text.replace(problemReportRegex, "").trim();
 }
 
-export function removeDyadTags(text: string): string {
+export function removeCreaTags(text: string): string {
   const creaRegex = /<crea-[^>]*>[\s\S]*?<\/crea-[^>]*>/g;
   return text.replace(creaRegex, "").trim();
 }
 
-export function hasUnclosedDyadWrite(text: string): boolean {
+export function hasUnclosedCreaWrite(text: string): boolean {
   // Find the last opening crea-write tag
   const openRegex = /<crea-write[^>]*>/g;
   let lastOpenIndex = -1;
@@ -1262,7 +1262,7 @@ export function hasUnclosedDyadWrite(text: string): boolean {
   return !hasClosingTag;
 }
 
-function escapeDyadTags(text: string): string {
+function escapeCreaTags(text: string): string {
   // Escape crea tags in reasoning content
   // We are replacing the opening tag with a look-alike character
   // to avoid issues where thinking content includes crea tags

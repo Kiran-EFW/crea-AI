@@ -240,7 +240,7 @@ export class IpcClient {
     return IpcClient.instance;
   }
 
-  public async restartDyad(): Promise<void> {
+  public async restartCrea(): Promise<void> {
     await this.ipcRenderer.invoke("restart-crea");
   }
 

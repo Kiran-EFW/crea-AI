@@ -49,9 +49,9 @@ export function ProviderSettingsPage({ provider }: ProviderSettingsPageProps) {
   const [saveError, setSaveError] = useState<string | null>(null);
   const router = useRouter();
 
-  // Use fetched data (or defaults for Dyad)
+  // Use fetched data (or defaults for Crea)
   const providerDisplayName = isDyad
-    ? "Dyad"
+    ? "Crea"
     : (providerData?.name ?? "Unknown Provider");
   const providerWebsiteUrl = isDyad
     ? "https://academy.crea.ai/settings"
@@ -135,15 +135,15 @@ export function ProviderSettingsPage({ provider }: ProviderSettingsPageProps) {
     }
   };
 
-  // --- Toggle Dyad Pro Handler ---
-  const handleToggleDyadPro = async (enabled: boolean) => {
+  // --- Toggle Crea Pro Handler ---
+  const handleToggleCreaPro = async (enabled: boolean) => {
     setIsSaving(true);
     try {
       await updateSettings({
         enableCreaPro: enabled,
       });
     } catch (error: any) {
-      showError(`Error toggling Dyad Pro: ${error}`);
+      showError(`Error toggling Crea Pro: ${error}`);
     } finally {
       setIsSaving(false);
     }
@@ -274,14 +274,14 @@ export function ProviderSettingsPage({ provider }: ProviderSettingsPageProps) {
         {isDyad && !settingsLoading && (
           <div className="mt-6 flex items-center justify-between p-4 bg-(--background-lightest) rounded-lg border">
             <div>
-              <h3 className="font-medium">Enable Dyad Pro</h3>
+              <h3 className="font-medium">Enable Crea Pro</h3>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                Toggle to enable Dyad Pro
+                Toggle to enable Crea Pro
               </p>
             </div>
             <Switch
               checked={settings?.enableCreaPro}
-              onCheckedChange={handleToggleDyadPro}
+              onCheckedChange={handleToggleCreaPro}
               disabled={isSaving}
             />
           </div>

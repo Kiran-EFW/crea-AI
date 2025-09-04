@@ -20,11 +20,11 @@ import { gitCommit } from "../utils/git_utils";
 import { readSettings } from "@/main/settings";
 import { writeMigrationFile } from "../utils/file_utils";
 import {
-  getDyadWriteTags,
-  getDyadRenameTags,
-  getDyadDeleteTags,
-  getDyadAddDependencyTags,
-  getDyadExecuteSqlTags,
+  getCreaWriteTags,
+  getCreaRenameTags,
+  getCreaDeleteTags,
+  getCreaAddDependencyTags,
+  getCreaExecuteSqlTags,
 } from "../utils/crea_tag_parser";
 import { storeDbTimestampAtCurrentVersion } from "../utils/neon_timestamp_utils";
 
@@ -111,12 +111,12 @@ export async function processFullResponseActions(
 
   try {
     // Extract all tags
-    const creaWriteTags = getDyadWriteTags(fullResponse);
-    const creaRenameTags = getDyadRenameTags(fullResponse);
-    const creaDeletePaths = getDyadDeleteTags(fullResponse);
-    const creaAddDependencyPackages = getDyadAddDependencyTags(fullResponse);
+    const creaWriteTags = getCreaWriteTags(fullResponse);
+    const creaRenameTags = getCreaRenameTags(fullResponse);
+    const creaDeletePaths = getCreaDeleteTags(fullResponse);
+    const creaAddDependencyPackages = getCreaAddDependencyTags(fullResponse);
     const creaExecuteSqlQueries = chatWithApp.app.supabaseProjectId
-      ? getDyadExecuteSqlTags(fullResponse)
+      ? getCreaExecuteSqlTags(fullResponse)
       : [];
 
     const message = await db.query.messages.findFirst({
@@ -427,7 +427,7 @@ export async function processFullResponseActions(
         try {
           commitHash = await gitCommit({
             path: appPath,
-            message: message + " + extra files edited outside of Dyad",
+            message: message + " + extra files edited outside of Crea",
             amend: true,
           });
           logger.log(
@@ -435,7 +435,7 @@ export async function processFullResponseActions(
           );
         } catch (error) {
           // Just log, but don't throw an error because the user can still
-          // commit these changes outside of Dyad if needed.
+          // commit these changes outside of Crea if needed.
           logger.error(
             `Failed to commit changes outside of crea: ${uncommittedFiles.join(
               ", ",

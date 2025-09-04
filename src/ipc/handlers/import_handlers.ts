@@ -95,7 +95,7 @@ export function registerImportHandlers() {
           throw error;
         }
       }
-      // Copy the app folder to the Dyad apps directory.
+      // Copy the app folder to the Crea apps directory.
       // Why not use fs.cp? Because we want stable ordering for
       // tests.
       await copyDirectoryRecursive(sourcePath, destPath);
@@ -122,7 +122,7 @@ export function registerImportHandlers() {
         // Create initial commit
         await gitCommit({
           path: destPath,
-          message: "Init Dyad app",
+          message: "Init Crea app",
         });
       }
 

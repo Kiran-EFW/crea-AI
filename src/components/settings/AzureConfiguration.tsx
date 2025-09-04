@@ -95,8 +95,8 @@ export function AzureConfiguration({ envVars }: AzureConfigurationProps) {
                     Find your resource name (the name you gave your Azure OpenAI
                     resource)
                   </li>
-                  <li>Set these environment variables before starting Dyad</li>
-                  <li>Restart Dyad after setting the environment variables</li>
+                  <li>Set these environment variables before starting Crea</li>
+                  <li>Restart Crea after setting the environment variables</li>
                 </ol>
               </div>
 

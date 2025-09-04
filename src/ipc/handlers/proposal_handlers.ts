@@ -11,13 +11,13 @@ import path from "node:path"; // Import path for basename
 // Import tag parsers
 import { processFullResponseActions } from "../processors/response_processor";
 import {
-  getDyadWriteTags,
-  getDyadRenameTags,
-  getDyadDeleteTags,
-  getDyadExecuteSqlTags,
-  getDyadAddDependencyTags,
-  getDyadChatSummaryTag,
-  getDyadCommandTags,
+  getCreaWriteTags,
+  getCreaRenameTags,
+  getCreaDeleteTags,
+  getCreaExecuteSqlTags,
+  getCreaAddDependencyTags,
+  getCreaChatSummaryTag,
+  getCreaCommandTags,
 } from "../utils/crea_tag_parser";
 import log from "electron-log";
 import { isServerFunction } from "../../supabase_admin/supabase_utils";
@@ -150,13 +150,13 @@ const getProposalHandler = async (
         );
         const messageContent = latestAssistantMessage.content;
 
-        const proposalTitle = getDyadChatSummaryTag(messageContent);
+        const proposalTitle = getCreaChatSummaryTag(messageContent);
 
-        const proposalWriteFiles = getDyadWriteTags(messageContent);
-        const proposalRenameFiles = getDyadRenameTags(messageContent);
-        const proposalDeleteFiles = getDyadDeleteTags(messageContent);
-        const proposalExecuteSqlQueries = getDyadExecuteSqlTags(messageContent);
-        const packagesAdded = getDyadAddDependencyTags(messageContent);
+        const proposalWriteFiles = getCreaWriteTags(messageContent);
+        const proposalRenameFiles = getCreaRenameTags(messageContent);
+        const proposalDeleteFiles = getCreaDeleteTags(messageContent);
+        const proposalExecuteSqlQueries = getCreaExecuteSqlTags(messageContent);
+        const packagesAdded = getCreaAddDependencyTags(messageContent);
 
         const filesChanged = [
           ...proposalWriteFiles.map((tag) => ({
@@ -221,7 +221,7 @@ const getProposalHandler = async (
       }
       const actions: ActionProposal["actions"] = [];
       if (latestAssistantMessage?.content) {
-        const writeTags = getDyadWriteTags(latestAssistantMessage.content);
+        const writeTags = getCreaWriteTags(latestAssistantMessage.content);
         const refactorTarget = writeTags.reduce(
           (largest, tag) => {
             const lineCount = tag.content.split("\n").length;
@@ -248,7 +248,7 @@ const getProposalHandler = async (
         }
 
         // Check for command tags and add corresponding actions
-        const commandTags = getDyadCommandTags(latestAssistantMessage.content);
+        const commandTags = getCreaCommandTags(latestAssistantMessage.content);
         if (commandTags.includes("rebuild")) {
           actions.push({
             id: "rebuild",
@@ -359,7 +359,7 @@ const approveProposalHandler = async (
   }
 
   // 2. Process the actions defined in the message content
-  const chatSummary = getDyadChatSummaryTag(messageToApprove.content);
+  const chatSummary = getCreaChatSummaryTag(messageToApprove.content);
   const processResult = await processFullResponseActions(
     messageToApprove.content,
     chatId,

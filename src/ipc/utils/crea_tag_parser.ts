@@ -4,7 +4,7 @@ import { SqlQuery } from "../../lib/schemas";
 
 const logger = log.scope("crea_tag_parser");
 
-export function getDyadWriteTags(fullResponse: string): {
+export function getCreaWriteTags(fullResponse: string): {
   path: string;
   content: string;
   description?: string;
@@ -47,7 +47,7 @@ export function getDyadWriteTags(fullResponse: string): {
   return tags;
 }
 
-export function getDyadRenameTags(fullResponse: string): {
+export function getCreaRenameTags(fullResponse: string): {
   from: string;
   to: string;
 }[] {
@@ -64,7 +64,7 @@ export function getDyadRenameTags(fullResponse: string): {
   return tags;
 }
 
-export function getDyadDeleteTags(fullResponse: string): string[] {
+export function getCreaDeleteTags(fullResponse: string): string[] {
   const creaDeleteRegex =
     /<crea-delete path="([^"]+)"[^>]*>([\s\S]*?)<\/crea-delete>/g;
   let match;
@@ -75,7 +75,7 @@ export function getDyadDeleteTags(fullResponse: string): string[] {
   return paths;
 }
 
-export function getDyadAddDependencyTags(fullResponse: string): string[] {
+export function getCreaAddDependencyTags(fullResponse: string): string[] {
   const creaAddDependencyRegex =
     /<crea-add-dependency packages="([^"]+)">[^<]*<\/crea-add-dependency>/g;
   let match;
@@ -86,7 +86,7 @@ export function getDyadAddDependencyTags(fullResponse: string): string[] {
   return packages;
 }
 
-export function getDyadChatSummaryTag(fullResponse: string): string | null {
+export function getCreaChatSummaryTag(fullResponse: string): string | null {
   const creaChatSummaryRegex =
     /<crea-chat-summary>([\s\S]*?)<\/crea-chat-summary>/g;
   const match = creaChatSummaryRegex.exec(fullResponse);
@@ -96,7 +96,7 @@ export function getDyadChatSummaryTag(fullResponse: string): string | null {
   return null;
 }
 
-export function getDyadExecuteSqlTags(fullResponse: string): SqlQuery[] {
+export function getCreaExecuteSqlTags(fullResponse: string): SqlQuery[] {
   const creaExecuteSqlRegex =
     /<crea-execute-sql([^>]*)>([\s\S]*?)<\/crea-execute-sql>/g;
   const descriptionRegex = /description="([^"]+)"/;
@@ -125,7 +125,7 @@ export function getDyadExecuteSqlTags(fullResponse: string): SqlQuery[] {
   return queries;
 }
 
-export function getDyadCommandTags(fullResponse: string): string[] {
+export function getCreaCommandTags(fullResponse: string): string[] {
   const creaCommandRegex =
     /<crea-command type="([^"]+)"[^>]*><\/crea-command>/g;
   let match;

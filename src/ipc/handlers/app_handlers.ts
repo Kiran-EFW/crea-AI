@@ -197,7 +197,7 @@ function listenToProcess({
     // This is a hacky heuristic to pick up when drizzle is asking for user
     // to select from one of a few choices. We automatically pick the first
     // option because it's usually a good default choice. We guard this with
-    // isNeon because: 1) only Neon apps (for the official Dyad templates) should
+    // isNeon because: 1) only Neon apps (for the official Crea templates) should
     // get this template and 2) it's safer to do this with Neon apps because
     // their databases have point in time restore built-in.
     if (isNeon && message.includes("created or renamed from another")) {
@@ -542,7 +542,7 @@ export function registerAppHandlers() {
       // Create initial commit
       const commitHash = await gitCommit({
         path: fullAppPath,
-        message: "Init Dyad app",
+        message: "Init Crea app",
       });
 
       // Update chat with initial commit hash
@@ -614,7 +614,7 @@ export function registerAppHandlers() {
         // Create initial commit
         await gitCommit({
           path: newAppPath,
-          message: "Init Dyad app",
+          message: "Init Crea app",
         });
       }
 
