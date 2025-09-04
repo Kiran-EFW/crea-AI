@@ -27,3 +27,4 @@ export function ChatError({ error, onDismiss }: ChatErrorProps) {
     </div>
   );
 }
+

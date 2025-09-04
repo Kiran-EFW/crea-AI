@@ -8,7 +8,7 @@ import * as schema from "./schema";
 import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import path from "node:path";
 import fs from "node:fs";
-import { getDyadAppPath, getUserDataPath } from "../paths/paths";
+import { getCreaAppPath, getUserDataPath } from "../paths/paths";
 import log from "electron-log";
 
 const logger = log.scope("db");
@@ -48,7 +48,7 @@ export function initializeDatabase(): BetterSQLite3Database<typeof schema> & {
   }
 
   fs.mkdirSync(getUserDataPath(), { recursive: true });
-  fs.mkdirSync(getDyadAppPath("."), { recursive: true });
+  fs.mkdirSync(getCreaAppPath("."), { recursive: true });
 
   const sqlite = new Database(dbPath, { timeout: 10000 });
   sqlite.pragma("foreign_keys = ON");
@@ -92,3 +92,4 @@ export const db = new Proxy({} as any, {
 }) as BetterSQLite3Database<typeof schema> & {
   $client: Database.Database;
 };
+

@@ -104,3 +104,4 @@ export async function fileExists(filePath: string) {
     .then(() => true)
     .catch(() => false);
 }
+

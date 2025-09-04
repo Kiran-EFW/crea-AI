@@ -40,3 +40,4 @@ export function useChats(appId: number | null) {
 
   return { chats, loading, refreshChats };
 }
+

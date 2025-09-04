@@ -135,3 +135,4 @@ export function useAttachments() {
     handlePaste,
   };
 }
+

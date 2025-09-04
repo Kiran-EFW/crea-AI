@@ -238,3 +238,4 @@ export function getNeonErrorMessage(error: any): string {
   const detailedMessage = error.response?.data?.message ?? "";
   return error.message + " " + detailedMessage;
 }
+

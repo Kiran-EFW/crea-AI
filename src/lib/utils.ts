@@ -205,3 +205,4 @@ export function generateCuteAppName(): string {
   const randomVerb = verbs[Math.floor(Math.random() * verbs.length)];
   return `${randomAdjective}-${randomAnimal}-${randomVerb}`;
 }
+

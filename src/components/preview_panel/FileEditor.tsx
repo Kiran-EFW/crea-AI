@@ -261,3 +261,4 @@ export const FileEditor = ({ appId, filePath }: FileEditorProps) => {
     </div>
   );
 };
+

@@ -5,7 +5,7 @@ import git from "isomorphic-git";
 import http from "isomorphic-git/http/node";
 import * as schema from "../../db/schema";
 import fs from "node:fs";
-import { getDyadAppPath } from "../../paths/paths";
+import { getCreaAppPath } from "../../paths/paths";
 import { db } from "../../db";
 import { apps } from "../../db/schema";
 import { eq } from "drizzle-orm";
@@ -565,7 +565,7 @@ async function handlePushToGithub(
     if (!app || !app.githubOrg || !app.githubRepo) {
       return { success: false, error: "App is not linked to a GitHub repo." };
     }
-    const appPath = getDyadAppPath(app.path);
+    const appPath = getCreaAppPath(app.path);
     const branch = app.githubBranch || "main";
 
     // Set up remote URL with token
@@ -672,3 +672,4 @@ export async function updateAppGithubRepo({
     })
     .where(eq(schema.apps.id, appId));
 }
+

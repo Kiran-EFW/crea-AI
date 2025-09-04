@@ -27,3 +27,4 @@ export function registerShellHandlers() {
     logger.debug("Showed item in folder:", fullPath);
   });
 }
+

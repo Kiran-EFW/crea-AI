@@ -447,3 +447,4 @@ export interface HelpChatResponseError {
   sessionId: string;
   error: string;
 }
+

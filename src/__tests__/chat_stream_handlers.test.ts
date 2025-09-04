@@ -53,9 +53,9 @@ vi.mock("isomorphic-git", () => ({
   },
 }));
 
-// Mock paths module to control getDyadAppPath
+// Mock paths module to control getCreaAppPath
 vi.mock("../paths/paths", () => ({
-  getDyadAppPath: vi.fn().mockImplementation((appPath) => {
+  getCreaAppPath: vi.fn().mockImplementation((appPath) => {
     return `/mock/user/data/path/${appPath}`;
   }),
   getUserDataPath: vi.fn().mockReturnValue("/mock/user/data/path"),
@@ -1206,3 +1206,4 @@ Some text after the unclosed tag`;
     expect(result).toBe(false);
   });
 });
+

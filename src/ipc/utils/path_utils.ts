@@ -58,3 +58,4 @@ export function safeJoin(basePath: string, ...paths: string[]): string {
 
   return joinedPath;
 }
+

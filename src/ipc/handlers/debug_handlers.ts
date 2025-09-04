@@ -11,7 +11,7 @@ import { extractCodebase } from "../../utils/codebase";
 import { db } from "../../db";
 import { chats, apps } from "../../db/schema";
 import { eq } from "drizzle-orm";
-import { getDyadAppPath } from "../../paths/paths";
+import { getCreaAppPath } from "../../paths/paths";
 import { LargeLanguageModel } from "@/lib/schemas";
 import { validateChatContext } from "../utils/context_paths_utils";
 
@@ -175,7 +175,7 @@ export function registerDebugHandlers() {
         }
 
         // Extract codebase
-        const appPath = getDyadAppPath(app.path);
+        const appPath = getCreaAppPath(app.path);
         const codebase = (
           await extractCodebase({
             appPath,
@@ -201,3 +201,4 @@ export function registerDebugHandlers() {
 function serializeModelForDebug(model: LargeLanguageModel): string {
   return `${model.provider}:${model.name} | customId: ${model.customModelId}`;
 }
+

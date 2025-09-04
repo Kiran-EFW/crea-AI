@@ -18,3 +18,4 @@ export const LoadingBar: React.FC<{ isVisible: boolean }> = ({ isVisible }) => {
     </div>
   );
 };
+

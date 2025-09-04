@@ -475,3 +475,4 @@ export const readAiRules = async (creaAppPath: string) => {
     return DEFAULT_AI_RULES;
   }
 };
+

@@ -63,3 +63,4 @@ export function registerReleaseNoteHandlers() {
 
   logger.debug("Registered release note IPC handlers");
 }
+

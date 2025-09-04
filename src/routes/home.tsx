@@ -10,3 +10,4 @@ export const homeRoute = createRoute({
     appId: z.number().optional(),
   }),
 });
+

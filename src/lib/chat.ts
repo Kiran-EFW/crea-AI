@@ -31,3 +31,4 @@ export async function getAllChats(appId?: number): Promise<ChatSummary[]> {
     throw error;
   }
 }
+

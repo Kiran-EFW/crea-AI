@@ -224,3 +224,4 @@ export function SupabaseConnector({ appId }: { appId: number }) {
     </div>
   );
 }
+

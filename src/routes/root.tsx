@@ -8,3 +8,4 @@ export const rootRoute = createRootRoute({
     </Layout>
   ),
 });
+

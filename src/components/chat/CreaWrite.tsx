@@ -11,14 +11,14 @@ import {
 import { CodeHighlight } from "./CodeHighlight";
 import { CustomTagState } from "./stateTypes";
 
-interface DyadWriteProps {
+interface CreaWriteProps {
   children?: ReactNode;
   node?: any;
   path?: string;
   description?: string;
 }
 
-export const DyadWrite: React.FC<DyadWriteProps> = ({
+export const CreaWrite: React.FC<CreaWriteProps> = ({
   children,
   node,
   path: pathProp,
@@ -106,3 +106,5 @@ export const DyadWrite: React.FC<DyadWriteProps> = ({
     </div>
   );
 };
+
+

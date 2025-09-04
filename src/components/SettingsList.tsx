@@ -86,3 +86,4 @@ export function SettingsList({ show }: { show: boolean }) {
     </div>
   );
 }
+

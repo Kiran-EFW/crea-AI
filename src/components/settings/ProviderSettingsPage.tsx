@@ -99,7 +99,7 @@ export function ProviderSettingsPage({ provider }: ProviderSettingsPageProps) {
         },
       };
       if (isDyad) {
-        settingsUpdate.enableDyadPro = true;
+        settingsUpdate.enableCreaPro = true;
       }
       await updateSettings(settingsUpdate);
       setApiKeyInput(""); // Clear input on success
@@ -140,7 +140,7 @@ export function ProviderSettingsPage({ provider }: ProviderSettingsPageProps) {
     setIsSaving(true);
     try {
       await updateSettings({
-        enableDyadPro: enabled,
+        enableCreaPro: enabled,
       });
     } catch (error: any) {
       showError(`Error toggling Dyad Pro: ${error}`);
@@ -280,7 +280,7 @@ export function ProviderSettingsPage({ provider }: ProviderSettingsPageProps) {
               </p>
             </div>
             <Switch
-              checked={settings?.enableDyadPro}
+              checked={settings?.enableCreaPro}
               onCheckedChange={handleToggleDyadPro}
               disabled={isSaving}
             />
@@ -296,3 +296,4 @@ export function ProviderSettingsPage({ provider }: ProviderSettingsPageProps) {
     </div>
   );
 }
+

@@ -9,7 +9,7 @@ import type { Problem } from "@/ipc/ipc_types";
 
 type ProblemWithoutSnippet = Omit<Problem, "snippet">;
 
-interface DyadProblemSummaryProps {
+interface CreaProblemSummaryProps {
   summary?: string;
   children?: React.ReactNode;
 }
@@ -49,7 +49,7 @@ const ProblemItem: React.FC<ProblemItemProps> = ({ problem, index }) => {
   );
 };
 
-export const DyadProblemSummary: React.FC<DyadProblemSummaryProps> = ({
+export const CreaProblemSummary: React.FC<CreaProblemSummaryProps> = ({
   summary,
   children,
 }) => {
@@ -154,3 +154,5 @@ export const DyadProblemSummary: React.FC<DyadProblemSummaryProps> = ({
     </div>
   );
 };
+
+

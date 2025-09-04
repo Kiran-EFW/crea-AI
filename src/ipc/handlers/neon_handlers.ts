@@ -233,3 +233,4 @@ export function registerNeonHandlers() {
     logger.info("Sent fake neon deep-link-received event during testing.");
   });
 }
+

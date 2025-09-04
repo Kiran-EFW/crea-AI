@@ -113,7 +113,7 @@ export function ContextFilesPicker() {
   };
 
   const isSmartContextEnabled =
-    settings?.enableDyadPro && settings?.enableProSmartFilesContextMode;
+    settings?.enableCreaPro && settings?.enableProSmartFilesContextMode;
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -410,3 +410,4 @@ export function ContextFilesPicker() {
     </Popover>
   );
 }
+

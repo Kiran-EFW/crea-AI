@@ -94,3 +94,4 @@ export function AppList({ show }: { show?: boolean }) {
     </SidebarGroup>
   );
 }
+

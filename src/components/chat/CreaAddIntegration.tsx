@@ -6,7 +6,7 @@ import { useAtomValue } from "jotai";
 import { showError } from "@/lib/toast";
 import { useLoadApp } from "@/hooks/useLoadApp";
 
-interface DyadAddIntegrationProps {
+interface CreaAddIntegrationProps {
   node: {
     properties: {
       provider: string;
@@ -15,7 +15,7 @@ interface DyadAddIntegrationProps {
   children: React.ReactNode;
 }
 
-export const DyadAddIntegration: React.FC<DyadAddIntegrationProps> = ({
+export const CreaAddIntegration: React.FC<CreaAddIntegrationProps> = ({
   node,
   children,
 }) => {
@@ -87,3 +87,5 @@ export const DyadAddIntegration: React.FC<DyadAddIntegrationProps> = ({
     </div>
   );
 };
+
+

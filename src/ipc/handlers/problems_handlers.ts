@@ -3,7 +3,7 @@ import { db } from "../../db";
 import { apps } from "../../db/schema";
 import { eq } from "drizzle-orm";
 import { generateProblemReport } from "../processors/tsc";
-import { getDyadAppPath } from "@/paths/paths";
+import { getCreaAppPath } from "@/paths/paths";
 import log from "electron-log";
 import { createLoggedHandler } from "./safe_handle";
 
@@ -23,7 +23,7 @@ export function registerProblemsHandlers() {
         throw new Error(`App not found: ${params.appId}`);
       }
 
-      const appPath = getDyadAppPath(app.path);
+      const appPath = getCreaAppPath(app.path);
 
       // Call autofix with empty full response to just run TypeScript checking
       const problemReport = await generateProblemReport({
@@ -38,3 +38,4 @@ export function registerProblemsHandlers() {
     }
   });
 }
+

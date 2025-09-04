@@ -48,3 +48,4 @@ export function useVercelDeployments(appId: number) {
     disconnectError: disconnectProjectMutation.error?.message || null,
   };
 }
+

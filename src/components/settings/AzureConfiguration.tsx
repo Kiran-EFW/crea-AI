@@ -117,3 +117,4 @@ export function AzureConfiguration({ envVars }: AzureConfigurationProps) {
     </div>
   );
 }
+

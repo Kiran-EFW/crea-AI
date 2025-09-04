@@ -3,7 +3,7 @@ import fs from "fs/promises";
 import path from "path";
 import { createLoggedHandler } from "./safe_handle";
 import log from "electron-log";
-import { getDyadAppPath } from "../../paths/paths";
+import { getCreaAppPath } from "../../paths/paths";
 import { apps } from "@/db/schema";
 import { db } from "@/db";
 import { chats } from "@/db/schema";
@@ -48,7 +48,7 @@ export function registerImportHandlers() {
   // Handler for checking if an app name is already taken
   handle("check-app-name", async (_, { appName }: { appName: string }) => {
     // Check filesystem
-    const appPath = getDyadAppPath(appName);
+    const appPath = getCreaAppPath(appName);
     try {
       await fs.access(appPath);
       return { exists: true };
@@ -83,7 +83,7 @@ export function registerImportHandlers() {
         throw new Error("Source folder does not exist");
       }
 
-      const destPath = getDyadAppPath(appName);
+      const destPath = getCreaAppPath(appName);
 
       // Check if the app already exists
       const errorMessage = "An app with this name already exists";
@@ -151,3 +151,4 @@ export function registerImportHandlers() {
 
   logger.debug("Registered import IPC handlers");
 }
+

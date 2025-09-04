@@ -89,3 +89,4 @@ export const CodeHighlight = memo(
     return prevProps.children === nextProps.children;
   },
 );
+

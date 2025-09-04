@@ -249,3 +249,4 @@ export function AICreditStatus({ userBudget }: { userBudget: UserBudgetInfo }) {
     </Tooltip>
   );
 }
+

@@ -12,7 +12,7 @@ import type {
 } from "../ipc_types";
 import fs from "node:fs";
 import path from "node:path";
-import { getDyadAppPath, getUserDataPath } from "../../paths/paths";
+import { getCreaAppPath, getUserDataPath } from "../../paths/paths";
 import { ChildProcess, spawn } from "node:child_process";
 import git from "isomorphic-git";
 import { promises as fsPromises } from "node:fs";
@@ -499,7 +499,7 @@ export function registerAppHandlers() {
       params: CreateAppParams,
     ): Promise<{ app: any; chatId: number }> => {
       const appPath = params.name;
-      const fullAppPath = getDyadAppPath(appPath);
+      const fullAppPath = getCreaAppPath(appPath);
       if (fs.existsSync(fullAppPath)) {
         throw new Error(`App already exists at: ${fullAppPath}`);
       }
@@ -580,8 +580,8 @@ export function registerAppHandlers() {
         throw new Error("Original app not found.");
       }
 
-      const originalAppPath = getDyadAppPath(originalApp.path);
-      const newAppPath = getDyadAppPath(newAppName);
+      const originalAppPath = getCreaAppPath(originalApp.path);
+      const newAppPath = getCreaAppPath(newAppName);
 
       // 3. Copy the app folder
       try {
@@ -649,7 +649,7 @@ export function registerAppHandlers() {
     }
 
     // Get app files
-    const appPath = getDyadAppPath(app.path);
+    const appPath = getCreaAppPath(app.path);
     let files: string[] = [];
 
     try {
@@ -687,7 +687,7 @@ export function registerAppHandlers() {
     });
     return {
       apps: allApps,
-      appBasePath: getDyadAppPath("$APP_BASE_PATH"),
+      appBasePath: getCreaAppPath("$APP_BASE_PATH"),
     };
   });
 
@@ -702,7 +702,7 @@ export function registerAppHandlers() {
         throw new Error("App not found");
       }
 
-      const appPath = getDyadAppPath(app.path);
+      const appPath = getCreaAppPath(app.path);
       const fullPath = path.join(appPath, filePath);
 
       // Check if the path is within the app directory (security check)
@@ -759,7 +759,7 @@ export function registerAppHandlers() {
 
         logger.debug(`Starting app ${appId} in path ${app.path}`);
 
-        const appPath = getDyadAppPath(app.path);
+        const appPath = getCreaAppPath(app.path);
         try {
           // There may have been a previous run that left a process on port 32100.
           await cleanUpPort(32100);
@@ -874,7 +874,7 @@ export function registerAppHandlers() {
             throw new Error("App not found");
           }
 
-          const appPath = getDyadAppPath(app.path);
+          const appPath = getCreaAppPath(app.path);
 
           // Remove node_modules if requested
           if (removeNodeModules) {
@@ -954,7 +954,7 @@ export function registerAppHandlers() {
         throw new Error("App not found");
       }
 
-      const appPath = getDyadAppPath(app.path);
+      const appPath = getCreaAppPath(app.path);
       const fullPath = path.join(appPath, filePath);
 
       // Check if the path is within the app directory (security check)
@@ -1061,7 +1061,7 @@ export function registerAppHandlers() {
         }
 
         // Delete app files
-        const appPath = getDyadAppPath(app.path);
+        const appPath = getCreaAppPath(app.path);
         try {
           await fsPromises.rm(appPath, { recursive: true, force: true });
         } catch (error: any) {
@@ -1124,8 +1124,8 @@ export function registerAppHandlers() {
           }
         }
 
-        const oldAppPath = getDyadAppPath(app.path);
-        const newAppPath = getDyadAppPath(appPath);
+        const oldAppPath = getCreaAppPath(app.path);
+        const newAppPath = getCreaAppPath(appPath);
         // Only move files if needed
         if (newAppPath !== oldAppPath) {
           // Move app files
@@ -1244,7 +1244,7 @@ export function registerAppHandlers() {
     // Doing this last because it's the most time-consuming and the least important
     // in terms of resetting the app state.
     logger.log("removing all app files...");
-    const creaAppPath = getDyadAppPath(".");
+    const creaAppPath = getCreaAppPath(".");
     if (fs.existsSync(creaAppPath)) {
       await fsPromises.rm(creaAppPath, { recursive: true, force: true });
       // Recreate the base directory
@@ -1271,7 +1271,7 @@ export function registerAppHandlers() {
       throw new Error("App not found");
     }
 
-    const appPath = getDyadAppPath(app.path);
+    const appPath = getCreaAppPath(app.path);
 
     return withLock(appId, async () => {
       try {
@@ -1363,3 +1363,4 @@ async function cleanUpPort(port: number) {
     await killProcessOnPort(port);
   }
 }
+

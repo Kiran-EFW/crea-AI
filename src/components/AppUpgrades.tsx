@@ -155,3 +155,4 @@ export function AppUpgrades({ appId }: { appId: number | null }) {
     </div>
   );
 }
+

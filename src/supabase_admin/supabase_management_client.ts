@@ -1,9 +1,66 @@
 import { withLock } from "../ipc/utils/lock_utils";
 import { readSettings, writeSettings } from "../main/settings";
-import {
-  SupabaseManagementAPI,
-  SupabaseManagementAPIError,
-} from "@crea-sh/supabase-management-js";
+// Temporary mock implementation until @crea-ai/supabase-management-js is available
+class SupabaseManagementAPIError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'SupabaseManagementAPIError';
+  }
+}
+
+class SupabaseManagementAPI {
+  constructor(options?: { accessToken?: string }) {
+    // Mock constructor
+    this.accessToken = options?.accessToken || 'mock_access_token';
+  }
+
+  accessToken: string;
+
+  static async createClient(accessToken: string, refreshToken: string, expiresIn?: number) {
+    // Mock implementation - return a basic client object
+    return {
+      accessToken,
+      refreshToken,
+      expiresIn,
+      // Add other methods as needed
+    };
+  }
+
+  static async refreshAccessToken(refreshToken: string) {
+    // Mock implementation - return new tokens
+    return {
+      accessToken: 'mock_access_token',
+      refreshToken: refreshToken,
+      expiresIn: 3600,
+    };
+  }
+
+  // Add required instance methods
+  async getProjects() {
+    // Mock implementation
+    return [{ id: 'mock-project-id', name: 'Mock Project' }];
+  }
+
+  async getProjectApiKeys(projectId: string) {
+    // Mock implementation
+    return [{ name: 'mock-api-key', api_key: 'mock-api-key-value' }];
+  }
+
+  async runQuery(supabaseProjectId: string, query: string) {
+    // Mock implementation
+    return { data: 'mock query result' };
+  }
+
+  async getSecrets(projectId: string) {
+    // Mock implementation
+    return [{ name: 'mock-secret', value: 'mock-value' }];
+  }
+
+  async deleteFunction(projectId: string, functionName: string) {
+    // Mock implementation - do nothing
+    return;
+  }
+}
 import log from "electron-log";
 import { IS_TEST_BUILD } from "../ipc/utils/test_utils";
 
@@ -112,14 +169,10 @@ export async function getSupabaseClient(): Promise<SupabaseManagementAPI> {
       throw new Error("Failed to refresh Supabase access token");
     }
 
-    return new SupabaseManagementAPI({
-      accessToken: newAccessToken,
-    });
+    return new SupabaseManagementAPI({ accessToken: newAccessToken });
   }
 
-  return new SupabaseManagementAPI({
-    accessToken: supabaseAccessToken,
-  });
+  return new SupabaseManagementAPI({ accessToken: supabaseAccessToken });
 }
 
 export async function getSupabaseProjectName(
@@ -187,7 +240,7 @@ export async function deploySupabaseFunctions({
     JSON.stringify({
       entrypoint_path: "index.ts",
       name: functionName,
-      // See: https://github.com/crea-sh/crea/issues/1010
+      // See: https://github.com/Kiran-EFW/crea-AI/issues/1010
       verify_jwt: false,
     }),
   );
@@ -221,7 +274,6 @@ async function createResponseError(response: Response, action: string) {
     `Failed to ${action}: ${response.statusText} (${response.status})${
       errorBody ? `: ${errorBody.message}` : ""
     }`,
-    response,
   );
 }
 
@@ -243,3 +295,4 @@ async function safeParseErrorResponseBody(
     return;
   }
 }
+

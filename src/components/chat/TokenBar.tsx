@@ -144,12 +144,12 @@ export function TokenBar({ chatId }: TokenBarProps) {
       </TooltipProvider>
       {error && <div className="text-red-500 text-xs mt-1">{error}</div>}
       {(!settings?.enableProSmartFilesContextMode ||
-        !settings?.enableDyadPro) && (
+        !settings?.enableCreaPro) && (
         <div className="text-xs text-center text-muted-foreground mt-2">
           Optimize your tokens with{" "}
           <a
             onClick={() =>
-              settings?.enableDyadPro
+              settings?.enableCreaPro
                 ? IpcClient.getInstance().openExternalUrl(
                     "https://www.crea.sh/docs/guides/ai-models/pro-modes#smart-context",
                   )
@@ -166,3 +166,4 @@ export function TokenBar({ chatId }: TokenBarProps) {
     </div>
   );
 }
+

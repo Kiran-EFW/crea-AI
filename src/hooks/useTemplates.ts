@@ -22,3 +22,4 @@ export function useTemplates() {
     refetch: query.refetch,
   };
 }
+

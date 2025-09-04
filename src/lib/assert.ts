@@ -6,3 +6,4 @@ export function assertExists<T>(
     throw new Error(message);
   }
 }
+

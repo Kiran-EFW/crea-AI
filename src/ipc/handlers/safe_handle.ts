@@ -36,3 +36,4 @@ export function createTestOnlyLoggedHandler(logger: log.LogFunctions) {
   }
   return createLoggedHandler(logger);
 }
+

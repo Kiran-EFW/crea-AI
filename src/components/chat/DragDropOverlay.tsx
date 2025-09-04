@@ -16,3 +16,4 @@ export function DragDropOverlay({ isDraggingOver }: DragDropOverlayProps) {
     </div>
   );
 }
+

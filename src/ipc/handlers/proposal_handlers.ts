@@ -27,7 +27,7 @@ import {
   getContextWindow,
 } from "../utils/token_utils";
 import { extractCodebase } from "../../utils/codebase";
-import { getDyadAppPath } from "../../paths/paths";
+import { getCreaAppPath } from "../../paths/paths";
 import { withLock } from "../utils/lock_utils";
 import { createLoggedHandler } from "./safe_handle";
 import { ApproveProposalResult } from "../ipc_types";
@@ -101,7 +101,7 @@ async function getCodebaseTokenCount(
   logger.log(`Calculating codebase token count for chatId: ${chatId}`);
   const codebase = (
     await extractCodebase({
-      appPath: getDyadAppPath(appPath),
+      appPath: getCreaAppPath(appPath),
       chatContext: validateChatContext(chatContext),
     })
   ).formattedOutput;
@@ -421,3 +421,4 @@ export function registerProposalHandlers() {
   handle("approve-proposal", approveProposalHandler);
   handle("reject-proposal", rejectProposalHandler);
 }
+

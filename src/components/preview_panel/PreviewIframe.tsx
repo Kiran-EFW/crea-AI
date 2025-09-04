@@ -605,3 +605,4 @@ function parseComponentSelection(data: any): ComponentSelection | null {
     columnNumber,
   };
 }
+

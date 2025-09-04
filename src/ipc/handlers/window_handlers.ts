@@ -51,3 +51,4 @@ export function registerWindowHandlers() {
   ipcMain.handle("window:close", handleClose);
   ipcMain.handle("get-system-platform", handleGetSystemPlatform);
 }
+

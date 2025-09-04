@@ -388,3 +388,4 @@ export class BackupManager {
     logger.debug(`Current version saved: ${version}`);
   }
 }
+

@@ -11,13 +11,13 @@ import {
 import { CodeHighlight } from "./CodeHighlight";
 import { CustomTagState } from "./stateTypes";
 
-interface DyadExecuteSqlProps {
+interface CreaExecuteSqlProps {
   children?: ReactNode;
   node?: any;
   description?: string;
 }
 
-export const DyadExecuteSql: React.FC<DyadExecuteSqlProps> = ({
+export const CreaExecuteSql: React.FC<CreaExecuteSqlProps> = ({
   children,
   node,
   description,
@@ -83,3 +83,5 @@ export const DyadExecuteSql: React.FC<DyadExecuteSqlProps> = ({
     </div>
   );
 };
+
+

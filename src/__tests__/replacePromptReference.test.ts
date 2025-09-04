@@ -39,3 +39,4 @@ describe("replacePromptReference", () => {
     expect(output).toBe("Mix Seven and Eight");
   });
 });
+

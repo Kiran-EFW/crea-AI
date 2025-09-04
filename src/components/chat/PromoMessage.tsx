@@ -56,7 +56,7 @@ export function Message({ spans }: MessageConfig) {
 export const TURBO_EDITS_PROMO_MESSAGE: MessageConfig = {
   spans: [
     { type: "text", content: "Tired of waiting on AI?" },
-    { type: "link", content: " Get Dyad Pro", url: "https://crea.ai/pro#ai" },
+    { type: "link", content: " Get Crea Pro", url: "https://crea.ai/pro#ai" },
     { type: "text", content: " for faster edits with Turbo Edits." },
   ],
 };
@@ -66,7 +66,7 @@ export const SMART_CONTEXT_PROMO_MESSAGE: MessageConfig = {
     { type: "text", content: "Save up to 5x on AI costs with " },
     {
       type: "link",
-      content: "Dyad Pro's Smart Context",
+      content: "Crea Pro's Smart Context",
       url: "https://crea.ai/pro#ai",
     },
   ],
@@ -90,7 +90,7 @@ export const REDDIT_TIP: MessageConfig = {
     },
     {
       type: "link",
-      content: "Dyad subreddit",
+      content: "Crea subreddit",
       url: "https://www.reddit.com/r/creabuilders/",
     },
   ],
@@ -124,7 +124,7 @@ export const BUILD_A_BIBLE_APP_TIP: MessageConfig = {
     },
     {
       type: "text",
-      content: " the creator of Dyad build a Bible app step-by-step",
+      content: " the creator of Crea build a Bible app step-by-step",
     },
   ],
 };
@@ -182,17 +182,17 @@ export const ROADMAP_TIP: MessageConfig = {
   ],
 };
 
-// Like Dyad? Star it on GitHub https://github.com/crea-sh/crea/
+// Like Crea? Star it on GitHub https://github.com/Kiran-EFW/crea-AI/
 export const GITHUB_TIP: MessageConfig = {
   spans: [
     {
       type: "text",
-      content: "Like Dyad? Star it on ",
+      content: "Like Crea? Star it on ",
     },
     {
       type: "link",
       content: "GitHub",
-      url: "https://github.com/crea-sh/crea",
+      url: "https://github.com/Kiran-EFW/crea-AI",
     },
   ],
 };
@@ -248,3 +248,4 @@ function hashNumber(key: number): number {
   // Return the result as an unsigned 32-bit integer.
   return i >>> 0;
 }
+

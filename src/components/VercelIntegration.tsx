@@ -59,3 +59,4 @@ export function VercelIntegration() {
     </div>
   );
 }
+

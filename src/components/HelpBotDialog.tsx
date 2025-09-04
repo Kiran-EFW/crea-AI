@@ -242,3 +242,4 @@ export function HelpBotDialog({ isOpen, onClose }: HelpBotDialogProps) {
     </Dialog>
   );
 }
+

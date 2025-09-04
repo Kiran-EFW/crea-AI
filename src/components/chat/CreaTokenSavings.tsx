@@ -2,12 +2,12 @@ import React from "react";
 import { Zap } from "lucide-react";
 import { Tooltip, TooltipTrigger, TooltipContent } from "../ui/tooltip";
 
-interface DyadTokenSavingsProps {
+interface CreaTokenSavingsProps {
   originalTokens: number;
   smartContextTokens: number;
 }
 
-export const DyadTokenSavings: React.FC<DyadTokenSavingsProps> = ({
+export const CreaTokenSavings: React.FC<CreaTokenSavingsProps> = ({
   originalTokens,
   smartContextTokens,
 }) => {
@@ -34,3 +34,5 @@ export const DyadTokenSavings: React.FC<DyadTokenSavingsProps> = ({
     </Tooltip>
   );
 };
+
+

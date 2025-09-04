@@ -233,3 +233,4 @@ export function CreatePromptDialog({
     <CreateOrEditPromptDialog mode="create" onCreatePrompt={onCreatePrompt} />
   );
 }
+

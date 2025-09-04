@@ -66,3 +66,4 @@ export function registerIpcHandlers() {
   registerPromptHandlers();
   registerHelpBotHandlers();
 }
+

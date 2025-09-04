@@ -422,3 +422,4 @@ You need to first add Supabase to your app and then we can add auth.
 
 <crea-add-integration provider="supabase"></crea-add-integration>
 `;
+

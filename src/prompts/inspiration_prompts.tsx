@@ -324,3 +324,4 @@ export const INSPIRATION_PROMPTS = [
     label: "Virtual Avatar Builder",
   },
 ];
+

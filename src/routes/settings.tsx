@@ -7,3 +7,4 @@ export const settingsRoute = createRoute({
   path: "/settings",
   component: SettingsPage,
 });
+

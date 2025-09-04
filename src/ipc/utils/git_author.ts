@@ -13,3 +13,4 @@ export async function getGitAuthor() {
       };
   return author;
 }
+

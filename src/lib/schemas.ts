@@ -292,3 +292,4 @@ export interface SqlQuery {
   content: string;
   description?: string;
 }
+

@@ -11,14 +11,14 @@ import {
 import { CodeHighlight } from "./CodeHighlight";
 import { CustomTagState } from "./stateTypes";
 
-interface DyadEditProps {
+interface CreaEditProps {
   children?: ReactNode;
   node?: any;
   path?: string;
   description?: string;
 }
 
-export const DyadEdit: React.FC<DyadEditProps> = ({
+export const CreaEdit: React.FC<CreaEditProps> = ({
   children,
   node,
   path: pathProp,
@@ -108,3 +108,5 @@ export const DyadEdit: React.FC<DyadEditProps> = ({
     </div>
   );
 };
+
+

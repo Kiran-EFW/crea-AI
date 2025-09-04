@@ -56,3 +56,4 @@ export function useRenameBranch() {
     renameBranchError: mutation.error,
   };
 }
+

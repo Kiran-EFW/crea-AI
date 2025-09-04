@@ -13,3 +13,4 @@ export const activeCheckoutCounterAtom = atom(0);
 export const isAnyCheckoutVersionInProgressAtom = atom(
   (get) => get(activeCheckoutCounterAtom) > 0,
 );
+

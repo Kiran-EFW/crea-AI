@@ -108,3 +108,4 @@ export const PortalMigrate = ({ appId }: PortalMigrateProps) => {
     </Card>
   );
 };
+

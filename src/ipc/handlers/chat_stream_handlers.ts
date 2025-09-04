@@ -19,7 +19,7 @@ import {
   SUPABASE_AVAILABLE_SYSTEM_PROMPT,
   SUPABASE_NOT_AVAILABLE_SYSTEM_PROMPT,
 } from "../../prompts/supabase_prompt";
-import { getDyadAppPath } from "../../paths/paths";
+import { getCreaAppPath } from "../../paths/paths";
 import { readSettings } from "../../main/settings";
 import type { ChatResponseEnd, ChatStreamParams } from "../ipc_types";
 import { extractCodebase, readFileWithCache } from "../../utils/codebase";
@@ -302,7 +302,7 @@ export function registerChatStreamHandlers() {
         try {
           const componentFileContent = await readFile(
             path.join(
-              getDyadAppPath(chat.app.path),
+              getCreaAppPath(chat.app.path),
               req.selectedComponent.relativePath,
             ),
             "utf8",
@@ -393,7 +393,7 @@ ${componentSnippet}
         // Normal AI processing for non-test prompts
         const settings = readSettings();
 
-        const appPath = getDyadAppPath(updatedChat.app.path);
+        const appPath = getCreaAppPath(updatedChat.app.path);
         const chatContext = req.selectedComponent
           ? {
               contextPaths: [
@@ -495,7 +495,7 @@ ${componentSnippet}
         }
 
         let systemPrompt = constructSystemPrompt({
-          aiRules: await readAiRules(getDyadAppPath(updatedChat.app.path)),
+          aiRules: await readAiRules(getCreaAppPath(updatedChat.app.path)),
           chatMode: settings.selectedChatMode,
         });
 
@@ -820,7 +820,7 @@ This conversation includes one or more image attachments. When the user uploads 
               // IF auto-fix is enabled
               let problemReport = await generateProblemReport({
                 fullResponse,
-                appPath: getDyadAppPath(updatedChat.app.path),
+                appPath: getCreaAppPath(updatedChat.app.path),
               });
 
               let autoFixAttempts = 0;
@@ -847,7 +847,7 @@ ${problemReport.problems
                 const problemFixPrompt = createProblemFixPrompt(problemReport);
 
                 const virtualFileSystem = new AsyncVirtualFileSystem(
-                  getDyadAppPath(updatedChat.app.path),
+                  getCreaAppPath(updatedChat.app.path),
                   {
                     fileExists: (fileName: string) => fileExists(fileName),
                     readFile: (fileName: string) => readFileWithCache(fileName),
@@ -918,7 +918,7 @@ ${problemReport.problems
 
                 problemReport = await generateProblemReport({
                   fullResponse,
-                  appPath: getDyadAppPath(updatedChat.app.path),
+                  appPath: getCreaAppPath(updatedChat.app.path),
                 });
               }
             } catch (error) {
@@ -1286,3 +1286,4 @@ These are the other apps that I've mentioned in my prompt. These other apps' cod
 ${otherAppsCodebaseInfo}
 `;
 }
+

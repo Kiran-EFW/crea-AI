@@ -272,3 +272,4 @@ export function VersionPane({ isVisible, onClose }: VersionPaneProps) {
     </div>
   );
 }
+

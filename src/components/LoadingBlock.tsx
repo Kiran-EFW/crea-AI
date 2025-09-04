@@ -134,3 +134,4 @@ export function LoadingBlock({ isStreaming = false }: LoadingBlockProps) {
   if (!isStreaming) return null;
   return <ChatLoader />;
 }
+

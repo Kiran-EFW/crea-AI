@@ -1165,3 +1165,4 @@ export class IpcClient {
     this.ipcRenderer.invoke("help:chat:cancel", sessionId).catch(() => {});
   }
 }
+

@@ -18,3 +18,4 @@ export function useAppVersion() {
 
   return appVersion;
 }
+

@@ -1,24 +1,24 @@
 import React, { useMemo } from "react";
 import ReactMarkdown from "react-markdown";
 
-import { DyadWrite } from "./DyadWrite";
-import { DyadRename } from "./DyadRename";
-import { DyadDelete } from "./DyadDelete";
-import { DyadAddDependency } from "./DyadAddDependency";
-import { DyadExecuteSql } from "./DyadExecuteSql";
-import { DyadAddIntegration } from "./DyadAddIntegration";
-import { DyadEdit } from "./DyadEdit";
-import { DyadCodebaseContext } from "./DyadCodebaseContext";
-import { DyadThink } from "./DyadThink";
+import { CreaWrite } from "./CreaWrite";
+import { CreaRename } from "./CreaRename";
+import { CreaDelete } from "./CreaDelete";
+import { CreaAddDependency } from "./CreaAddDependency";
+import { CreaExecuteSql } from "./CreaExecuteSql";
+import { CreaAddIntegration } from "./CreaAddIntegration";
+import { CreaEdit } from "./CreaEdit";
+import { CreaCodebaseContext } from "./CreaCodebaseContext";
+import { CreaThink } from "./CreaThink";
 import { CodeHighlight } from "./CodeHighlight";
 import { useAtomValue } from "jotai";
 import { isStreamingAtom } from "@/atoms/chatAtoms";
 import { CustomTagState } from "./stateTypes";
-import { DyadOutput } from "./DyadOutput";
-import { DyadProblemSummary } from "./DyadProblemSummary";
+import { CreaOutput } from "./CreaOutput";
+import { CreaProblemSummary } from "./CreaProblemSummary";
 import { IpcClient } from "@/ipc/ipc_client";
 
-interface DyadMarkdownParserProps {
+interface CreaMarkdownParserProps {
   content: string;
 }
 
@@ -67,9 +67,9 @@ export const VanillaMarkdownParser = ({ content }: { content: string }) => {
 };
 
 /**
- * Custom component to parse markdown content with Dyad-specific tags
+ * Custom component to parse markdown content with Crea-specific tags
  */
-export const DyadMarkdownParser: React.FC<DyadMarkdownParserProps> = ({
+export const CreaMarkdownParser: React.FC<CreaMarkdownParserProps> = ({
   content,
 }) => {
   const isStreaming = useAtomValue(isStreamingAtom);
@@ -276,7 +276,7 @@ function renderCustomTag(
   switch (tag) {
     case "think":
       return (
-        <DyadThink
+        <CreaThink
           node={{
             properties: {
               state: getState({ isStreaming, inProgress }),
@@ -284,11 +284,11 @@ function renderCustomTag(
           }}
         >
           {content}
-        </DyadThink>
+        </CreaThink>
       );
     case "crea-write":
       return (
-        <DyadWrite
+        <CreaWrite
           node={{
             properties: {
               path: attributes.path || "",
@@ -298,12 +298,12 @@ function renderCustomTag(
           }}
         >
           {content}
-        </DyadWrite>
+        </CreaWrite>
       );
 
     case "crea-rename":
       return (
-        <DyadRename
+        <CreaRename
           node={{
             properties: {
               from: attributes.from || "",
@@ -312,12 +312,12 @@ function renderCustomTag(
           }}
         >
           {content}
-        </DyadRename>
+        </CreaRename>
       );
 
     case "crea-delete":
       return (
-        <DyadDelete
+        <CreaDelete
           node={{
             properties: {
               path: attributes.path || "",
@@ -325,12 +325,12 @@ function renderCustomTag(
           }}
         >
           {content}
-        </DyadDelete>
+        </CreaDelete>
       );
 
     case "crea-add-dependency":
       return (
-        <DyadAddDependency
+        <CreaAddDependency
           node={{
             properties: {
               packages: attributes.packages || "",
@@ -338,12 +338,12 @@ function renderCustomTag(
           }}
         >
           {content}
-        </DyadAddDependency>
+        </CreaAddDependency>
       );
 
     case "crea-execute-sql":
       return (
-        <DyadExecuteSql
+        <CreaExecuteSql
           node={{
             properties: {
               state: getState({ isStreaming, inProgress }),
@@ -352,12 +352,12 @@ function renderCustomTag(
           }}
         >
           {content}
-        </DyadExecuteSql>
+        </CreaExecuteSql>
       );
 
     case "crea-add-integration":
       return (
-        <DyadAddIntegration
+        <CreaAddIntegration
           node={{
             properties: {
               provider: attributes.provider || "",
@@ -365,12 +365,12 @@ function renderCustomTag(
           }}
         >
           {content}
-        </DyadAddIntegration>
+        </CreaAddIntegration>
       );
 
     case "crea-edit":
       return (
-        <DyadEdit
+        <CreaEdit
           node={{
             properties: {
               path: attributes.path || "",
@@ -380,12 +380,12 @@ function renderCustomTag(
           }}
         >
           {content}
-        </DyadEdit>
+        </CreaEdit>
       );
 
     case "crea-codebase-context":
       return (
-        <DyadCodebaseContext
+        <CreaCodebaseContext
           node={{
             properties: {
               files: attributes.files || "",
@@ -394,24 +394,24 @@ function renderCustomTag(
           }}
         >
           {content}
-        </DyadCodebaseContext>
+        </CreaCodebaseContext>
       );
 
     case "crea-output":
       return (
-        <DyadOutput
+        <CreaOutput
           type={attributes.type as "warning" | "error"}
           message={attributes.message}
         >
           {content}
-        </DyadOutput>
+        </CreaOutput>
       );
 
     case "crea-problem-report":
       return (
-        <DyadProblemSummary summary={attributes.summary}>
+        <CreaProblemSummary summary={attributes.summary}>
           {content}
-        </DyadProblemSummary>
+        </CreaProblemSummary>
       );
 
     case "crea-chat-summary":
@@ -422,3 +422,6 @@ function renderCustomTag(
       return null;
   }
 }
+
+
+
