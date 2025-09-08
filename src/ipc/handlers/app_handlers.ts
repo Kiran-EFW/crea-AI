@@ -498,17 +498,20 @@ export function registerAppHandlers() {
       _,
       params: CreateAppParams,
     ): Promise<{ app: any; chatId: number }> => {
-      const appPath = params.name;
+      // Use custom path if provided, otherwise use name
+      const appPath = params.path || params.name;
       const fullAppPath = getCreaAppPath(appPath);
-      if (fs.existsSync(fullAppPath)) {
-        throw new Error(`App already exists at: ${fullAppPath}`);
+
+      // Only check for existing directory if a custom path was provided
+      if (params.path && fs.existsSync(fullAppPath)) {
+        throw new Error(`Directory already exists at: ${fullAppPath}`);
       }
+
       // Create a new app
       const [app] = await db
         .insert(apps)
         .values({
           name: params.name,
-          // Use the name as the path for now
           path: appPath,
         })
         .returning();

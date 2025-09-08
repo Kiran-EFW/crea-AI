@@ -150,32 +150,13 @@ async function applyComponentTagger(appPath: string) {
   // Install the dependency
   await new Promise<void>((resolve, reject) => {
     logger.info("Installing component-tagger dependency");
-    const process = spawn(
-      "pnpm add -D @crea-ai/react-vite-component-tagger || npm install --save-dev --legacy-peer-deps @crea-ai/react-vite-component-tagger",
-      {
-        cwd: appPath,
-        shell: true,
-        stdio: "pipe",
-      },
-    );
+    // Temporarily skip component tagger installation due to unpublished package
+    logger.warn("Skipping @crea-ai/react-vite-component-tagger installation - package not published yet");
+    // TODO: Re-enable when package is published to npm
 
-    process.stdout?.on("data", (data) => logger.info(data.toString()));
-    process.stderr?.on("data", (data) => logger.error(data.toString()));
-
-    process.on("close", (code) => {
-      if (code === 0) {
-        logger.info("component-tagger dependency installed successfully");
-        resolve();
-      } else {
-        logger.error(`Failed to install dependency, exit code ${code}`);
-        reject(new Error("Failed to install dependency"));
-      }
-    });
-
-    process.on("error", (err) => {
-      logger.error("Failed to spawn pnpm", err);
-      reject(err);
-    });
+    // For now, just resolve immediately without installing the package
+    logger.info("Component tagger setup completed (installation skipped)");
+    resolve();
   });
 
   // Commit changes

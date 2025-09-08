@@ -48,8 +48,7 @@ export const PreviewHeader = () => {
   const [previewMode, setPreviewMode] = useAtom(previewModeAtom);
   const [isPreviewOpen, setIsPreviewOpen] = useAtom(isPreviewOpenAtom);
   const selectedAppId = useAtomValue(selectedAppIdAtom);
-  const previewRef = useRef<HTMLButtonElement>(null);
-  const codeRef = useRef<HTMLButtonElement>(null);
+  const previewCodeToggleRef = useRef<HTMLButtonElement>(null);
   const problemsRef = useRef<HTMLButtonElement>(null);
   const configureRef = useRef<HTMLButtonElement>(null);
   const publishRef = useRef<HTMLButtonElement>(null);
@@ -124,10 +123,9 @@ export const PreviewHeader = () => {
 
       switch (previewMode) {
         case "preview":
-          targetRef = previewRef;
-          break;
         case "code":
-          targetRef = codeRef;
+          // Both preview and code modes use the same toggle button
+          targetRef = previewCodeToggleRef;
           break;
         case "problems":
           targetRef = problemsRef;
@@ -216,13 +214,53 @@ export const PreviewHeader = () => {
               mass: 0.6,
             }}
           />
-          {renderButton(
-            "preview",
-            previewRef,
-            <Eye size={14} />,
-            "Preview",
-            "preview-mode-button",
-          )}
+          {/* Simple Preview/Code Toggle Switch */}
+          <div className="relative">
+            <button
+              data-testid="preview-code-toggle-button"
+              ref={previewCodeToggleRef}
+              className={`${BUTTON_CLASS_NAME} relative px-3 py-1 min-w-[120px] flex items-center justify-between`}
+              onClick={() => selectPanel(previewMode === "preview" ? "code" : "preview")}
+            >
+              {/* Preview Label */}
+              <span className={`text-xs font-medium transition-colors duration-200 ${
+                previewMode === "preview"
+                  ? "text-blue-600 dark:text-blue-400"
+                  : "text-gray-500 dark:text-gray-400"
+              }`}>
+                Preview
+              </span>
+
+              {/* Toggle Switch */}
+              <motion.div
+                className="relative w-8 h-4 bg-gray-200 dark:bg-gray-700 rounded-full mx-2"
+                animate={{
+                  backgroundColor: previewMode === "preview"
+                    ? "rgb(59 130 246)" // blue-500
+                    : "rgb(107 114 128)" // gray-500
+                }}
+                transition={{ duration: 0.2 }}
+              >
+                <motion.div
+                  className="absolute top-0.5 w-3 h-3 bg-white rounded-full shadow-sm"
+                  animate={{
+                    left: previewMode === "preview" ? 2 : 18,
+                  }}
+                  transition={{ duration: 0.2, ease: "easeInOut" }}
+                />
+              </motion.div>
+
+              {/* Code Label */}
+              <span className={`text-xs font-medium transition-colors duration-200 ${
+                previewMode === "code"
+                  ? "text-blue-600 dark:text-blue-400"
+                  : "text-gray-500 dark:text-gray-400"
+              }`}>
+                Code
+              </span>
+            </button>
+          </div>
+
           {renderButton(
             "problems",
             problemsRef,
@@ -234,13 +272,6 @@ export const PreviewHeader = () => {
                 {displayCount}
               </span>
             ),
-          )}
-          {renderButton(
-            "code",
-            codeRef,
-            <Code size={14} />,
-            "Code",
-            "code-mode-button",
           )}
           {renderButton(
             "configure",

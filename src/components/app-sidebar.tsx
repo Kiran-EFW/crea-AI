@@ -75,7 +75,8 @@ export function AppSidebar() {
   const expandedByHover = useRef(false);
   const [isHelpDialogOpen, setIsHelpDialogOpen] = useState(false); // State for dialog
   const [isDropdownOpen] = useAtom(dropdownOpenAtom);
-  const { theme, setTheme } = useTheme();
+  const { theme, isDarkMode, setTheme } = useTheme();
+
 
   useEffect(() => {
     if (hoverState.startsWith("start-hover") && state === "collapsed") {
@@ -157,10 +158,10 @@ export function AppSidebar() {
               className="font-medium w-14 flex flex-col items-center gap-1 h-14 mb-2 rounded-2xl"
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             >
-              {theme === "dark" ? (
-                <Sun className="h-5 w-5" />
+              {isDarkMode ? (
+                <Sun className="h-5 w-5 text-yellow-500" key="sun" />
               ) : (
-                <Moon className="h-5 w-5" />
+                <Moon className="h-5 w-5 text-blue-500" key="moon" />
               )}
               <span className={"text-xs"}>Theme</span>
             </SidebarMenuButton>

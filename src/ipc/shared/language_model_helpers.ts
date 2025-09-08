@@ -162,6 +162,58 @@ export const MODEL_OPTIONS: Record<string, ModelOption[]> = {
     },
   ],
   openrouter: [
+    // Claude Models via OpenRouter
+    {
+      name: "anthropic/claude-3.7-sonnet",
+      displayName: "Claude 3.7 Sonnet (OpenRouter)",
+      description: "Anthropic's latest model via OpenRouter",
+      maxOutputTokens: 32_000,
+      contextWindow: 200_000,
+      temperature: 0,
+    },
+    {
+      name: "anthropic/claude-3.5-sonnet",
+      displayName: "Claude 3.5 Sonnet (OpenRouter)",
+      description: "Powerful coding model via OpenRouter",
+      maxOutputTokens: 32_000,
+      contextWindow: 200_000,
+      temperature: 0,
+    },
+    // GPT Models via OpenRouter
+    {
+      name: "openai/gpt-5",
+      displayName: "GPT-5 (OpenRouter)",
+      description: "OpenAI's latest model via OpenRouter",
+      maxOutputTokens: 32_000,
+      contextWindow: 400_000,
+      temperature: 0,
+    },
+    {
+      name: "openai/gpt-5-mini",
+      displayName: "GPT-5 Mini (OpenRouter)",
+      description: "Fast and efficient GPT-5 via OpenRouter",
+      maxOutputTokens: 32_000,
+      contextWindow: 400_000,
+      temperature: 0,
+    },
+    // Gemini Models via OpenRouter
+    {
+      name: "google/gemini-2.5-pro",
+      displayName: "Gemini 2.5 Pro (OpenRouter)",
+      description: "Google's advanced model via OpenRouter",
+      maxOutputTokens: 32_000,
+      contextWindow: 1_000_000,
+      temperature: 0,
+    },
+    {
+      name: "google/gemini-2.5-flash",
+      displayName: "Gemini 2.5 Flash (OpenRouter)",
+      description: "Fast Gemini model via OpenRouter",
+      maxOutputTokens: 32_000,
+      contextWindow: 1_000_000,
+      temperature: 0,
+    },
+    // Coding-focused models
     {
       name: "qwen/qwen3-coder",
       displayName: "Qwen3 Coder",
@@ -170,16 +222,32 @@ export const MODEL_OPTIONS: Record<string, ModelOption[]> = {
       contextWindow: 262_000,
       temperature: 0,
     },
-    // https://openrouter.ai/deepseek/deepseek-chat-v3-0324:free
     {
-      name: "deepseek/deepseek-chat-v3-0324:free",
-      displayName: "DeepSeek v3 (free)",
-      description: "Use for free (data may be used for training)",
+      name: "codestral/codestral-mamba",
+      displayName: "Codestral Mamba",
+      description: "Mistral's advanced coding model",
+      maxOutputTokens: 32_000,
+      contextWindow: 256_000,
+      temperature: 0,
+    },
+    // Reasoning models
+    {
+      name: "deepseek/deepseek-r1-0528",
+      displayName: "DeepSeek R1",
+      description: "Excellent reasoning model with great price/performance",
       maxOutputTokens: 32_000,
       contextWindow: 128_000,
       temperature: 0,
     },
-    // https://openrouter.ai/moonshotai/kimi-k2
+    {
+      name: "deepseek/deepseek-v3",
+      displayName: "DeepSeek v3",
+      description: "Powerful reasoning model",
+      maxOutputTokens: 32_000,
+      contextWindow: 128_000,
+      temperature: 0,
+    },
+    // Cost-effective options
     {
       name: "moonshotai/kimi-k2",
       displayName: "Kimi K2",
@@ -188,10 +256,19 @@ export const MODEL_OPTIONS: Record<string, ModelOption[]> = {
       contextWindow: 131_000,
       temperature: 0,
     },
+    // Free tier options
     {
-      name: "deepseek/deepseek-r1-0528",
-      displayName: "DeepSeek R1",
-      description: "Good reasoning model with excellent price for performance",
+      name: "deepseek/deepseek-chat-v3-0324:free",
+      displayName: "DeepSeek v3 (free)",
+      description: "Use for free (data may be used for training)",
+      maxOutputTokens: 32_000,
+      contextWindow: 128_000,
+      temperature: 0,
+    },
+    {
+      name: "microsoft/wizardlm-2-8x22b",
+      displayName: "WizardLM 2 (free)",
+      description: "Free tier reasoning model",
       maxOutputTokens: 32_000,
       contextWindow: 128_000,
       temperature: 0,
@@ -245,6 +322,128 @@ export const MODEL_OPTIONS: Record<string, ModelOption[]> = {
       temperature: 0,
     },
   ],
+  grok: [
+    {
+      name: "grok-2-1212",
+      displayName: "Grok 2",
+      description: "xAI's Grok 2 model with enhanced reasoning",
+      maxOutputTokens: 32_000,
+      contextWindow: 128_000,
+      temperature: 0,
+    },
+    {
+      name: "grok-2-mini",
+      displayName: "Grok 2 Mini",
+      description: "Fast and efficient Grok model",
+      maxOutputTokens: 16_000,
+      contextWindow: 128_000,
+      temperature: 0,
+    },
+    {
+      name: "grok-beta",
+      displayName: "Grok Beta",
+      description: "Latest Grok beta with experimental features",
+      maxOutputTokens: 32_000,
+      contextWindow: 128_000,
+      temperature: 0,
+    },
+    {
+      name: "grok-1",
+      displayName: "Grok 1",
+      description: "Original Grok model with reliable performance",
+      maxOutputTokens: 32_000,
+      contextWindow: 128_000,
+      temperature: 0,
+    },
+    {
+      name: "grok-2-fast",
+      displayName: "Grok 2 Fast",
+      description: "Optimized Grok 2 for speed and efficiency",
+      maxOutputTokens: 16_000,
+      contextWindow: 128_000,
+      temperature: 0,
+    },
+  ],
+  mistral: [
+    {
+      name: "mistral-large-latest",
+      displayName: "Mistral Large",
+      description: "Mistral's most powerful model",
+      maxOutputTokens: 32_000,
+      contextWindow: 128_000,
+      temperature: 0,
+    },
+    {
+      name: "mistral-medium",
+      displayName: "Mistral Medium",
+      description: "Balanced performance and efficiency",
+      maxOutputTokens: 32_000,
+      contextWindow: 32_000,
+      temperature: 0,
+    },
+    {
+      name: "codestral-mamba",
+      displayName: "Codestral Mamba",
+      description: "Mistral's coding-focused model",
+      maxOutputTokens: 32_000,
+      contextWindow: 256_000,
+      temperature: 0,
+    },
+  ],
+  cohere: [
+    {
+      name: "command-r-plus",
+      displayName: "Command R+",
+      description: "Cohere's most powerful model",
+      maxOutputTokens: 32_000,
+      contextWindow: 128_000,
+      temperature: 0,
+    },
+    {
+      name: "command-r",
+      displayName: "Command R",
+      description: "Cohere's advanced reasoning model",
+      maxOutputTokens: 32_000,
+      contextWindow: 128_000,
+      temperature: 0,
+    },
+  ],
+  together: [
+    {
+      name: "meta-llama/llama-3.3-70b-instruct-turbo",
+      displayName: "Llama 3.3 70B",
+      description: "Meta's largest Llama model",
+      maxOutputTokens: 32_000,
+      contextWindow: 128_000,
+      temperature: 0,
+    },
+    {
+      name: "meta-llama/llama-3.1-8b-instruct-turbo",
+      displayName: "Llama 3.1 8B",
+      description: "Fast and efficient Llama model",
+      maxOutputTokens: 32_000,
+      contextWindow: 128_000,
+      temperature: 0,
+    },
+  ],
+  perplexity: [
+    {
+      name: "llama-3.1-sonar-large-128k-online",
+      displayName: "Sonar Large Online",
+      description: "Real-time web search with Llama 3.1",
+      maxOutputTokens: 32_000,
+      contextWindow: 128_000,
+      temperature: 0,
+    },
+    {
+      name: "llama-3.1-sonar-small-128k-online",
+      displayName: "Sonar Small Online",
+      description: "Fast online search model",
+      maxOutputTokens: 32_000,
+      contextWindow: 128_000,
+      temperature: 0,
+    },
+  ],
 };
 
 export const PROVIDER_TO_ENV_VAR: Record<string, string> = {
@@ -253,6 +452,11 @@ export const PROVIDER_TO_ENV_VAR: Record<string, string> = {
   google: "GEMINI_API_KEY",
   openrouter: "OPENROUTER_API_KEY",
   azure: "AZURE_API_KEY",
+  grok: "GROK_API_KEY",
+  mistral: "MISTRAL_API_KEY",
+  cohere: "COHERE_API_KEY",
+  together: "TOGETHER_API_KEY",
+  perplexity: "PERPLEXITY_API_KEY",
 };
 
 export const CLOUD_PROVIDERS: Record<
@@ -298,6 +502,36 @@ export const CLOUD_PROVIDERS: Record<
     hasFreeTier: false,
     websiteUrl: "https://portal.azure.com/",
     gatewayPrefix: "",
+  },
+  grok: {
+    displayName: "Grok",
+    hasFreeTier: false,
+    websiteUrl: "https://console.x.ai/",
+    gatewayPrefix: "grok/",
+  },
+  mistral: {
+    displayName: "Mistral AI",
+    hasFreeTier: false,
+    websiteUrl: "https://console.mistral.ai/",
+    gatewayPrefix: "mistral/",
+  },
+  cohere: {
+    displayName: "Cohere",
+    hasFreeTier: false,
+    websiteUrl: "https://dashboard.cohere.ai/",
+    gatewayPrefix: "cohere/",
+  },
+  together: {
+    displayName: "Together AI",
+    hasFreeTier: false,
+    websiteUrl: "https://api.together.xyz/",
+    gatewayPrefix: "together/",
+  },
+  perplexity: {
+    displayName: "Perplexity",
+    hasFreeTier: true,
+    websiteUrl: "https://www.perplexity.ai/",
+    gatewayPrefix: "perplexity/",
   },
 };
 

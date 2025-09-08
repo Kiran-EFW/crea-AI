@@ -47,6 +47,7 @@ export interface ChatProblemsEvent {
 
 export interface CreateAppParams {
   name: string;
+  path?: string;
 }
 
 export interface CreateAppResult {

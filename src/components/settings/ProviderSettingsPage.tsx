@@ -16,6 +16,7 @@ import { UserSettings } from "@/lib/schemas";
 import { ProviderSettingsHeader } from "./ProviderSettingsHeader";
 import { ApiKeyConfiguration } from "./ApiKeyConfiguration";
 import { ModelsSection } from "./ModelsSection";
+import { OpenRouterModelSelector } from "../OpenRouterModelSelector";
 
 interface ProviderSettingsPageProps {
   provider: string;
@@ -290,6 +291,11 @@ export function ProviderSettingsPage({ provider }: ProviderSettingsPageProps) {
         {/* Conditionally render CustomModelsSection */}
         {supportsCustomModels && providerData && (
           <ModelsSection providerId={providerData.id} />
+        )}
+
+        {/* OpenRouter Model Selector */}
+        {provider === "openrouter" && (
+          <OpenRouterModelSelector providerId={provider} />
         )}
         <div className="h-24"></div>
       </div>

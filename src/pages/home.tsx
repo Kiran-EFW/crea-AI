@@ -25,6 +25,8 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { Button } from "@/components/ui/button";
 import { ExternalLink, Plus } from "lucide-react";
 import { ImportAppButton } from "@/components/ImportAppButton";
+import { GitHubConnectButton } from "@/components/GitHubConnectButton";
+import { CreateAppDialog } from "@/components/CreateAppDialog";
 import { showError } from "@/lib/toast";
 import { invalidateAppQuery } from "@/hooks/useLoadApp";
 import { useQueryClient } from "@tanstack/react-query";
@@ -52,6 +54,7 @@ export default function HomePage() {
   const appVersion = useAppVersion();
   const [releaseNotesOpen, setReleaseNotesOpen] = useState(false);
   const [releaseUrl, setReleaseUrl] = useState("");
+  const [createAppDialogOpen, setCreateAppDialogOpen] = useState(false);
   const { theme } = useTheme();
   const queryClient = useQueryClient();
   useEffect(() => {
@@ -157,6 +160,36 @@ export default function HomePage() {
     // No finally block needed for setIsLoading(false) here if navigation happens on success
   };
 
+  const handleAppCreated = async (appId: number, chatId: string) => {
+    try {
+      setIsLoading(true);
+
+      // Apply template if selected
+      if (
+        settings?.selectedTemplateId &&
+        NEON_TEMPLATE_IDS.has(settings.selectedTemplateId)
+      ) {
+        await neonTemplateHook({
+          appId,
+          appName: "", // We'll get this from the app data
+        });
+      }
+
+      // Navigate to the chat
+      setSelectedAppId(appId);
+      setIsPreviewOpen(false);
+      await refreshApps();
+      await invalidateAppQuery(queryClient, { appId });
+      posthog.capture("home:create-app-dialog");
+      navigate({ to: "/chat", search: { id: chatId } });
+    } catch (error) {
+      console.error("Failed to setup created app:", error);
+      showError("App created but failed to setup. " + (error as any).toString());
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // Loading overlay for app creation
   if (isLoading) {
     return (
@@ -185,16 +218,17 @@ export default function HomePage() {
       <SetupBanner />
 
       <div className="w-full">
-        <div className="flex flex-col sm:flex-row gap-4 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
           <ImportAppButton />
           <Button
-            onClick={() => navigate({ to: "/" })}
+            onClick={() => setCreateAppDialogOpen(true)}
             variant="outline"
-            className="flex items-center gap-2 px-6 py-3 h-auto bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950 dark:to-indigo-950 border-blue-200 dark:border-blue-800 hover:from-blue-100 hover:to-indigo-100 dark:hover:from-blue-900 dark:hover:to-indigo-900"
+            className="flex items-center gap-2 px-6 py-3 h-auto w-full bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950 dark:to-indigo-950 border-blue-200 dark:border-blue-800 hover:from-blue-100 hover:to-indigo-100 dark:hover:from-blue-900 dark:hover:to-indigo-900"
           >
             <Plus className="w-5 h-5 text-blue-600 dark:text-blue-400" />
             <span className="font-medium">Create New App</span>
           </Button>
+          <GitHubConnectButton />
         </div>
         <HomeChatInput onSubmit={handleSubmit} />
 
@@ -287,6 +321,13 @@ export default function HomePage() {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Create App Dialog */}
+      <CreateAppDialog
+        isOpen={createAppDialogOpen}
+        onClose={() => setCreateAppDialogOpen(false)}
+        onAppCreated={handleAppCreated}
+      />
     </div>
   );
 }
