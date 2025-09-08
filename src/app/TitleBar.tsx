@@ -10,7 +10,7 @@ import { providerSettingsRoute } from "@/routes/settings/providers/$provider";
 import { cn } from "@/lib/utils";
 import { useDeepLink } from "@/contexts/DeepLinkContext";
 import { useEffect, useState } from "react";
-import { CreaProSuccessDialog } from "@/components/CreaProSuccessDialog";
+import { ScalixProSuccessDialog } from "@/components/ScalixProSuccessDialog";
 import { useTheme } from "@/contexts/ThemeContext";
 import { IpcClient } from "@/ipc/ipc_client";
 import { useUserBudgetInfo } from "@/hooks/useUserBudgetInfo";
@@ -45,7 +45,7 @@ export const TitleBar = () => {
     checkPlatform();
   }, []);
 
-  const showCreaProSuccessDialog = () => {
+  const showScalixProSuccessDialog = () => {
     setIsSuccessDialogOpen(true);
   };
 
@@ -54,7 +54,7 @@ export const TitleBar = () => {
     const handleDeepLink = async () => {
       if (lastDeepLink?.type === "crea-pro-return") {
         await refreshSettings();
-        showCreaProSuccessDialog();
+        showScalixProSuccessDialog();
       }
     };
     handleDeepLink();
@@ -104,7 +104,7 @@ export const TitleBar = () => {
         {showWindowControls && <WindowsControls />}
       </div>
 
-      <CreaProSuccessDialog
+      <ScalixProSuccessDialog
         isOpen={isSuccessDialogOpen}
         onClose={() => setIsSuccessDialogOpen(false)}
       />

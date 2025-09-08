@@ -6,9 +6,9 @@ import { walk } from "estree-walker";
 const VALID_EXTENSIONS = new Set([".jsx", ".tsx"]);
 
 /**
- * A webpack loader that adds `data-crea-*` attributes to JSX elements.
+ * A webpack loader that adds `data-scalix-*` attributes to JSX elements.
  */
-export default function creaTaggerLoader(this: any, code: string) {
+export default function scalixTaggerLoader(this: any, code: string) {
   // Signal that this is an async loader
   const callback = this.async();
 
@@ -48,26 +48,26 @@ export default function creaTaggerLoader(this: any, code: string) {
             const alreadyTagged = node.attributes?.some(
               (attr: any) =>
                 attr.type === "JSXAttribute" &&
-                attr.name?.name === "data-crea-id",
+                attr.name?.name === "data-scalix-id",
             );
             if (alreadyTagged) return;
 
-            // Build the crea ID
+            // Build the scalix ID
             const loc = node.loc?.start;
             if (!loc) return;
-            const creaId = `${fileRelative}:${loc.line}:${loc.column}`;
+            const scalixId = `${fileRelative}:${loc.line}:${loc.column}`;
 
             // Inject the attributes
             if (node.name.end != null) {
               ms.appendLeft(
                 node.name.end,
-                ` data-crea-id="${creaId}" data-crea-name="${tagName}"`,
+                ` data-scalix-id="${scalixId}" data-scalix-name="${tagName}"`,
               );
               transformCount++;
             }
           } catch (error) {
             console.warn(
-              `[crea-tagger] Warning: Failed to process JSX node in ${this.resourcePath}:`,
+              `[scalix-tagger] Warning: Failed to process JSX node in ${this.resourcePath}:`,
               error,
             );
           }
@@ -86,7 +86,7 @@ export default function creaTaggerLoader(this: any, code: string) {
       };
     } catch (error) {
       console.warn(
-        `[crea-tagger] Warning: Failed to transform ${this.resourcePath}:`,
+        `[scalix-tagger] Warning: Failed to transform ${this.resourcePath}:`,
         error,
       );
       return null;
@@ -102,7 +102,7 @@ export default function creaTaggerLoader(this: any, code: string) {
       }
     })
     .catch((err) => {
-      console.error(`[crea-tagger] ERROR in ${this.resourcePath}:`, err);
+      console.error(`[scalix-tagger] ERROR in ${this.resourcePath}:`, err);
       // Return original code instead of throwing
       callback(null, code);
     });

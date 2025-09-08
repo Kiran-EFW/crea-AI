@@ -9,16 +9,16 @@ import { getEnvVar } from "./read_env";
 import log from "electron-log";
 import { getLanguageModelProviders } from "../shared/language_model_helpers";
 import { LanguageModelProvider } from "../ipc_types";
-import { createCreaEngine } from "./llm_engine_provider";
-import { CREA_API_ENDPOINTS } from "./crea_auth";
+import { createScalixEngine } from "./llm_engine_provider";
+import { SCALIX_API_ENDPOINTS } from "./scalix_auth";
 
 import { LM_STUDIO_BASE_URL } from "./lm_studio_utils";
 import { LanguageModel } from "ai";
 import { createOllamaProvider } from "./ollama_provider";
 import { getOllamaApiUrl } from "../handlers/local_model_ollama_handler";
 
-const creaEngineUrl = process.env.CREA_ENGINE_URL;
-const creaGatewayUrl = process.env.CREA_GATEWAY_URL;
+const scalixEngineUrl = process.env.SCALIX_ENGINE_URL;
+const scalixGatewayUrl = process.env.SCALIX_GATEWAY_URL;
 
 const AUTO_MODELS = [
   {
@@ -56,7 +56,7 @@ export async function getModelClient(
 }> {
   const allProviders = await getLanguageModelProviders();
 
-  const creaApiKey = settings.providerSettings?.auto?.apiKey?.value;
+  const scalixApiKey = settings.providerSettings?.auto?.apiKey?.value;
 
   // --- Handle specific provider ---
   const providerConfig = allProviders.find((p) => p.id === model.provider);
@@ -65,22 +65,22 @@ export async function getModelClient(
     throw new Error(`Configuration not found for provider: ${model.provider}`);
   }
 
-  // Handle Crea Pro override
-  if (creaApiKey && settings.enableCreaPro) {
-    // Check if the selected provider supports Crea Pro (has a gateway prefix) OR
+  // Handle Scalix Pro override
+  if (scalixApiKey && settings.enableScalixPro) {
+    // Check if the selected provider supports Scalix Pro (has a gateway prefix) OR
     // we're using local engine.
     // IMPORTANT: some providers like OpenAI have an empty string gateway prefix,
     // so we do a nullish and not a truthy check here.
-    if (providerConfig.gatewayPrefix != null || creaEngineUrl) {
+    if (providerConfig.gatewayPrefix != null || scalixEngineUrl) {
       const isEngineEnabled =
         settings.enableProSmartFilesContextMode ||
         settings.enableProLazyEditsMode;
       const provider = isEngineEnabled
-        ? createCreaEngine({
-            apiKey: creaApiKey,
-            baseURL: creaEngineUrl ?? "https://engine.crea.ai/v1",
+        ? createScalixEngine({
+            apiKey: scalixApiKey,
+            baseURL: scalixEngineUrl ?? "https://engine.scalix.ai/v1",
             originalProviderId: model.provider,
-            creaOptions: {
+            scalixOptions: {
               enableLazyEdits:
                 settings.selectedChatMode === "ask"
                   ? false
@@ -91,21 +91,21 @@ export async function getModelClient(
             settings,
           })
         : createOpenAICompatible({
-            name: "crea-gateway",
-            apiKey: creaApiKey,
-            baseURL: creaGatewayUrl ?? CREA_API_ENDPOINTS.GATEWAY,
+            name: "scalix-gateway",
+            apiKey: scalixApiKey,
+            baseURL: scalixGatewayUrl ?? SCALIX_API_ENDPOINTS.GATEWAY,
           });
 
       logger.info(
-        `\x1b[1;97;44m Using Crea Pro API key for model: ${model.name}. engine_enabled=${isEngineEnabled} \x1b[0m`,
+        `\x1b[1;97;44m Using Scalix Pro API key for model: ${model.name}. engine_enabled=${isEngineEnabled} \x1b[0m`,
       );
       if (isEngineEnabled) {
         logger.info(
-          `\x1b[1;30;42m Using Crea Pro engine: ${creaEngineUrl ?? "<prod>"} \x1b[0m`,
+          `\x1b[1;30;42m Using Scalix Pro engine: ${scalixEngineUrl ?? "<prod>"} \x1b[0m`,
         );
       } else {
         logger.info(
-          `\x1b[1;30;43m Using Crea Pro gateway: ${creaGatewayUrl ?? "<prod>"} \x1b[0m`,
+          `\x1b[1;30;43m Using Scalix Pro gateway: ${scalixGatewayUrl ?? "<prod>"} \x1b[0m`,
         );
       }
       // Do not use free variant (for openrouter).

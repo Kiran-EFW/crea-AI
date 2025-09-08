@@ -56,30 +56,30 @@ try {
 }
 
 try {
-  const creaShimPath = path.join(__dirname, "crea-shim.js");
-  creaShimContent = fs.readFileSync(creaShimPath, "utf-8");
-  parentPort?.postMessage("[proxy-worker] crea-shim.js loaded.");
+  const scalixShimPath = path.join(__dirname, "scalix-shim.js");
+  creaShimContent = fs.readFileSync(scalixShimPath, "utf-8");
+  parentPort?.postMessage("[proxy-worker] scalix-shim.js loaded.");
 } catch (error) {
   parentPort?.postMessage(
-    `[proxy-worker] Failed to read crea-shim.js: ${error.message}`,
+    `[proxy-worker] Failed to read scalix-shim.js: ${error.message}`,
   );
 }
 
 try {
-  const creaComponentSelectorClientPath = path.join(
+  const scalixComponentSelectorClientPath = path.join(
     __dirname,
-    "crea-component-selector-client.js",
+    "scalix-component-selector-client.js",
   );
   creaComponentSelectorClientContent = fs.readFileSync(
-    creaComponentSelectorClientPath,
+    scalixComponentSelectorClientPath,
     "utf-8",
   );
   parentPort?.postMessage(
-    "[proxy-worker] crea-component-selector-client.js loaded.",
+    "[proxy-worker] scalix-component-selector-client.js loaded.",
   );
 } catch (error) {
   parentPort?.postMessage(
-    `[proxy-worker] Failed to read crea-component-selector-client.js: ${error.message}`,
+    `[proxy-worker] Failed to read scalix-component-selector-client.js: ${error.message}`,
   );
 }
 

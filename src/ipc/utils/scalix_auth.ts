@@ -12,14 +12,14 @@ const logger = log.scope("scalix_auth");
  * - Scalix Pro services (user management, billing)
  */
 
-export interface CreaAuthConfig {
+export interface ScalixAuthConfig {
   apiKey?: string;
   baseURL?: string;
   timeout?: number;
   retries?: number;
 }
 
-export interface CreaAuthHeaders {
+export interface ScalixAuthHeaders {
   Authorization: string;
   "X-Scalix-Client": string;
   "X-Scalix-Version": string;
@@ -30,7 +30,7 @@ export interface CreaAuthHeaders {
 /**
  * Validates Scalix API key format
  */
-export function validateCreaApiKey(apiKey: string): boolean {
+export function validateScalixApiKey(apiKey: string): boolean {
   if (!apiKey) return false;
 
   // Scalix API keys should start with 'scalix_'
@@ -41,7 +41,7 @@ export function validateCreaApiKey(apiKey: string): boolean {
 
   // Check minimum length (should be reasonably long)
   if (apiKey.length < 20) {
-    logger.error("Crea API key appears to be too short");
+    logger.error("Scalix API key appears to be too short");
     return false;
   }
 
@@ -51,28 +51,28 @@ export function validateCreaApiKey(apiKey: string): boolean {
 /**
  * Loads and validates Scalix API key from settings or environment
  */
-export function loadCreaApiKey(options: CreaAuthConfig = {}): string {
+export function loadScalixApiKey(options: ScalixAuthConfig = {}): string {
   const apiKey = loadApiKey({
     apiKey: options.apiKey,
     environmentVariableName: "SCALIX_PRO_API_KEY",
     description: "Scalix Pro API key",
   });
 
-  if (!validateCreaApiKey(apiKey)) {
-    throw new Error("Invalid Crea API key format or missing key");
+  if (!validateScalixApiKey(apiKey)) {
+    throw new Error("Invalid Scalix API key format or missing key");
   }
 
   return apiKey;
 }
 
 /**
- * Generates Crea authentication headers
+ * Generates Scalix authentication headers
  */
-export function createCreaAuthHeaders(options: CreaAuthConfig = {}): CreaAuthHeaders {
-  const creaApiKey = loadCreaApiKey(options);
+export function createScalixAuthHeaders(options: ScalixAuthConfig = {}): ScalixAuthHeaders {
+  const scalixApiKey = loadScalixApiKey(options);
 
   return {
-    Authorization: `Bearer ${creaApiKey}`,
+    Authorization: `Bearer ${scalixApiKey}`,
     "X-Scalix-Client": "desktop-app",
     "X-Scalix-Version": process.env.npm_package_version || "1.0.0",
     "Content-Type": "application/json",
@@ -80,9 +80,9 @@ export function createCreaAuthHeaders(options: CreaAuthConfig = {}): CreaAuthHea
 }
 
 /**
- * Crea API endpoints configuration
+ * Scalix API endpoints configuration
  */
-export const CREA_API_ENDPOINTS = {
+export const SCALIX_API_ENDPOINTS = {
   // Scalix Engine - Advanced AI processing
   ENGINE: "https://engine.scalix.ai/v1",
 
@@ -105,11 +105,11 @@ export const CREA_API_ENDPOINTS = {
 } as const;
 
 /**
- * Makes authenticated request to Crea API with retry logic
+ * Makes authenticated request to Scalix API with retry logic
  */
-export async function makeCreaApiRequest<T = any>(
+export async function makeScalixApiRequest<T = any>(
   endpoint: string,
-  options: RequestInit & CreaAuthConfig = {}
+  options: RequestInit & ScalixAuthConfig = {}
 ): Promise<T> {
   const {
     timeout = 10000,
@@ -119,14 +119,14 @@ export async function makeCreaApiRequest<T = any>(
     ...fetchOptions
   } = options;
 
-  const authHeaders = createCreaAuthHeaders(options);
+  const authHeaders = createScalixAuthHeaders(options);
   const headers = { ...authHeaders, ...customHeaders };
 
   let lastError: Error | null = null;
 
   for (let attempt = 1; attempt <= retries; attempt++) {
     try {
-      logger.info(`Crea API request attempt ${attempt}/${retries} to ${endpoint}`);
+      logger.info(`Scalix API request attempt ${attempt}/${retries} to ${endpoint}`);
 
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), timeout);
@@ -142,11 +142,11 @@ export async function makeCreaApiRequest<T = any>(
 
       if (!response.ok) {
         const errorBody = await response.text();
-        const error = new Error(`Crea API request failed: ${response.status} ${response.statusText}`);
+        const error = new Error(`Scalix API request failed: ${response.status} ${response.statusText}`);
 
         // Don't retry on authentication errors
         if (response.status === 401 || response.status === 403) {
-          logger.error(`Crea authentication failed: ${errorBody}`);
+          logger.error(`Scalix authentication failed: ${errorBody}`);
           throw error;
         }
 
@@ -161,12 +161,12 @@ export async function makeCreaApiRequest<T = any>(
       }
 
       const data = await response.json();
-      logger.info(`Crea API request successful to ${endpoint}`);
+      logger.info(`Scalix API request successful to ${endpoint}`);
       return data;
 
     } catch (error: any) {
       lastError = error;
-      logger.warn(`Crea API request attempt ${attempt} failed: ${error.message}`);
+      logger.warn(`Scalix API request attempt ${attempt} failed: ${error.message}`);
 
       // Retry on network errors
       if (attempt < retries &&
@@ -182,36 +182,36 @@ export async function makeCreaApiRequest<T = any>(
     }
   }
 
-  logger.error(`All Crea API request attempts failed. Last error: ${lastError?.message}`);
-  throw lastError || new Error("Crea API request failed");
+  logger.error(`All Scalix API request attempts failed. Last error: ${lastError?.message}`);
+  throw lastError || new Error("Scalix API request failed");
 }
 
 /**
- * Gets user budget information from Crea API
+ * Gets user budget information from Scalix API
  */
-export async function getCreaUserBudget(options: CreaAuthConfig = {}) {
+export async function getScalixUserBudget(options: ScalixAuthConfig = {}) {
   try {
-    return await makeCreaApiRequest(CREA_API_ENDPOINTS.USER_BUDGET, {
+    return await makeScalixApiRequest(SCALIX_API_ENDPOINTS.USER_BUDGET, {
       ...options,
       method: "GET",
     });
   } catch (error) {
-    logger.error("Failed to fetch Crea user budget:", error);
+    logger.error("Failed to fetch Scalix user budget:", error);
     return null;
   }
 }
 
 /**
- * Gets user information from Crea API
+ * Gets user information from Scalix API
  */
-export async function getCreaUserInfo(options: CreaAuthConfig = {}) {
+export async function getScalixUserInfo(options: ScalixAuthConfig = {}) {
   try {
-    return await makeCreaApiRequest(CREA_API_ENDPOINTS.USER_INFO, {
+    return await makeScalixApiRequest(SCALIX_API_ENDPOINTS.USER_INFO, {
       ...options,
       method: "GET",
     });
   } catch (error) {
-    logger.error("Failed to fetch Crea user info:", error);
+    logger.error("Failed to fetch Scalix user info:", error);
     return null;
   }
 }

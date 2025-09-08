@@ -20,12 +20,12 @@ import { gitCommit } from "../utils/git_utils";
 import { readSettings } from "@/main/settings";
 import { writeMigrationFile } from "../utils/file_utils";
 import {
-  getCreaWriteTags,
-  getCreaRenameTags,
-  getCreaDeleteTags,
-  getCreaAddDependencyTags,
-  getCreaExecuteSqlTags,
-} from "../utils/crea_tag_parser";
+  getScalixWriteTags,
+  getScalixRenameTags,
+  getScalixDeleteTags,
+  getScalixAddDependencyTags,
+  getScalixExecuteSqlTags,
+} from "../utils/scalix_tag_parser";
 import { storeDbTimestampAtCurrentVersion } from "../utils/neon_timestamp_utils";
 
 import { FileUploadsState } from "../utils/file_uploads_state";
@@ -111,12 +111,12 @@ export async function processFullResponseActions(
 
   try {
     // Extract all tags
-    const creaWriteTags = getCreaWriteTags(fullResponse);
-    const creaRenameTags = getCreaRenameTags(fullResponse);
-    const creaDeletePaths = getCreaDeleteTags(fullResponse);
-    const creaAddDependencyPackages = getCreaAddDependencyTags(fullResponse);
-    const creaExecuteSqlQueries = chatWithApp.app.supabaseProjectId
-      ? getCreaExecuteSqlTags(fullResponse)
+    const scalixWriteTags = getScalixWriteTags(fullResponse);
+    const scalixRenameTags = getScalixRenameTags(fullResponse);
+    const scalixDeletePaths = getScalixDeleteTags(fullResponse);
+    const scalixAddDependencyPackages = getScalixAddDependencyTags(fullResponse);
+    const scalixExecuteSqlQueries = chatWithApp.app.supabaseProjectId
+      ? getScalixExecuteSqlTags(fullResponse)
       : [];
 
     const message = await db.query.messages.findFirst({

@@ -1,16 +1,16 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 import {
-  getCreaWriteTags,
-  getCreaRenameTags,
-  getCreaAddDependencyTags,
-  getCreaDeleteTags,
-} from "../ipc/utils/crea_tag_parser";
+  getScalixWriteTags,
+  getScalixRenameTags,
+  getScalixAddDependencyTags,
+  getScalixDeleteTags,
+} from "../ipc/utils/scalix_tag_parser";
 
 import { processFullResponseActions } from "../ipc/processors/response_processor";
 import {
-  removeCreaTags,
-  hasUnclosedCreaWrite,
+  removeScalixTags,
+  hasUnclosedScalixWrite,
 } from "../ipc/handlers/chat_stream_handlers";
 import fs from "node:fs";
 import git from "isomorphic-git";
@@ -958,39 +958,39 @@ describe("processFullResponse", () => {
   });
 });
 
-describe("removeCreaTags", () => {
+describe("removeScalixTags", () => {
   it("should return empty string when input is empty", () => {
-    const result = removeCreaTags("");
+    const result = removeScalixTags("");
     expect(result).toBe("");
   });
 
   it("should return the same text when no crea tags are present", () => {
     const text = "This is a regular text without any crea tags.";
-    const result = removeCreaTags(text);
+    const result = removeScalixTags(text);
     expect(result).toBe(text);
   });
 
   it("should remove a single crea-write tag", () => {
     const text = `Before text <crea-write path="src/file.js">console.log('hello');</crea-write> After text`;
-    const result = removeCreaTags(text);
+    const result = removeScalixTags(text);
     expect(result).toBe("Before text  After text");
   });
 
   it("should remove a single crea-delete tag", () => {
     const text = `Before text <crea-delete path="src/file.js"></crea-delete> After text`;
-    const result = removeCreaTags(text);
+    const result = removeScalixTags(text);
     expect(result).toBe("Before text  After text");
   });
 
   it("should remove a single crea-rename tag", () => {
     const text = `Before text <crea-rename from="old.js" to="new.js"></crea-rename> After text`;
-    const result = removeCreaTags(text);
+    const result = removeScalixTags(text);
     expect(result).toBe("Before text  After text");
   });
 
   it("should remove multiple different crea tags", () => {
     const text = `Start <crea-write path="file1.js">code here</crea-write> middle <crea-delete path="file2.js"></crea-delete> end <crea-rename from="old.js" to="new.js"></crea-rename> finish`;
-    const result = removeCreaTags(text);
+    const result = removeScalixTags(text);
     expect(result).toBe("Start  middle  end  finish");
   });
 
@@ -1006,19 +1006,19 @@ const Component = () => {
 export default Component;
 </crea-write>
 After`;
-    const result = removeCreaTags(text);
+    const result = removeScalixTags(text);
     expect(result).toBe("Before\n\nAfter");
   });
 
   it("should handle crea tags with complex attributes", () => {
     const text = `Text <crea-write path="src/file.js" description="Complex component with quotes" version="1.0">const x = "hello world";</crea-write> more text`;
-    const result = removeCreaTags(text);
+    const result = removeScalixTags(text);
     expect(result).toBe("Text  more text");
   });
 
   it("should remove crea tags and trim whitespace", () => {
     const text = `  <crea-write path="file.js">code</crea-write>  `;
-    const result = removeCreaTags(text);
+    const result = removeScalixTags(text);
     expect(result).toBe("");
   });
 
@@ -1027,19 +1027,19 @@ After`;
 const html = '<div>Hello</div>';
 const component = <Component />;
 </crea-write>`;
-    const result = removeCreaTags(text);
+    const result = removeScalixTags(text);
     expect(result).toBe("");
   });
 
   it("should handle self-closing crea tags", () => {
     const text = `Before <crea-delete path="file.js" /> After`;
-    const result = removeCreaTags(text);
+    const result = removeScalixTags(text);
     expect(result).toBe('Before <crea-delete path="file.js" /> After');
   });
 
   it("should handle malformed crea tags gracefully", () => {
     const text = `Before <crea-write path="file.js">unclosed tag After`;
-    const result = removeCreaTags(text);
+    const result = removeScalixTags(text);
     expect(result).toBe('Before <crea-write path="file.js">unclosed tag After');
   });
 
@@ -1048,51 +1048,51 @@ const component = <Component />;
 const regex = /<div[^>]*>.*?</div>/g;
 const special = "Special chars: @#$%^&*()[]{}|\\";
 </crea-write>`;
-    const result = removeCreaTags(text);
+    const result = removeScalixTags(text);
     expect(result).toBe("");
   });
 
   it("should handle multiple crea tags of the same type", () => {
     const text = `<crea-write path="file1.js">code1</crea-write> between <crea-write path="file2.js">code2</crea-write>`;
-    const result = removeCreaTags(text);
+    const result = removeScalixTags(text);
     expect(result).toBe("between");
   });
 
   it("should handle crea tags with custom tag names", () => {
     const text = `Before <crea-custom-action param="value">content</crea-custom-action> After`;
-    const result = removeCreaTags(text);
+    const result = removeScalixTags(text);
     expect(result).toBe("Before  After");
   });
 });
 
-describe("hasUnclosedCreaWrite", () => {
-  it("should return false when there are no crea-write tags", () => {
-    const text = "This is just regular text without any crea tags.";
-    const result = hasUnclosedCreaWrite(text);
+describe("hasUnclosedScalixWrite", () => {
+  it("should return false when there are no scalix-write tags", () => {
+    const text = "This is just regular text without any scalix tags.";
+    const result = hasUnclosedScalixWrite(text);
     expect(result).toBe(false);
   });
 
-  it("should return false when crea-write tag is properly closed", () => {
-    const text = `<crea-write path="src/file.js">console.log('hello');</crea-write>`;
-    const result = hasUnclosedCreaWrite(text);
+  it("should return false when scalix-write tag is properly closed", () => {
+    const text = `<scalix-write path="src/file.js">console.log('hello');</scalix-write>`;
+    const result = hasUnclosedScalixWrite(text);
     expect(result).toBe(false);
   });
 
-  it("should return true when crea-write tag is not closed", () => {
-    const text = `<crea-write path="src/file.js">console.log('hello');`;
-    const result = hasUnclosedCreaWrite(text);
+  it("should return true when scalix-write tag is not closed", () => {
+    const text = `<scalix-write path="src/file.js">console.log('hello');`;
+    const result = hasUnclosedScalixWrite(text);
     expect(result).toBe(true);
   });
 
   it("should return false when crea-write tag with attributes is properly closed", () => {
     const text = `<crea-write path="src/file.js" description="A test file">console.log('hello');</crea-write>`;
-    const result = hasUnclosedCreaWrite(text);
+    const result = hasUnclosedScalixWrite(text);
     expect(result).toBe(false);
   });
 
   it("should return true when crea-write tag with attributes is not closed", () => {
     const text = `<crea-write path="src/file.js" description="A test file">console.log('hello');`;
-    const result = hasUnclosedCreaWrite(text);
+    const result = hasUnclosedScalixWrite(text);
     expect(result).toBe(true);
   });
 
@@ -1100,7 +1100,7 @@ describe("hasUnclosedCreaWrite", () => {
     const text = `<crea-write path="src/file1.js">code1</crea-write>
     Some text in between
     <crea-write path="src/file2.js">code2</crea-write>`;
-    const result = hasUnclosedCreaWrite(text);
+    const result = hasUnclosedScalixWrite(text);
     expect(result).toBe(false);
   });
 
@@ -1108,7 +1108,7 @@ describe("hasUnclosedCreaWrite", () => {
     const text = `<crea-write path="src/file1.js">code1</crea-write>
     Some text in between
     <crea-write path="src/file2.js">code2`;
-    const result = hasUnclosedCreaWrite(text);
+    const result = hasUnclosedScalixWrite(text);
     expect(result).toBe(true);
   });
 
@@ -1116,7 +1116,7 @@ describe("hasUnclosedCreaWrite", () => {
     const text = `<crea-write path="src/file1.js">code1
     Some text in between
     <crea-write path="src/file2.js">code2</crea-write>`;
-    const result = hasUnclosedCreaWrite(text);
+    const result = hasUnclosedScalixWrite(text);
     expect(result).toBe(false);
   });
 
@@ -1134,7 +1134,7 @@ const Component = () => {
 
 export default Component;
 </crea-write>`;
-    const result = hasUnclosedCreaWrite(text);
+    const result = hasUnclosedScalixWrite(text);
     expect(result).toBe(false);
   });
 
@@ -1151,7 +1151,7 @@ const Component = () => {
 };
 
 export default Component;`;
-    const result = hasUnclosedCreaWrite(text);
+    const result = hasUnclosedScalixWrite(text);
     expect(result).toBe(true);
   });
 
@@ -1160,7 +1160,7 @@ export default Component;`;
 const message = "Hello 'world'";
 const regex = /<div[^>]*>/g;
 </crea-write>`;
-    const result = hasUnclosedCreaWrite(text);
+    const result = hasUnclosedScalixWrite(text);
     expect(result).toBe(false);
   });
 
@@ -1168,7 +1168,7 @@ const regex = /<div[^>]*>/g;
     const text = `Some text before the tag
 <crea-write path="src/file.js">console.log('hello');</crea-write>
 Some text after the tag`;
-    const result = hasUnclosedCreaWrite(text);
+    const result = hasUnclosedScalixWrite(text);
     expect(result).toBe(false);
   });
 
@@ -1176,19 +1176,19 @@ Some text after the tag`;
     const text = `Some text before the tag
 <crea-write path="src/file.js">console.log('hello');
 Some text after the unclosed tag`;
-    const result = hasUnclosedCreaWrite(text);
+    const result = hasUnclosedScalixWrite(text);
     expect(result).toBe(true);
   });
 
   it("should handle empty crea-write tags", () => {
     const text = `<crea-write path="src/file.js"></crea-write>`;
-    const result = hasUnclosedCreaWrite(text);
+    const result = hasUnclosedScalixWrite(text);
     expect(result).toBe(false);
   });
 
   it("should handle unclosed empty crea-write tags", () => {
     const text = `<crea-write path="src/file.js">`;
-    const result = hasUnclosedCreaWrite(text);
+    const result = hasUnclosedScalixWrite(text);
     expect(result).toBe(true);
   });
 
@@ -1196,13 +1196,13 @@ Some text after the unclosed tag`;
     const text = `<crea-write path="src/file1.js">completed content</crea-write>
     <crea-write path="src/file2.js">unclosed content
     <crea-write path="src/file3.js">final content</crea-write>`;
-    const result = hasUnclosedCreaWrite(text);
+    const result = hasUnclosedScalixWrite(text);
     expect(result).toBe(false);
   });
 
   it("should handle tags with special characters in attributes", () => {
     const text = `<crea-write path="src/file-name_with.special@chars.js" description="File with special chars in path">content</crea-write>`;
-    const result = hasUnclosedCreaWrite(text);
+    const result = hasUnclosedScalixWrite(text);
     expect(result).toBe(false);
   });
 });

@@ -9,9 +9,9 @@ const VALID_EXTENSIONS = new Set([".jsx", ".tsx"]);
 /**
  * Returns a Vite / esbuild plug-in.
  */
-export default function creaTagger(): Plugin {
+export default function scalixTagger(): Plugin {
   return {
-    name: "vite-plugin-crea-tagger",
+    name: "vite-plugin-scalix-tagger",
     apply: "serve",
     enforce: "pre",
 
@@ -42,29 +42,29 @@ export default function creaTagger(): Plugin {
               const tagName = node.name.name as string;
               if (!tagName) return;
 
-              // ── 2. Check whether the tag already has data-crea-id ───────────────
+              // ── 2. Check whether the tag already has data-scalix-id ───────────────
               const alreadyTagged = node.attributes?.some(
                 (attr: any) =>
                   attr.type === "JSXAttribute" &&
-                  attr.name?.name === "data-crea-id",
+                  attr.name?.name === "data-scalix-id",
               );
               if (alreadyTagged) return;
 
               // ── 3. Build the id "relative/file.jsx:line:column" ─────────────────
               const loc = node.loc?.start;
               if (!loc) return;
-              const creaId = `${fileRelative}:${loc.line}:${loc.column}`;
+              const scalixId = `${fileRelative}:${loc.line}:${loc.column}`;
 
               // ── 4. Inject the attributes just after the tag name ────────────────
               if (node.name.end != null) {
                 ms.appendLeft(
                   node.name.end,
-                  ` data-crea-id="${creaId}" data-crea-name="${tagName}"`,
+                  ` data-scalix-id="${scalixId}" data-scalix-name="${tagName}"`,
                 );
               }
             } catch (error) {
               console.warn(
-                `[crea-tagger] Warning: Failed to process JSX node in ${id}:`,
+                `[scalix-tagger] Warning: Failed to process JSX node in ${id}:`,
                 error,
               );
             }
@@ -80,7 +80,7 @@ export default function creaTagger(): Plugin {
         };
       } catch (error) {
         console.warn(
-          `[crea-tagger] Warning: Failed to transform ${id}:`,
+          `[scalix-tagger] Warning: Failed to transform ${id}:`,
           error,
         );
         return null;

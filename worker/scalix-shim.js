@@ -1,5 +1,5 @@
 (function () {
-  console.debug("crea-shim.js loaded via proxy v0.6.0");
+  console.debug("scalix-shim.js loaded via proxy v0.6.0");
   const isInsideIframe = window.parent !== window;
   if (!isInsideIframe) return;
 

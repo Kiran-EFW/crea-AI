@@ -1,15 +1,15 @@
-# @crea-ai/react-vite-component-tagger
+# @scalix-ai/react-vite-component-tagger
 
-A Vite plugin that automatically adds `data-crea-id` and `data-crea-name` attributes to your React components. This is useful for identifying components in the DOM, for example for testing or analytics.
+A Vite plugin that automatically adds `data-scalix-id` and `data-scalix-name` attributes to your React components. This is useful for identifying components in the DOM, for example for testing or analytics.
 
 ## Installation
 
 ```bash
-npm install @crea-ai/react-vite-component-tagger
+npm install @scalix-ai/react-vite-component-tagger
 # or
-yarn add @crea-ai/react-vite-component-tagger
+yarn add @scalix-ai/react-vite-component-tagger
 # or
-pnpm add @crea-ai/react-vite-component-tagger
+pnpm add @scalix-ai/react-vite-component-tagger
 ```
 
 ## Usage

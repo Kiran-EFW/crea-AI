@@ -6,10 +6,10 @@ import log from "electron-log";
 import { WorkerInput, WorkerOutput } from "../../../shared/tsc_types";
 
 import {
-  getCreaDeleteTags,
-  getCreaRenameTags,
-  getCreaWriteTags,
-} from "../utils/crea_tag_parser";
+  getScalixDeleteTags,
+  getScalixRenameTags,
+  getScalixWriteTags,
+} from "../utils/scalix_tag_parser";
 import { getTypeScriptCachePath } from "@/paths/paths";
 
 const logger = log.scope("tsc");
@@ -58,9 +58,9 @@ export async function generateProblemReport({
       }
     });
 
-    const writeTags = getCreaWriteTags(fullResponse);
-    const renameTags = getCreaRenameTags(fullResponse);
-    const deletePaths = getCreaDeleteTags(fullResponse);
+    const writeTags = getScalixWriteTags(fullResponse);
+    const renameTags = getScalixRenameTags(fullResponse);
+    const deletePaths = getScalixDeleteTags(fullResponse);
     const virtualChanges = {
       deletePaths,
       renameTags,
