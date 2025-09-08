@@ -449,3 +449,14 @@ export interface HelpChatResponseError {
   error: string;
 }
 
+// --- Payment Provider Types ---
+export interface StripeOAuthParams {
+  code: string;
+  state: string;
+}
+
+export interface RazorpayOAuthParams {
+  code: string;
+  state: string;
+}
+

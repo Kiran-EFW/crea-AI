@@ -9,7 +9,6 @@ const SETTINGS_SECTIONS = [
   { id: "ai-settings", label: "AI" },
   { id: "provider-settings", label: "Model Providers" },
   { id: "telemetry", label: "Telemetry" },
-  { id: "integrations", label: "Integrations" },
   { id: "experiments", label: "Experiments" },
   { id: "danger-zone", label: "Danger Zone" },
 ];

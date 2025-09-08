@@ -2,15 +2,27 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-// We might need a Supabase icon here, but for now, let's use a generic one or text.
-// import { Supabase } from "lucide-react"; // Placeholder
-import { DatabaseZap } from "lucide-react"; // Using DatabaseZap as a placeholder
+import { DatabaseZap, ExternalLink } from "lucide-react";
 import { useSettings } from "@/hooks/useSettings";
 import { showSuccess, showError } from "@/lib/toast";
+import { IpcClient } from "@/ipc/ipc_client";
+import { useDeepLink } from "@/contexts/DeepLinkContext";
+import { useEffect } from "react";
 
 export function SupabaseIntegration() {
   const { settings, updateSettings } = useSettings();
+  const { lastDeepLink } = useDeepLink();
   const [isDisconnecting, setIsDisconnecting] = useState(false);
+
+  useEffect(() => {
+    const handleDeepLink = async () => {
+      if (lastDeepLink?.type === "supabase-oauth-return") {
+        await updateSettings({}); // Refresh settings
+        showSuccess("Successfully connected to Supabase!");
+      }
+    };
+    handleDeepLink();
+  }, [lastDeepLink]);
 
   const handleDisconnectFromSupabase = async () => {
     setIsDisconnecting(true);
@@ -49,54 +61,94 @@ export function SupabaseIntegration() {
   // Check if there's any Supabase accessToken to determine connection status
   const isConnected = !!settings?.supabase?.accessToken;
 
-  if (!isConnected) {
-    return null;
+  if (isConnected) {
+    return (
+      <div className="flex flex-col space-y-4 p-4 border bg-white dark:bg-gray-800 max-w-100 rounded-md">
+        <div className="flex flex-col items-start justify-between">
+          <div className="flex items-center justify-between w-full">
+            <h2 className="text-lg font-medium pb-1 flex items-center gap-2">
+              <DatabaseZap className="h-5 w-5 text-green-500" />
+              Supabase
+            </h2>
+            <Button
+              variant="outline"
+              onClick={() => {
+                IpcClient.getInstance().openExternalUrl(
+                  "https://supabase.com/dashboard",
+                );
+              }}
+              className="ml-2 px-2 py-1 h-8 mb-2"
+              style={{ display: "inline-flex", alignItems: "center" }}
+              asChild
+            >
+              <div className="flex items-center gap-1">
+                Dashboard
+                <ExternalLink className="h-3 w-3" />
+              </div>
+            </Button>
+          </div>
+          <p className="text-sm text-gray-500 dark:text-gray-400 pb-3">
+            You are connected to Supabase for database management and real-time features.
+          </p>
+          <div className="w-full space-y-3">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleDisconnectFromSupabase}
+              disabled={isDisconnecting}
+              className="text-red-600 border-red-600 hover:bg-red-50 dark:hover:bg-red-950"
+            >
+              {isDisconnecting ? "Disconnecting..." : "Disconnect"}
+            </Button>
+            <div className="flex items-center space-x-3 pt-2 border-t">
+              <Switch
+                id="supabase-migrations"
+                checked={!!settings?.enableSupabaseWriteSqlMigration}
+                onCheckedChange={handleMigrationSettingChange}
+              />
+              <div className="space-y-1">
+                <Label
+                  htmlFor="supabase-migrations"
+                  className="text-sm font-medium"
+                >
+                  Write SQL migration files
+                </Label>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  Generate SQL migration files when modifying your schema.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div>
-      <div className="flex items-center justify-between">
-        <div>
-          <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">
-            Supabase Integration
-          </h3>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-            Your account is connected to Supabase.
-          </p>
-        </div>
+    <div className="flex flex-col space-y-4 p-4 border bg-white dark:bg-gray-800 max-w-100 rounded-md">
+      <div className="flex flex-col items-start justify-between">
+        <h2 className="text-lg font-medium pb-1 flex items-center gap-2">
+          <DatabaseZap className="h-5 w-5 text-green-500" />
+          Supabase
+        </h2>
+        <p className="text-sm text-gray-500 dark:text-gray-400 pb-3">
+          Connect to Supabase for PostgreSQL database, real-time subscriptions, and backend features.
+        </p>
         <Button
-          onClick={handleDisconnectFromSupabase}
-          variant="destructive"
-          size="sm"
-          disabled={isDisconnecting}
-          className="flex items-center gap-2"
+          onClick={async () => {
+            if (settings?.isTestMode) {
+              await IpcClient.getInstance().fakeHandleSupabaseConnect();
+            } else {
+              await IpcClient.getInstance().openExternalUrl(
+                "https://oauth.crea.sh/api/integrations/supabase/login",
+              );
+            }
+          }}
+          className="w-auto h-10 cursor-pointer flex items-center justify-center px-4 py-2 rounded-md border-2 transition-colors font-medium text-sm dark:bg-gray-900 dark:border-gray-700"
+          data-testid="connect-supabase-button"
         >
-          {isDisconnecting ? "Disconnecting..." : "Disconnect from Supabase"}
-          <DatabaseZap className="h-4 w-4" />
+          Connect to Supabase
         </Button>
-      </div>
-      <div className="mt-4">
-        <div className="flex items-center space-x-3">
-          <Switch
-            id="supabase-migrations"
-            checked={!!settings?.enableSupabaseWriteSqlMigration}
-            onCheckedChange={handleMigrationSettingChange}
-          />
-          <div className="space-y-1">
-            <Label
-              htmlFor="supabase-migrations"
-              className="text-sm font-medium"
-            >
-              Write SQL migration files
-            </Label>
-            <p className="text-xs text-gray-500 dark:text-gray-400">
-              Generate SQL migration files when modifying your Supabase schema.
-              This helps you track database changes in version control, though
-              these files aren't used for chat context, which uses the live
-              schema.
-            </p>
-          </div>
-        </div>
       </div>
     </div>
   );

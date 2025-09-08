@@ -7,6 +7,17 @@ import { useTemplates } from "@/hooks/useTemplates";
 import { TemplateCard } from "@/components/TemplateCard";
 import { CreateAppDialog } from "@/components/CreateAppDialog";
 import { NeonConnector } from "@/components/NeonConnector";
+import { GitHubIntegration } from "@/components/GitHubIntegration";
+import { VercelIntegration } from "@/components/VercelIntegration";
+import { SupabaseIntegration } from "@/components/SupabaseIntegration";
+import { StripeConnector } from "@/components/StripeConnector";
+import { RazorpayConnector } from "@/components/RazorpayConnector";
+import { AwsS3Connector } from "@/components/AwsS3Connector";
+import { CloudflareR2Connector } from "@/components/CloudflareR2Connector";
+import { SendGridConnector } from "@/components/SendGridConnector";
+import { ResendConnector } from "@/components/ResendConnector";
+import { MixpanelConnector } from "@/components/MixpanelConnector";
+import { SentryConnector } from "@/components/SentryConnector";
 
 const HubPage: React.FC = () => {
   const router = useRouter();
@@ -42,10 +53,10 @@ const HubPage: React.FC = () => {
         </Button>
         <header className="mb-8 text-left">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            Pick your default template
+            Hub
           </h1>
           <p className="text-md text-gray-600 dark:text-gray-400">
-            Choose a starting point for your new project.
+            Choose templates and connect to external services for your projects.
             {isLoading && " Loading additional templates..."}
           </p>
         </header>
@@ -104,18 +115,84 @@ const HubPage: React.FC = () => {
 
 function BackendSection() {
   return (
-    <div className="">
+    <div class="">
       <header className="mb-4 text-left">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-          Backend Services
+          Integrations & Services
         </h1>
         <p className="text-md text-gray-600 dark:text-gray-400">
-          Connect to backend services for your projects.
+          Connect to external services and set up your project infrastructure.
         </p>
       </header>
 
       <div className="grid grid-cols-1 gap-6">
-        <NeonConnector />
+        {/* Database Integrations */}
+        <div className="space-y-4">
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Databases</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <NeonConnector />
+            <SupabaseIntegration />
+          </div>
+        </div>
+
+        {/* Deployment & Hosting */}
+        <div className="space-y-4">
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Deployment & Hosting</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <VercelIntegration />
+          </div>
+        </div>
+
+        {/* Payment Providers */}
+        <div className="space-y-4">
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Payment Providers</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <StripeConnector />
+            <RazorpayConnector />
+          </div>
+        </div>
+
+        {/* Cloud Storage */}
+        <div className="space-y-4">
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Cloud Storage</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <AwsS3Connector />
+            <CloudflareR2Connector />
+          </div>
+        </div>
+
+        {/* Email Services */}
+        <div className="space-y-4">
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Email Services</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <SendGridConnector />
+            <ResendConnector />
+          </div>
+        </div>
+
+        {/* Analytics */}
+        <div className="space-y-4">
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Analytics</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <MixpanelConnector />
+          </div>
+        </div>
+
+        {/* Monitoring */}
+        <div className="space-y-4">
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Monitoring</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <SentryConnector />
+          </div>
+        </div>
+
+        {/* Version Control & Collaboration */}
+        <div className="space-y-4">
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Version Control & Collaboration</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <GitHubIntegration />
+          </div>
+        </div>
       </div>
     </div>
   );

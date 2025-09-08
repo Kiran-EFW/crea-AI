@@ -878,6 +878,58 @@ export class IpcClient {
 
   // --- End Neon Management ---
 
+  // --- Service Management ---
+  public async fakeHandleGithubConnect(): Promise<void> {
+    await this.ipcRenderer.invoke("github:fake-connect");
+  }
+
+  public async fakeHandleSupabaseConnect(): Promise<void> {
+    await this.ipcRenderer.invoke("supabase:fake-connect");
+  }
+
+  public async fakeHandleVercelConnect(): Promise<void> {
+    await this.ipcRenderer.invoke("vercel:fake-connect");
+  }
+
+  // --- Payment Provider Management ---
+  public async fakeHandleStripeConnect(): Promise<void> {
+    await this.ipcRenderer.invoke("stripe:fake-connect");
+  }
+
+  public async fakeHandleRazorpayConnect(): Promise<void> {
+    await this.ipcRenderer.invoke("razorpay:fake-connect");
+  }
+
+  // --- Cloud Storage Management ---
+  public async fakeHandleAwsS3Connect(): Promise<void> {
+    await this.ipcRenderer.invoke("aws-s3:fake-connect");
+  }
+
+  public async fakeHandleCloudflareR2Connect(): Promise<void> {
+    await this.ipcRenderer.invoke("cloudflare-r2:fake-connect");
+  }
+
+  // --- Email Service Management ---
+  public async fakeHandleSendGridConnect(): Promise<void> {
+    await this.ipcRenderer.invoke("sendgrid:fake-connect");
+  }
+
+  public async fakeHandleResendConnect(): Promise<void> {
+    await this.ipcRenderer.invoke("resend:fake-connect");
+  }
+
+  // --- Analytics Management ---
+  public async fakeHandleMixpanelConnect(): Promise<void> {
+    await this.ipcRenderer.invoke("mixpanel:fake-connect");
+  }
+
+  // --- Monitoring Management ---
+  public async fakeHandleSentryConnect(): Promise<void> {
+    await this.ipcRenderer.invoke("sentry:fake-connect");
+  }
+
+  // --- End Service Management ---
+
   // --- Portal Management ---
   public async portalMigrateCreate(params: {
     appId: number;

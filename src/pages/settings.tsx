@@ -13,9 +13,6 @@ import { useAppVersion } from "@/hooks/useAppVersion";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "@tanstack/react-router";
-import { GitHubIntegration } from "@/components/GitHubIntegration";
-import { VercelIntegration } from "@/components/VercelIntegration";
-import { SupabaseIntegration } from "@/components/SupabaseIntegration";
 
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
@@ -100,22 +97,6 @@ export default function SettingsPage() {
                   {settings ? settings.telemetryUserId : "n/a"}
                 </span>
               </div>
-            </div>
-          </div>
-
-          {/* Integrations Section */}
-          <div
-            id="integrations"
-            className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6"
-          >
-            <h2 className="text-lg font-medium text-gray-900 dark:text-white mb-4">
-              Integrations
-            </h2>
-            <div className="space-y-4">
-              <GitHubIntegration />
-              <VercelIntegration />
-              <SupabaseIntegration />
-              <NeonIntegration />
             </div>
           </div>
 

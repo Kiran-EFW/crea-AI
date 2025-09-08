@@ -102,6 +102,57 @@ export const NeonSchema = z.object({
 });
 export type Neon = z.infer<typeof NeonSchema>;
 
+export const StripeSchema = z.object({
+  accessToken: SecretSchema.optional(),
+  refreshToken: SecretSchema.optional(),
+  expiresIn: z.number().optional(),
+  tokenTimestamp: z.number().optional(),
+});
+export type Stripe = z.infer<typeof StripeSchema>;
+
+export const RazorpaySchema = z.object({
+  accessToken: SecretSchema.optional(),
+  refreshToken: SecretSchema.optional(),
+  expiresIn: z.number().optional(),
+  tokenTimestamp: z.number().optional(),
+});
+export type Razorpay = z.infer<typeof RazorpaySchema>;
+
+export const AwsS3Schema = z.object({
+  accessKeyId: SecretSchema.optional(),
+  secretAccessKey: SecretSchema.optional(),
+  region: z.string().optional(),
+});
+export type AwsS3 = z.infer<typeof AwsS3Schema>;
+
+export const CloudflareR2Schema = z.object({
+  accessKeyId: SecretSchema.optional(),
+  secretAccessKey: SecretSchema.optional(),
+  accountId: z.string().optional(),
+});
+export type CloudflareR2 = z.infer<typeof CloudflareR2Schema>;
+
+export const SendGridSchema = z.object({
+  apiKey: SecretSchema.optional(),
+});
+export type SendGrid = z.infer<typeof SendGridSchema>;
+
+export const ResendSchema = z.object({
+  apiKey: SecretSchema.optional(),
+});
+export type Resend = z.infer<typeof ResendSchema>;
+
+export const MixpanelSchema = z.object({
+  projectToken: SecretSchema.optional(),
+});
+export type Mixpanel = z.infer<typeof MixpanelSchema>;
+
+export const SentrySchema = z.object({
+  dsn: SecretSchema.optional(),
+  projectId: z.string().optional(),
+});
+export type Sentry = z.infer<typeof SentrySchema>;
+
 export const ExperimentsSchema = z.object({
   // Deprecated
   enableSupabaseIntegration: z.boolean().describe("DEPRECATED").optional(),
@@ -153,6 +204,14 @@ export const UserSettingsSchema = z.object({
   vercelAccessToken: SecretSchema.optional(),
   supabase: SupabaseSchema.optional(),
   neon: NeonSchema.optional(),
+  stripe: StripeSchema.optional(),
+  razorpay: RazorpaySchema.optional(),
+  aws: AwsS3Schema.optional(),
+  cloudflare: CloudflareR2Schema.optional(),
+  sendgrid: SendGridSchema.optional(),
+  resend: ResendSchema.optional(),
+  mixpanel: MixpanelSchema.optional(),
+  sentry: SentrySchema.optional(),
   autoApproveChanges: z.boolean().optional(),
   telemetryConsent: z.enum(["opted_in", "opted_out", "unset"]).optional(),
   telemetryUserId: z.string().optional(),
