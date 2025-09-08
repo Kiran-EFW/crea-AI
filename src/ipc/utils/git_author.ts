@@ -1,10 +1,11 @@
-import { getGithubUser } from "../handlers/github_handlers";
+import { readSettings } from "../../main/settings";
 
 export async function getGitAuthor() {
-  const user = await getGithubUser();
+  const settings = readSettings();
+  const user = settings.githubUser;
   const author = user
     ? {
-        name: `[crea]`,
+        name: "[crea]",
         email: user.email,
       }
     : {

@@ -204,10 +204,7 @@ export function SupabaseConnector({ appId }: { appId: number }) {
         <img
           onClick={async () => {
             if (settings?.isTestMode) {
-              await IpcClient.getInstance().fakeHandleSupabaseConnect({
-                appId,
-                fakeProjectId: "fake-project-id",
-              });
+              await IpcClient.getInstance().fakeHandleSupabaseConnect();
             } else {
               await IpcClient.getInstance().openExternalUrl(
                 "https://supabase-oauth.crea.sh/api/connect-supabase/login",

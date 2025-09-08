@@ -847,15 +847,6 @@ export class IpcClient {
     });
   }
 
-  public async fakeHandleSupabaseConnect(params: {
-    appId: number;
-    fakeProjectId: string;
-  }): Promise<void> {
-    await this.ipcRenderer.invoke(
-      "supabase:fake-connect-and-set-project",
-      params,
-    );
-  }
 
   // --- End Supabase Management ---
 
@@ -928,7 +919,6 @@ export class IpcClient {
     await this.ipcRenderer.invoke("sentry:fake-connect");
   }
 
-  // --- End Service Management ---
 
   // --- Portal Management ---
   public async portalMigrateCreate(params: {
@@ -1174,6 +1164,10 @@ export class IpcClient {
   // Template methods
   public async getTemplates(): Promise<Template[]> {
     return this.ipcRenderer.invoke("get-templates");
+  }
+
+  public async refreshTemplates(): Promise<Template[]> {
+    return this.ipcRenderer.invoke("refresh-templates");
   }
 
   // --- Prompts Library ---

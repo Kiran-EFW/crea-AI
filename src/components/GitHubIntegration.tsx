@@ -1,21 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Github, ExternalLink } from "lucide-react";
 import { useSettings } from "@/hooks/useSettings";
 import { showSuccess, showError } from "@/lib/toast";
 import { IpcClient } from "@/ipc/ipc_client";
 import { useDeepLink } from "@/contexts/DeepLinkContext";
-import { useEffect } from "react";
 
 export function GitHubIntegration() {
-  const { settings, refreshSettings } = useSettings();
+  const { settings, updateSettings } = useSettings();
   const { lastDeepLink } = useDeepLink();
   const [isDisconnecting, setIsDisconnecting] = useState(false);
 
   useEffect(() => {
     const handleDeepLink = async () => {
       if (lastDeepLink?.type === "github-oauth-return") {
-        await refreshSettings();
+        await updateSettings({});
         showSuccess("Successfully connected to GitHub!");
       }
     };

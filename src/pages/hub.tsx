@@ -1,28 +1,31 @@
-import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
-import { useRouter } from "@tanstack/react-router";
-import { useSettings } from "@/hooks/useSettings";
-import { useTemplates } from "@/hooks/useTemplates";
-import { TemplateCard } from "@/components/TemplateCard";
-import { CreateAppDialog } from "@/components/CreateAppDialog";
-import { NeonConnector } from "@/components/NeonConnector";
-import { GitHubIntegration } from "@/components/GitHubIntegration";
-import { VercelIntegration } from "@/components/VercelIntegration";
-import { SupabaseIntegration } from "@/components/SupabaseIntegration";
-import { StripeConnector } from "@/components/StripeConnector";
-import { RazorpayConnector } from "@/components/RazorpayConnector";
 import { AwsS3Connector } from "@/components/AwsS3Connector";
 import { CloudflareR2Connector } from "@/components/CloudflareR2Connector";
-import { SendGridConnector } from "@/components/SendGridConnector";
-import { ResendConnector } from "@/components/ResendConnector";
+import { CreateAppDialog } from "@/components/CreateAppDialog";
+import { GitHubIntegration } from "@/components/GitHubIntegration";
 import { MixpanelConnector } from "@/components/MixpanelConnector";
+import { NeonConnector } from "@/components/NeonConnector";
+import { RazorpayConnector } from "@/components/RazorpayConnector";
+import { ResendConnector } from "@/components/ResendConnector";
+import { SendGridConnector } from "@/components/SendGridConnector";
 import { SentryConnector } from "@/components/SentryConnector";
+import { StripeConnector } from "@/components/StripeConnector";
+import { SupabaseIntegration } from "@/components/SupabaseIntegration";
+import { TemplateCard } from "@/components/TemplateCard";
+import { VercelIntegration } from "@/components/VercelIntegration";
+import { Button } from "@/components/ui/button";
+import { useSettings } from "@/hooks/useSettings";
+import { useTemplates } from "@/hooks/useTemplates";
+import { useRouter } from "@tanstack/react-router";
+import { ArrowLeft } from "lucide-react";
+import { RefreshCw } from "lucide-react";
+import type React from "react";
+import { useState } from "react";
 
 const HubPage: React.FC = () => {
   const router = useRouter();
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
-  const { templates, isLoading } = useTemplates();
+  const [isRefreshingTemplates, setIsRefreshingTemplates] = useState(false);
+  const { templates, isLoading, refetch } = useTemplates();
   const { settings, updateSettings } = useSettings();
   const selectedTemplateId = settings?.selectedTemplateId;
 
@@ -32,6 +35,17 @@ const HubPage: React.FC = () => {
 
   const handleCreateApp = () => {
     setIsCreateDialogOpen(true);
+  };
+
+  const handleRefreshTemplates = async () => {
+    setIsRefreshingTemplates(true);
+    try {
+      await refetch();
+    } catch (error) {
+      console.error("Failed to refresh templates:", error);
+    } finally {
+      setIsRefreshingTemplates(false);
+    }
   };
   // Separate templates into official and community
   const officialTemplates =
@@ -52,13 +66,27 @@ const HubPage: React.FC = () => {
           Go Back
         </Button>
         <header className="mb-8 text-left">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            Hub
-          </h1>
-          <p className="text-md text-gray-600 dark:text-gray-400">
-            Choose templates and connect to external services for your projects.
-            {isLoading && " Loading additional templates..."}
-          </p>
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+                Hub
+              </h1>
+              <p className="text-md text-gray-600 dark:text-gray-400 mt-1">
+                Choose templates and connect to external services for your projects.
+                {isLoading && " Loading additional templates..."}
+              </p>
+            </div>
+            <Button
+              onClick={handleRefreshTemplates}
+              variant="outline"
+              size="sm"
+              disabled={isRefreshingTemplates}
+              className="flex items-center gap-2"
+            >
+              <RefreshCw className={`h-4 w-4 ${isRefreshingTemplates ? 'animate-spin' : ''}`} />
+              {isRefreshingTemplates ? 'Refreshing...' : 'Refresh Templates'}
+            </Button>
+          </div>
         </header>
 
         {/* Official Templates Section */}
@@ -105,9 +133,12 @@ const HubPage: React.FC = () => {
       </div>
 
       <CreateAppDialog
-        open={isCreateDialogOpen}
-        onOpenChange={setIsCreateDialogOpen}
-        template={templates.find((t) => t.id === settings?.selectedTemplateId)}
+        isOpen={isCreateDialogOpen}
+        onClose={() => setIsCreateDialogOpen(false)}
+        onAppCreated={(appId, chatId) => {
+          // Handle app creation - you might want to navigate or refresh
+          console.log("App created:", appId, chatId);
+        }}
       />
     </div>
   );
@@ -115,7 +146,7 @@ const HubPage: React.FC = () => {
 
 function BackendSection() {
   return (
-    <div class="">
+    <div className="">
       <header className="mb-4 text-left">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
           Integrations & Services

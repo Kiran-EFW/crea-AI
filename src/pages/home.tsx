@@ -181,7 +181,7 @@ export default function HomePage() {
       await refreshApps();
       await invalidateAppQuery(queryClient, { appId });
       posthog.capture("home:create-app-dialog");
-      navigate({ to: "/chat", search: { id: chatId } });
+      navigate({ to: "/chat", search: { id: parseInt(chatId) } });
     } catch (error) {
       console.error("Failed to setup created app:", error);
       showError("App created but failed to setup. " + (error as any).toString());

@@ -11,6 +11,13 @@ const logger = log.scope("template_utils");
 let apiTemplatesCache: Template[] | null = null;
 let apiTemplatesFetchPromise: Promise<Template[]> | null = null;
 
+// Function to clear template cache
+export function clearTemplateCache(): void {
+  apiTemplatesCache = null;
+  apiTemplatesFetchPromise = null;
+  logger.info("Template cache cleared");
+}
+
 // Convert API template to our Template interface
 function convertApiTemplate(apiTemplate: ApiTemplate): Template {
   return {
@@ -24,10 +31,16 @@ function convertApiTemplate(apiTemplate: ApiTemplate): Template {
 }
 
 // Fetch templates from API with caching
-export async function fetchApiTemplates(): Promise<Template[]> {
-  // Return cached data if available
-  if (apiTemplatesCache) {
+export async function fetchApiTemplates(forceRefresh: boolean = false): Promise<Template[]> {
+  // Return cached data if available and not forcing refresh
+  if (!forceRefresh && apiTemplatesCache) {
     return apiTemplatesCache;
+  }
+
+  // Clear cache if forcing refresh
+  if (forceRefresh) {
+    apiTemplatesCache = null;
+    apiTemplatesFetchPromise = null;
   }
 
   // Return existing promise if fetch is already in progress
@@ -69,8 +82,8 @@ export async function fetchApiTemplates(): Promise<Template[]> {
 }
 
 // Get all templates (local + API)
-export async function getAllTemplates(): Promise<Template[]> {
-  const apiTemplates = await fetchApiTemplates();
+export async function getAllTemplates(forceRefresh: boolean = false): Promise<Template[]> {
+  const apiTemplates = await fetchApiTemplates(forceRefresh);
   return [...localTemplatesData, ...apiTemplates];
 }
 

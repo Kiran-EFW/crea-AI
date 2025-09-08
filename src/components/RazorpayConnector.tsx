@@ -5,13 +5,10 @@ import { toast } from "sonner";
 import { useSettings } from "@/hooks/useSettings";
 import { useDeepLink } from "@/contexts/DeepLinkContext";
 import { ExternalLink } from "lucide-react";
-import { useTheme } from "@/contexts/ThemeContext";
 
 export function RazorpayConnector() {
   const { settings, refreshSettings } = useSettings();
   const { lastDeepLink } = useDeepLink();
-  const { isDarkMode } = useTheme();
-
   useEffect(() => {
     const handleDeepLink = async () => {
       if (lastDeepLink?.type === "razorpay-oauth-return") {
@@ -86,7 +83,7 @@ export function RazorpayConnector() {
           data-testid="connect-razorpay-button"
         >
           <span className="mr-2">Connect to</span>
-          <RazorpaySvg isDarkMode={isDarkMode} />
+          <RazorpaySvg isDarkMode={false} />
         </Button>
       </div>
     </div>

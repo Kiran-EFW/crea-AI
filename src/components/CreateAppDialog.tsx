@@ -59,7 +59,7 @@ export function CreateAppDialog({ isOpen, onClose, onAppCreated }: CreateAppDial
         path: selectedFolder,
       });
 
-      onAppCreated(result.app.id, result.chatId);
+      onAppCreated(result.app.id, result.chatId.toString());
       onClose();
 
       // Reset form

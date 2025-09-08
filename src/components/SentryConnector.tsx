@@ -5,13 +5,10 @@ import { toast } from "sonner";
 import { useSettings } from "@/hooks/useSettings";
 import { useDeepLink } from "@/contexts/DeepLinkContext";
 import { ExternalLink, Activity } from "lucide-react";
-import { useTheme } from "@/contexts/ThemeContext";
 
 export function SentryConnector() {
   const { settings, refreshSettings } = useSettings();
   const { lastDeepLink } = useDeepLink();
-  const { isDarkMode } = useTheme();
-
   useEffect(() => {
     const handleDeepLink = async () => {
       if (lastDeepLink?.type === "sentry-oauth-return") {

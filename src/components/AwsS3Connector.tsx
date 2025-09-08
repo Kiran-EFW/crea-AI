@@ -5,13 +5,10 @@ import { toast } from "sonner";
 import { useSettings } from "@/hooks/useSettings";
 import { useDeepLink } from "@/contexts/DeepLinkContext";
 import { ExternalLink, Cloud } from "lucide-react";
-import { useTheme } from "@/contexts/ThemeContext";
 
 export function AwsS3Connector() {
   const { settings, refreshSettings } = useSettings();
   const { lastDeepLink } = useDeepLink();
-  const { isDarkMode } = useTheme();
-
   useEffect(() => {
     const handleDeepLink = async () => {
       if (lastDeepLink?.type === "aws-s3-oauth-return") {
@@ -22,7 +19,7 @@ export function AwsS3Connector() {
     handleDeepLink();
   }, [lastDeepLink]);
 
-  if (settings?.aws?.s3?.accessKeyId) {
+  if (settings?.aws?.accessKeyId) {
     return (
       <div className="flex flex-col space-y-4 p-4 border bg-white dark:bg-gray-800 max-w-100 rounded-md">
         <div className="flex flex-col items-start justify-between">

@@ -1,5 +1,4 @@
 import log from "electron-log";
-import { ipcMain } from "electron";
 import { createTestOnlyLoggedHandler } from "./safe_handle";
 
 export const logger = log.scope("razorpay_handlers");

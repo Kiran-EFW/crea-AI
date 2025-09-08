@@ -1,12 +1,13 @@
-import React, { useState } from "react";
-import { ArrowLeft } from "lucide-react";
-import { IpcClient } from "@/ipc/ipc_client";
 import { useSettings } from "@/hooks/useSettings";
-import { CommunityCodeConsentDialog } from "./CommunityCodeConsentDialog";
-import type { Template } from "@/shared/templates";
-import { Button } from "./ui/button";
-import { cn } from "@/lib/utils";
+import { IpcClient } from "@/ipc/ipc_client";
 import { showWarning } from "@/lib/toast";
+import { cn } from "@/lib/utils";
+import type { Template } from "@/shared/templates";
+import { ArrowLeft } from "lucide-react";
+import type React from "react";
+import { useState } from "react";
+import { CommunityCodeConsentDialog } from "./CommunityCodeConsentDialog";
+import { Button } from "./ui/button";
 
 interface TemplateCardProps {
   template: Template;
@@ -65,12 +66,21 @@ export const TemplateCard: React.FC<TemplateCardProps> = ({
 
   return (
     <>
-      <div
+      <button
+        type="button"
         onClick={handleCardClick}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleCardClick();
+          }
+        }}
+        aria-label={`Select ${template.title} template`}
         className={`
-          bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden 
-          transform transition-all duration-300 ease-in-out 
-          cursor-pointer group relative
+          bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden
+          transform transition-all duration-300 ease-in-out
+          cursor-pointer group relative w-full text-left border-none p-0
+          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50
           ${
             isSelected
               ? "ring-2 ring-blue-500 dark:ring-blue-400 shadow-xl"
@@ -78,7 +88,8 @@ export const TemplateCard: React.FC<TemplateCardProps> = ({
           }
         `}
       >
-        <div className="relative">
+        {/* Template photos are disabled - keeping code for future use */}
+        {/* <div className="relative">
           <img
             src={template.imageUrl}
             alt={template.title}
@@ -91,7 +102,15 @@ export const TemplateCard: React.FC<TemplateCardProps> = ({
               Selected
             </span>
           )}
-        </div>
+        </div> */}
+
+        {isSelected && (
+          <div className="bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-500 dark:border-blue-400 rounded-t-xl p-2">
+            <span className="bg-blue-600 text-white text-xs font-bold px-3 py-1.5 rounded-md shadow-lg">
+              Selected
+            </span>
+          </div>
+        )}
         <div className="p-4">
           <div className="flex justify-between items-center mb-1.5">
             <h2
@@ -124,17 +143,19 @@ export const TemplateCard: React.FC<TemplateCardProps> = ({
             {template.description}
           </p>
           {template.githubUrl && (
-            <a
-              className={`inline-flex items-center text-sm font-medium transition-colors duration-200 ${
+            <button
+              type="button"
+              className={`inline-flex items-center text-sm font-medium transition-colors duration-200 bg-transparent border-none p-0 cursor-pointer ${
                 isSelected
                   ? "text-blue-500 hover:text-blue-700 dark:text-blue-300 dark:hover:text-blue-200"
                   : "text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
               }`}
               onClick={handleGithubClick}
+              aria-label={`View ${template.title} on GitHub`}
             >
               View on GitHub{" "}
               <ArrowLeft className="w-4 h-4 ml-1 transform rotate-180" />
-            </a>
+            </button>
           )}
 
           <Button
@@ -151,7 +172,7 @@ export const TemplateCard: React.FC<TemplateCardProps> = ({
             Create App
           </Button>
         </div>
-      </div>
+      </button>
 
       <CommunityCodeConsentDialog
         isOpen={showConsentDialog}
