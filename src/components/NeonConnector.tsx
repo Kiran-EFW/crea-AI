@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { useSettings } from "@/hooks/useSettings";
 
 import { useDeepLink } from "@/contexts/DeepLinkContext";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Database } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
 import { NeonDisconnectButton } from "@/components/NeonDisconnectButton";
 
@@ -29,7 +29,10 @@ export function NeonConnector() {
       <div className="flex flex-col space-y-4 p-4 border bg-white dark:bg-gray-800 max-w-100 rounded-md">
         <div className="flex flex-col items-start justify-between">
           <div className="flex items-center justify-between w-full">
-            <h2 className="text-lg font-medium pb-1">Neon Database</h2>
+            <h2 className="text-lg font-medium pb-1 flex items-center gap-2">
+              <Database className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+              <span className="text-gray-900 dark:text-white">Neon Database</span>
+            </h2>
             <Button
               variant="outline"
               onClick={() => {
@@ -59,7 +62,10 @@ export function NeonConnector() {
   return (
     <div className="flex flex-col space-y-4 p-4 border bg-white dark:bg-gray-800 max-w-100 rounded-md">
       <div className="flex flex-col items-start justify-between">
-        <h2 className="text-lg font-medium pb-1">Neon Database</h2>
+        <h2 className="text-lg font-medium pb-1 flex items-center gap-2">
+          <Database className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+          <span className="text-gray-900 dark:text-white">Neon Database</span>
+        </h2>
         <p className="text-sm text-gray-500 dark:text-gray-400 pb-3">
           Neon Database has a good free tier with backups and up to 10 projects.
         </p>

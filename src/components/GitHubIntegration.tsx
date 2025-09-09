@@ -1,49 +1,16 @@
-import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Github, ExternalLink } from "lucide-react";
-import { useSettings } from "@/hooks/useSettings";
-import { showSuccess, showError } from "@/lib/toast";
 import { IpcClient } from "@/ipc/ipc_client";
-import { useDeepLink } from "@/contexts/DeepLinkContext";
+import { useGitHubConnection } from "@/hooks/useGitHubConnection";
 
 export function GitHubIntegration() {
-  const { settings, updateSettings } = useSettings();
-  const { lastDeepLink } = useDeepLink();
-  const [isDisconnecting, setIsDisconnecting] = useState(false);
+  const { globalConnection, startOAuthFlow, disconnect } = useGitHubConnection();
 
-  useEffect(() => {
-    const handleDeepLink = async () => {
-      if (lastDeepLink?.type === "github-oauth-return") {
-        await updateSettings({});
-        showSuccess("Successfully connected to GitHub!");
-      }
-    };
-    handleDeepLink();
-  }, [lastDeepLink]);
-
-  const handleDisconnectFromGithub = async () => {
-    setIsDisconnecting(true);
-    try {
-      const result = await updateSettings({
-        githubAccessToken: undefined,
-      });
-      if (result) {
-        showSuccess("Successfully disconnected from GitHub");
-      } else {
-        showError("Failed to disconnect from GitHub");
-      }
-    } catch (err: any) {
-      showError(
-        err.message || "An error occurred while disconnecting from GitHub",
-      );
-    } finally {
-      setIsDisconnecting(false);
-    }
+  const handleConnectToGithub = async () => {
+    await startOAuthFlow();
   };
 
-  const isConnected = !!settings?.githubAccessToken;
-
-  if (isConnected) {
+  if (globalConnection.isConnected) {
     return (
       <div className="flex flex-col space-y-4 p-4 border bg-white dark:bg-gray-800 max-w-100 rounded-md">
         <div className="flex flex-col items-start justify-between">
@@ -71,15 +38,18 @@ export function GitHubIntegration() {
           </div>
           <p className="text-sm text-gray-500 dark:text-gray-400 pb-3">
             You are connected to GitHub for version control and collaboration.
+            {globalConnection.userEmail && (
+              <span className="block mt-1 font-medium">{globalConnection.userEmail}</span>
+            )}
           </p>
           <Button
             variant="outline"
             size="sm"
-            onClick={handleDisconnectFromGithub}
-            disabled={isDisconnecting}
+            onClick={disconnect}
+            disabled={globalConnection.isConnecting}
             className="text-red-600 border-red-600 hover:bg-red-50 dark:hover:bg-red-950"
           >
-            {isDisconnecting ? "Disconnecting..." : "Disconnect"}
+            {globalConnection.isConnecting ? "Disconnecting..." : "Disconnect"}
           </Button>
         </div>
       </div>
@@ -97,20 +67,23 @@ export function GitHubIntegration() {
           Connect to GitHub for version control, collaboration, and repository management.
         </p>
         <Button
-          onClick={async () => {
-            if (settings?.isTestMode) {
-              await IpcClient.getInstance().fakeHandleGithubConnect();
-            } else {
-              await IpcClient.getInstance().openExternalUrl(
-                "https://oauth.scalix.world/api/integrations/github/login",
-              );
-            }
-          }}
+          onClick={handleConnectToGithub}
+          disabled={globalConnection.isConnecting}
           className="w-auto h-10 cursor-pointer flex items-center justify-center px-4 py-2 rounded-md border-2 transition-colors font-medium text-sm dark:bg-gray-900 dark:border-gray-700"
           data-testid="connect-github-button"
         >
-          Connect to GitHub
+          {globalConnection.isConnecting ? "Connecting..." : "Connect to GitHub"}
         </Button>
+        {globalConnection.error && (
+          <p className="text-sm text-red-600 dark:text-red-400 mt-2">
+            {globalConnection.error}
+          </p>
+        )}
+        {globalConnection.statusMessage && (
+          <p className="text-sm text-gray-600 dark:text-gray-300 mt-2">
+            {globalConnection.statusMessage}
+          </p>
+        )}
       </div>
     </div>
   );

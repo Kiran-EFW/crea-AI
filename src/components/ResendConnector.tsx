@@ -24,7 +24,10 @@ export function ResendConnector() {
       <div className="flex flex-col space-y-4 p-4 border bg-white dark:bg-gray-800 max-w-100 rounded-md">
         <div className="flex flex-col items-start justify-between">
           <div className="flex items-center justify-between w-full">
-            <h2 className="text-lg font-medium pb-1">Resend</h2>
+            <h2 className="text-lg font-medium pb-1 flex items-center gap-2">
+              <Mail className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+              <span className="text-gray-900 dark:text-white">Resend</span>
+            </h2>
             <Button
               variant="outline"
               onClick={() => {
@@ -65,8 +68,8 @@ export function ResendConnector() {
     <div className="flex flex-col space-y-4 p-4 border bg-white dark:bg-gray-800 max-w-100 rounded-md">
       <div className="flex flex-col items-start justify-between">
         <h2 className="text-lg font-medium pb-1 flex items-center gap-2">
-          <Mail className="h-5 w-5 text-blue-500" />
-          Resend
+          <Mail className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+          <span className="text-gray-900 dark:text-white">Resend</span>
         </h2>
         <p className="text-sm text-gray-500 dark:text-gray-400 pb-3">
           Resend offers a modern email API with great developer experience and reliable delivery.

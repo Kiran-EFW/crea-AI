@@ -96,8 +96,8 @@
       label.appendChild(editLine);
     }
 
-    const name = el.dataset.creaName || "<unknown>";
-    const file = (el.dataset.creaId || "").split(":")[0];
+    const name = el.dataset.scalixName || "<unknown>";
+    const file = (el.dataset.scalixId || "").split(":")[0];
 
     const nameEl = document.createElement("div");
     nameEl.textContent = name;
@@ -116,7 +116,7 @@
     if (state.type !== "inspecting") return;
 
     let el = e.target;
-    while (el && !el.dataset.creaId) el = el.parentElement;
+    while (el && !el.dataset.scalixId) el = el.parentElement;
 
     if (state.element === el) return;
     state.element = el;
@@ -181,7 +181,7 @@
   function initializeComponentSelector() {
     if (!document.body) {
       console.error(
-        "Dyad component selector initialization failed: document.body not found.",
+        "Scalix component selector initialization failed: document.body not found.",
       );
       return;
     }
@@ -193,10 +193,10 @@
           },
           "*",
         );
-        console.debug("Dyad component selector initialized");
+        console.debug("Scalix component selector initialized");
       } else {
         console.warn(
-          "Dyad component selector not initialized because no DOM elements were tagged",
+          "Scalix component selector not initialized because no DOM elements were tagged",
         );
       }
     }, 0);

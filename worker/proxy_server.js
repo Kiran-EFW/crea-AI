@@ -36,8 +36,8 @@ let rememberedOrigin = null; // e.g. "http://localhost:5173"
 /* ---------- optional resources for HTML injection ---------------------- */
 
 let stacktraceJsContent = null;
-let creaShimContent = null;
-let creaComponentSelectorClientContent = null;
+let scalixShimContent = null;
+let scalixComponentSelectorClientContent = null;
 try {
   const stackTraceLibPath = path.join(
     __dirname,
@@ -107,16 +107,16 @@ function injectHTML(buf) {
       );
     }
 
-    if (creaShimContent) {
-      scripts.push(`<script>${creaShimContent}</script>`);
+    if (scalixShimContent) {
+      scripts.push(`<script>${scalixShimContent}</script>`);
     } else {
       scripts.push(
           '<script>console.warn("[proxy-worker] scalix shim was not injected.");</script>',
       );
     }
   }
-  if (creaComponentSelectorClientContent) {
-    scripts.push(`<script>${creaComponentSelectorClientContent}</script>`);
+  if (scalixComponentSelectorClientContent) {
+    scripts.push(`<script>${scalixComponentSelectorClientContent}</script>`);
   } else {
     scripts.push(
         '<script>console.warn("[proxy-worker] scalix component selector client was not injected.");</script>',

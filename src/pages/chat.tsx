@@ -43,9 +43,10 @@ export default function ChatPage() {
 
   return (
     <PanelGroup autoSaveId="persistence" direction="horizontal">
-      <Panel id="chat-panel" minSize={30}>
+      <Panel id="chat-panel" order={1} minSize={30}>
         <div className="h-full w-full">
           <ChatPanel
+            key={chatId || 'no-chat'}
             chatId={chatId}
             isPreviewOpen={isPreviewOpen}
             onTogglePreview={() => {
@@ -69,6 +70,7 @@ export default function ChatPage() {
           collapsible
           ref={ref}
           id="preview-panel"
+          order={2}
           minSize={20}
           className={cn(
             !isResizing && "transition-all duration-100 ease-in-out",

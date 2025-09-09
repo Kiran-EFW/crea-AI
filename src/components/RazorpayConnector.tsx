@@ -4,7 +4,7 @@ import { IpcClient } from "@/ipc/ipc_client";
 import { toast } from "sonner";
 import { useSettings } from "@/hooks/useSettings";
 import { useDeepLink } from "@/contexts/DeepLinkContext";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, CreditCard } from "lucide-react";
 
 export function RazorpayConnector() {
   const { settings, refreshSettings } = useSettings();
@@ -24,7 +24,10 @@ export function RazorpayConnector() {
       <div className="flex flex-col space-y-4 p-4 border bg-white dark:bg-gray-800 max-w-100 rounded-md">
         <div className="flex flex-col items-start justify-between">
           <div className="flex items-center justify-between w-full">
-            <h2 className="text-lg font-medium pb-1">Razorpay</h2>
+            <h2 className="text-lg font-medium pb-1 flex items-center gap-2">
+              <CreditCard className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+              <span className="text-gray-900 dark:text-white">Razorpay</span>
+            </h2>
             <Button
               variant="outline"
               onClick={() => {
@@ -65,7 +68,10 @@ export function RazorpayConnector() {
   return (
     <div className="flex flex-col space-y-4 p-4 border bg-white dark:bg-gray-800 max-w-100 rounded-md">
       <div className="flex flex-col items-start justify-between">
-        <h2 className="text-lg font-medium pb-1">Razorpay</h2>
+        <h2 className="text-lg font-medium pb-1 flex items-center gap-2">
+          <CreditCard className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+          <span className="text-gray-900 dark:text-white">Razorpay</span>
+        </h2>
         <p className="text-sm text-gray-500 dark:text-gray-400 pb-3">
           Razorpay provides payment solutions for India with support for cards, UPI, net banking, and wallets.
         </p>

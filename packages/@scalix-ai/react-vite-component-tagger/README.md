@@ -19,19 +19,19 @@ Add the plugin to your `vite.config.ts` file:
 ```ts
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import creaTagger from "@crea-ai/react-vite-component-tagger";
+import scalixComponentTagger from "@scalix-ai/react-vite-component-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), creaTagger()],
+  plugins: [react(), scalixComponentTagger()],
 });
 ```
 
-The plugin will automatically add `data-crea-id` and `data-crea-name` to all your React components.
+The plugin will automatically add `data-scalix-id` and `data-scalix-name` to all your React components.
 
-The `data-crea-id` will be a unique identifier for each component instance, in the format `path/to/file.tsx:line:column`.
+The `data-scalix-id` will be a unique identifier for each component instance, in the format `path/to/file.tsx:line:column`.
 
-The `data-crea-name` will be the name of the component.
+The `data-scalix-name` will be the name of the component.
 
 ## Testing & Publishing
 
@@ -40,13 +40,13 @@ Bump it to an alpha version and test in Crea app, eg. `"version": "0.0.1-alpha.0
 Then publish it:
 
 ```sh
-cd packages/@crea-ai/react-vite-component-tagger/ && npm run prepublishOnly && npm publish
+cd packages/@scalix-ai/react-vite-component-tagger/ && npm run prepublishOnly && npm publish
 ```
 
 Update the scaffold like this:
 
 ```sh
-cd scaffold && pnpm remove @crea-ai/react-vite-component-tagger && pnpm add -D @crea-ai/react-vite-component-tagger
+cd scaffold && pnpm remove @scalix-ai/react-vite-component-tagger && pnpm add -D @scalix-ai/react-vite-component-tagger
 ```
 
 Run the E2E tests and make sure it passes.

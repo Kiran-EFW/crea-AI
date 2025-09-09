@@ -65,8 +65,8 @@ export function AwsS3Connector() {
     <div className="flex flex-col space-y-4 p-4 border bg-white dark:bg-gray-800 max-w-100 rounded-md">
       <div className="flex flex-col items-start justify-between">
         <h2 className="text-lg font-medium pb-1 flex items-center gap-2">
-          <Cloud className="h-5 w-5 text-orange-500" />
-          AWS S3
+          <Cloud className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+          <span className="text-gray-900 dark:text-white">AWS S3</span>
         </h2>
         <p className="text-sm text-gray-500 dark:text-gray-400 pb-3">
           Amazon S3 provides scalable object storage with high durability and availability.

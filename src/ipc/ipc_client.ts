@@ -134,9 +134,9 @@ export class IpcClient {
         if (callbacks) {
           callbacks.onUpdate(messages);
         } else {
-          console.warn(
-            `[IPC] No callbacks found for chat ${chatId}`,
-            this.chatStreams,
+          // Silently ignore missing callbacks - this can happen during component remounting
+          console.debug(
+            `[IPC] No callbacks found for chat ${chatId} - likely due to component remounting`,
           );
         }
       } else {
@@ -170,10 +170,9 @@ export class IpcClient {
         console.debug("chat:response:end");
         this.chatStreams.delete(chatId);
       } else {
-        console.error(
-          new Error(
-            `[IPC] No callbacks found for chat ${chatId} on stream end`,
-          ),
+        // Silently ignore missing callbacks - this can happen during component remounting
+        console.debug(
+          `[IPC] No callbacks found for chat ${chatId} on stream end - likely due to component remounting`,
         );
       }
     });

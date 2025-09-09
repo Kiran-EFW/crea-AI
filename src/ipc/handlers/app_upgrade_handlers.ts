@@ -150,13 +150,38 @@ async function applyComponentTagger(appPath: string) {
   // Install the dependency
   await new Promise<void>((resolve, reject) => {
     logger.info("Installing component-tagger dependency");
-    // Temporarily skip component tagger installation due to unpublished package
-    logger.warn("Skipping @scalix-ai/react-vite-component-tagger installation - package not published yet");
-    // TODO: Re-enable when package is published to npm
+    const { spawn } = require('child_process');
 
-    // For now, just resolve immediately without installing the package
-    logger.info("Component tagger setup completed (installation skipped)");
-    resolve();
+    const installProcess = spawn('pnpm', ['add', '-D', '@scalix-ai/react-vite-component-tagger'], {
+      cwd: appPath,
+      stdio: 'pipe'
+    });
+
+    let stdout = '';
+    let stderr = '';
+
+    installProcess.stdout.on('data', (data: Buffer) => {
+      stdout += data.toString();
+    });
+
+    installProcess.stderr.on('data', (data: Buffer) => {
+      stderr += data.toString();
+    });
+
+    installProcess.on('close', (code: number) => {
+      if (code === 0) {
+        logger.info("Component tagger dependency installed successfully");
+        resolve();
+      } else {
+        logger.error(`Failed to install component tagger: ${stderr}`);
+        reject(new Error(`Failed to install @scalix-ai/react-vite-component-tagger: ${stderr}`));
+      }
+    });
+
+    installProcess.on('error', (error: Error) => {
+      logger.error("Error installing component tagger:", error);
+      reject(error);
+    });
   });
 
   // Commit changes

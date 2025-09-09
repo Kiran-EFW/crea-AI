@@ -93,10 +93,10 @@ export function VercelIntegration() {
     <div className="flex flex-col space-y-4 p-4 border bg-white dark:bg-gray-800 max-w-100 rounded-md">
       <div className="flex flex-col items-start justify-between">
         <h2 className="text-lg font-medium pb-1 flex items-center gap-2">
-          <svg className="h-5 w-5 text-black dark:text-white" fill="currentColor" viewBox="0 0 24 24">
+          <svg className="h-5 w-5 text-gray-700 dark:text-gray-300" fill="currentColor" viewBox="0 0 24 24">
             <path d="M24 22.525H0l12-21.05 12 21.05z" />
           </svg>
-          Vercel
+          <span className="text-gray-900 dark:text-white">Vercel</span>
         </h2>
         <p className="text-sm text-gray-500 dark:text-gray-400 pb-3">
           Connect to Vercel for fast, reliable deployments and hosting with global CDN.

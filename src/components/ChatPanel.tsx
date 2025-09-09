@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, memo } from "react";
 import { useAtom, useAtomValue } from "jotai";
 import { chatMessagesAtom, chatStreamCountAtom } from "../atoms/chatAtoms";
 import { IpcClient } from "@/ipc/ipc_client";
@@ -15,7 +15,7 @@ interface ChatPanelProps {
   onTogglePreview: () => void;
 }
 
-export function ChatPanel({
+function ChatPanelComponent({
   chatId,
   isPreviewOpen,
   onTogglePreview,
@@ -142,4 +142,6 @@ export function ChatPanel({
     </div>
   );
 }
+
+export const ChatPanel = memo(ChatPanelComponent);
 

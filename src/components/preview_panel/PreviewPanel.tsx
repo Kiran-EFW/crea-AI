@@ -109,7 +109,7 @@ export function PreviewPanel() {
     <div className="flex flex-col h-full">
       <div className="flex-1 overflow-hidden">
         <PanelGroup direction="vertical">
-          <Panel id="content" minSize={30}>
+          <Panel id="content" order={1} minSize={30}>
             <div className="h-full overflow-y-auto">
               {previewMode === "preview" ? (
                 <PreviewIframe key={key} loading={loading} />
@@ -127,7 +127,7 @@ export function PreviewPanel() {
           {isConsoleOpen && (
             <>
               <PanelResizeHandle className="h-1 bg-border hover:bg-gray-400 transition-colors cursor-row-resize" />
-              <Panel id="console" minSize={10} defaultSize={30}>
+              <Panel id="console" order={2} minSize={10} defaultSize={30}>
                 <div className="flex flex-col h-full">
                   <ConsoleHeader
                     isOpen={true}
