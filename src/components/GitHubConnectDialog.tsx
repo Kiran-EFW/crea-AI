@@ -26,7 +26,7 @@ export function GitHubConnectDialog({ isOpen, onClose }: GitHubConnectDialogProp
       // This would typically involve:
       // 1. GitHub OAuth authorization
       // 2. Repository selection dialog
-      // 3. Cloning/importing the repo into Crea
+      // 3. Cloning/importing the repo into Scalix
 
       await IpcClient.getInstance().openExternalUrl("https://github.com/login/oauth/authorize?client_id=YOUR_CLIENT_ID&scope=repo");
       showError("GitHub OAuth integration coming soon! This will allow you to connect existing repositories.");
@@ -45,7 +45,7 @@ export function GitHubConnectDialog({ isOpen, onClose }: GitHubConnectDialogProp
       // This would typically involve:
       // 1. GitHub OAuth authorization
       // 2. Repository creation dialog (name, description, visibility)
-      // 3. Initializing the repo with Crea template
+      // 3. Initializing the repo with Scalix template
 
       await IpcClient.getInstance().openExternalUrl("https://github.com/new");
       showError("GitHub repository creation integration coming soon! This will help you create new repositories.");
@@ -66,7 +66,7 @@ export function GitHubConnectDialog({ isOpen, onClose }: GitHubConnectDialogProp
             Connect GitHub Repository
           </DialogTitle>
           <DialogDescription>
-            Choose how you'd like to work with GitHub repositories in Crea.
+            Choose how you'd like to work with GitHub repositories in Scalix.
           </DialogDescription>
         </DialogHeader>
 

@@ -10,7 +10,7 @@ export function registerSupabaseHandlers() {
     logger.info("Simulating Supabase OAuth connection for testing");
     event.sender.send("deep-link-received", {
       type: "supabase-oauth-return",
-      url: "https://oauth.crea.ai/api/integrations/supabase/login",
+      url: "https://oauth.scalix.world/api/integrations/supabase/login",
     });
     logger.info("Sent fake supabase deep-link-received event during testing.");
   });

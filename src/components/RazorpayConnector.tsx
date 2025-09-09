@@ -75,7 +75,7 @@ export function RazorpayConnector() {
               await IpcClient.getInstance().fakeHandleRazorpayConnect();
             } else {
               await IpcClient.getInstance().openExternalUrl(
-                "https://oauth.crea.sh/api/integrations/razorpay/login",
+                "https://oauth.scalix.world/api/integrations/razorpay/login",
               );
             }
           }}

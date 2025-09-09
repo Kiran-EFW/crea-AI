@@ -2,12 +2,12 @@ import path from "node:path";
 import os from "node:os";
 import { IS_TEST_BUILD } from "../ipc/utils/test_utils";
 
-export function getCreaAppPath(appPath: string): string {
+export function getScalixAppPath(appPath: string): string {
   if (IS_TEST_BUILD) {
     const electron = getElectron();
-    return path.join(electron!.app.getPath("userData"), "crea-apps", appPath);
+    return path.join(electron!.app.getPath("userData"), "scalix-apps", appPath);
   }
-  return path.join(os.homedir(), "crea-apps", appPath);
+  return path.join(os.homedir(), "scalix-apps", appPath);
 }
 
 export function getTypeScriptCachePath(): string {

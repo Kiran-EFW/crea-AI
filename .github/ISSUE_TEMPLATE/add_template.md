@@ -1,12 +1,12 @@
 ---
 name: Add Template
-about: Request to add a template to Crea Hub
+about: Request to add a template to Scalix Hub
 title: "Add Template: [Template Name]"
 labels: "add-template"
 assignees: ""
 ---
 
-If you'd like to add a template to Crea Hub, follow the [Add Template guide](https://crea.ai/docs/templates/add-template).
+If you'd like to add a template to Scalix Hub, follow the [Add Template guide](https://scalix.world/docs/templates/add-template).
 
 **Template name:**
 

@@ -12,7 +12,7 @@ export function registerRazorpayHandlers() {
     // Simulate the deep link event
     event.sender.send("deep-link-received", {
       type: "razorpay-oauth-return",
-      url: "https://oauth.crea.ai/api/integrations/razorpay/login",
+      url: "https://oauth.scalix.world/api/integrations/razorpay/login",
     });
     logger.info("Sent fake razorpay deep-link-received event during testing.");
   });

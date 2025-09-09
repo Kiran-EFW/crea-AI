@@ -29,8 +29,8 @@ function getKeyButtonText({
 }) {
   if (isDyad) {
     return isConfigured
-      ? "Manage Crea Pro Subscription"
-      : "Setup Crea Pro Subscription";
+      ? "Manage Scalix Pro Subscription"
+      : "Setup Scalix Pro Subscription";
   }
   return isConfigured ? "Manage API Keys" : "Setup API Key";
 }

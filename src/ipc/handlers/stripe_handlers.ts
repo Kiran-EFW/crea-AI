@@ -12,7 +12,7 @@ export function registerStripeHandlers() {
     // Simulate the deep link event
     event.sender.send("deep-link-received", {
       type: "stripe-oauth-return",
-      url: "https://oauth.crea.ai/api/integrations/stripe/login",
+      url: "https://oauth.scalix.world/api/integrations/stripe/login",
     });
     logger.info("Sent fake stripe deep-link-received event during testing.");
   });

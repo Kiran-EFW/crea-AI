@@ -1,6 +1,6 @@
 import { readSettings, writeSettings } from "./settings";
 
-export function handleCreaProReturn({ apiKey }: { apiKey: string }) {
+export function handleScalixProReturn({ apiKey }: { apiKey: string }) {
   const settings = readSettings();
   writeSettings({
     providerSettings: {
@@ -12,7 +12,7 @@ export function handleCreaProReturn({ apiKey }: { apiKey: string }) {
         },
       },
     },
-    enableCreaPro: true,
+    enableScalixPro: true,
   });
 }
 

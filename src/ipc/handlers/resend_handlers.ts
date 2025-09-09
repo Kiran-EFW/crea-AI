@@ -9,7 +9,7 @@ export function registerResendHandlers() {
     logger.info("Simulating Resend OAuth connection for testing");
     event.sender.send("deep-link-received", {
       type: "resend-oauth-return",
-      url: "https://oauth.crea.ai/api/integrations/resend/login",
+      url: "https://oauth.scalix.world/api/integrations/resend/login",
     });
     logger.info("Sent fake resend deep-link-received event during testing.");
   });

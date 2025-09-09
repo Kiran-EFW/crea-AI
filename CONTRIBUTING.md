@@ -1,18 +1,18 @@
 # Contributing
 
-Crea is still a very early-stage project, thus the codebase is rapidly changing.
+Scalix is still a very early-stage project, thus the codebase is rapidly changing.
 
-Before opening a pull request, please open an issue and discuss whether the change makes sense in Crea. Ensuring a cohesive user experience sometimes means we can't include every possible feature or we need to consider the long-term design of how we want to support a feature area.
+Before opening a pull request, please open an issue and discuss whether the change makes sense in Scalix. Ensuring a cohesive user experience sometimes means we can't include every possible feature or we need to consider the long-term design of how we want to support a feature area.
 
-For a high-level overview of how Crea works, please see the [Architecture Guide](./docs/architecture.md). Understanding the architecture will help ensure your contributions align with the overall design of the project.
+For a high-level overview of how Scalix works, please see the [Architecture Guide](./docs/architecture.md). Understanding the architecture will help ensure your contributions align with the overall design of the project.
 
 ## More than code contributions
 
-Something that I really appreciate are all the non-code contributions, such as reporting bugs, writing feature requests and participating on [Crea's sub-reddit](https://www.reddit.com/r/creabuilders).
+Something that I really appreciate are all the non-code contributions, such as reporting bugs, writing feature requests and participating on [Scalix's sub-reddit](https://www.reddit.com/r/scalixbuilders).
 
 ## Development
 
-Crea is an Electron app.
+Scalix is an Electron app.
 
 **Install dependencies:**
 

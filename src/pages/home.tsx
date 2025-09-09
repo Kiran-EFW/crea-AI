@@ -26,7 +26,7 @@ import { Button } from "@/components/ui/button";
 import { ExternalLink, Plus } from "lucide-react";
 import { ImportAppButton } from "@/components/ImportAppButton";
 import { GitHubConnectButton } from "@/components/GitHubConnectButton";
-import { CreateAppDialog } from "@/components/CreateAppDialog";
+import { ScalixAppDialog } from "@/components/ScalixAppDialog";
 import { showError } from "@/lib/toast";
 import { invalidateAppQuery } from "@/hooks/useLoadApp";
 import { useQueryClient } from "@tanstack/react-query";
@@ -54,7 +54,7 @@ export default function HomePage() {
   const appVersion = useAppVersion();
   const [releaseNotesOpen, setReleaseNotesOpen] = useState(false);
   const [releaseUrl, setReleaseUrl] = useState("");
-  const [createAppDialogOpen, setCreateAppDialogOpen] = useState(false);
+  const [scalixAppDialogOpen, setScalixAppDialogOpen] = useState(false);
   const { theme } = useTheme();
   const queryClient = useQueryClient();
   useEffect(() => {
@@ -221,7 +221,7 @@ export default function HomePage() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
           <ImportAppButton />
           <Button
-            onClick={() => setCreateAppDialogOpen(true)}
+            onClick={() => setScalixAppDialogOpen(true)}
             variant="outline"
             className="flex items-center gap-2 px-6 py-3 h-auto w-full bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950 dark:to-indigo-950 border-blue-200 dark:border-blue-800 hover:from-blue-100 hover:to-indigo-100 dark:hover:from-blue-900 dark:hover:to-indigo-900"
           >
@@ -323,9 +323,9 @@ export default function HomePage() {
       </Dialog>
 
       {/* Create App Dialog */}
-      <CreateAppDialog
-        isOpen={createAppDialogOpen}
-        onClose={() => setCreateAppDialogOpen(false)}
+      <ScalixAppDialog
+        isOpen={scalixAppDialogOpen}
+        onClose={() => setScalixAppDialogOpen(false)}
         onAppCreated={handleAppCreated}
       />
     </div>

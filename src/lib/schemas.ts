@@ -160,11 +160,11 @@ export const ExperimentsSchema = z.object({
 });
 export type Experiments = z.infer<typeof ExperimentsSchema>;
 
-export const CreaProBudgetSchema = z.object({
+export const ScalixProBudgetSchema = z.object({
   budgetResetAt: z.string(),
   maxBudget: z.number(),
 });
-export type CreaProBudget = z.infer<typeof CreaProBudgetSchema>;
+export type ScalixProBudget = z.infer<typeof ScalixProBudgetSchema>;
 
 export const GlobPathSchema = z.object({
   globPath: z.string(),
@@ -216,7 +216,7 @@ export const UserSettingsSchema = z.object({
   telemetryConsent: z.enum(["opted_in", "opted_out", "unset"]).optional(),
   telemetryUserId: z.string().optional(),
   hasRunBefore: z.boolean().optional(),
-  enableCreaPro: z.boolean().optional(),
+  enableScalixPro: z.boolean().optional(),
   experiments: ExperimentsSchema.optional(),
   lastShownReleaseNotesVersion: z.string().optional(),
   maxChatTurnsInContext: z.number().optional(),
@@ -244,7 +244,7 @@ export const UserSettingsSchema = z.object({
   // DEPRECATED.
   ////////////////////////////////
   enableProSaverMode: z.boolean().optional(),
-  creaProBudget: CreaProBudgetSchema.optional(),
+  scalixProBudget: ScalixProBudgetSchema.optional(),
   runtimeMode: RuntimeModeSchema.optional(),
 });
 
@@ -253,11 +253,11 @@ export const UserSettingsSchema = z.object({
  */
 export type UserSettings = z.infer<typeof UserSettingsSchema>;
 
-export function isCreaProEnabled(settings: UserSettings): boolean {
-  return settings.enableCreaPro === true && hasCreaProKey(settings);
+export function isScalixProEnabled(settings: UserSettings): boolean {
+  return settings.enableScalixPro === true && hasScalixProKey(settings);
 }
 
-export function hasCreaProKey(settings: UserSettings): boolean {
+export function hasScalixProKey(settings: UserSettings): boolean {
   return !!settings.providerSettings?.auto?.apiKey?.value;
 }
 

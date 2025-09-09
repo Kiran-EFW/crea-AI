@@ -11,7 +11,7 @@ import { extractCodebase } from "../../utils/codebase";
 import { db } from "../../db";
 import { chats, apps } from "../../db/schema";
 import { eq } from "drizzle-orm";
-import { getCreaAppPath } from "../../paths/paths";
+import { getScalixAppPath } from "../../paths/paths";
 import { LargeLanguageModel } from "@/lib/schemas";
 import { validateChatContext } from "../utils/context_paths_utils";
 
@@ -51,12 +51,12 @@ async function getSystemDebugInfo({
     console.error("Failed to get node path:", err);
   }
 
-  // Get Crea version from package.json
+  // Get Scalix version from package.json
   const packageJsonPath = path.resolve(__dirname, "..", "..", "package.json");
-  let creaVersion = "unknown";
+  let scalixVersion = "unknown";
   try {
     const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
-    creaVersion = packageJson.version;
+    scalixVersion = packageJson.version;
   } catch (err) {
     console.error("Failed to read package.json:", err);
   }
@@ -107,7 +107,7 @@ async function getSystemDebugInfo({
       serializeModelForDebug(settings.selectedModel) || "unknown",
     telemetryConsent: settings.telemetryConsent || "unknown",
     telemetryUrl: "https://us.i.posthog.com", // Hardcoded from renderer.tsx
-    creaVersion,
+    scalixVersion,
     platform: process.platform,
     architecture: arch(),
     logs,
@@ -175,7 +175,7 @@ export function registerDebugHandlers() {
         }
 
         // Extract codebase
-        const appPath = getCreaAppPath(app.path);
+        const appPath = getScalixAppPath(app.path);
         const codebase = (
           await extractCodebase({
             appPath,

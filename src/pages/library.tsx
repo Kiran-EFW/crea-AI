@@ -1,9 +1,9 @@
 import React from "react";
 import { usePrompts } from "@/hooks/usePrompts";
 import {
-  CreatePromptDialog,
+  ScalixPromptDialog,
   CreateOrEditPromptDialog,
-} from "@/components/CreatePromptDialog";
+} from "@/components/ScalixPromptDialog";
 import { DeleteConfirmationDialog } from "@/components/DeleteConfirmationDialog";
 
 export default function LibraryPage() {
@@ -15,7 +15,7 @@ export default function LibraryPage() {
       <div className="max-w-6xl mx-auto">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-3xl font-bold mr-4">Library: Prompts</h1>
-          <CreatePromptDialog onCreatePrompt={createPrompt} />
+          <ScalixPromptDialog onCreatePrompt={createPrompt} />
         </div>
 
         {isLoading ? (

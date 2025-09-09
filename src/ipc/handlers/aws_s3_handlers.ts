@@ -9,7 +9,7 @@ export function registerAwsS3Handlers() {
     logger.info("Simulating AWS S3 OAuth connection for testing");
     event.sender.send("deep-link-received", {
       type: "aws-s3-oauth-return",
-      url: "https://oauth.crea.ai/api/integrations/aws-s3/login",
+      url: "https://oauth.scalix.world/api/integrations/aws-s3/login",
     });
     logger.info("Sent fake aws-s3 deep-link-received event during testing.");
   });

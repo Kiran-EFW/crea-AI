@@ -493,9 +493,9 @@ export const CLOUD_PROVIDERS: Record<
     gatewayPrefix: "openrouter/",
   },
   auto: {
-    displayName: "Crea",
-    websiteUrl: "https://academy.crea.ai/settings",
-    gatewayPrefix: "crea/",
+    displayName: "Scalix",
+    websiteUrl: "https://academy.scalix.world/settings",
+    gatewayPrefix: "scalix/",
   },
   azure: {
     displayName: "Azure OpenAI",

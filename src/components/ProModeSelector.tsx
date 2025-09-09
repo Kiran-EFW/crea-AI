@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Sparkles, Info } from "lucide-react";
 import { useSettings } from "@/hooks/useSettings";
 import { IpcClient } from "@/ipc/ipc_client";
-import { hasCreaProKey, type UserSettings } from "@/lib/schemas";
+import { hasScalixProKey, type UserSettings } from "@/lib/schemas";
 
 export function ProModeSelector() {
   const { settings, updateSettings } = useSettings();
@@ -48,12 +48,12 @@ export function ProModeSelector() {
 
   const toggleProEnabled = () => {
     updateSettings({
-      enableCreaPro: !settings?.enableCreaPro,
+      enableScalixPro: !settings?.enableScalixPro,
     });
   };
 
-  const hasProKey = settings ? hasCreaProKey(settings) : false;
-  const proModeTogglable = hasProKey && Boolean(settings?.enableCreaPro);
+  const hasProKey = settings ? hasScalixProKey(settings) : false;
+  const proModeTogglable = hasProKey && Boolean(settings?.enableScalixPro);
 
   return (
     <Popover>
@@ -70,14 +70,14 @@ export function ProModeSelector() {
             </Button>
           </PopoverTrigger>
         </TooltipTrigger>
-        <TooltipContent>Configure Crea Pro settings</TooltipContent>
+        <TooltipContent>Configure Scalix Pro settings</TooltipContent>
       </Tooltip>
       <PopoverContent className="w-80 border-primary/20">
         <div className="space-y-4">
           <div className="space-y-1">
             <h4 className="font-medium flex items-center gap-1.5">
               <Sparkles className="h-4 w-4 text-primary" />
-              <span className="text-primary font-medium">Crea Pro</span>
+              <span className="text-primary font-medium">Scalix Pro</span>
             </h4>
             <div className="h-px bg-gradient-to-r from-primary/50 via-primary/20 to-transparent" />
           </div>
@@ -87,7 +87,7 @@ export function ProModeSelector() {
                 className="inline-flex items-center justify-center gap-2 rounded-md border border-primary/30 bg-primary/10 px-3 py-2 text-sm font-medium text-primary shadow-sm transition-colors hover:bg-primary/20 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 onClick={() => {
                   IpcClient.getInstance().openExternalUrl(
-                    "https://crea.sh/pro#ai",
+                    "https://scalix.world/pro#ai",
                   );
                 }}
               >
@@ -98,11 +98,11 @@ export function ProModeSelector() {
           <div className="flex flex-col gap-5">
             <SelectorRow
               id="pro-enabled"
-              label="Enable Crea Pro"
-              description="Use Crea Pro AI credits"
-              tooltip="Uses Crea Pro AI credits for the main AI model and Pro modes."
+              label="Enable Scalix Pro"
+              description="Use Scalix Pro AI credits"
+              tooltip="Uses Scalix Pro AI credits for the main AI model and Pro modes."
               isTogglable={hasProKey}
-              settingEnabled={Boolean(settings?.enableCreaPro)}
+              settingEnabled={Boolean(settings?.enableScalixPro)}
               toggle={toggleProEnabled}
             />
             <SelectorRow

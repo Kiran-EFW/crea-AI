@@ -3,7 +3,7 @@ import { versions, apps } from "../../db/schema";
 import { eq, and } from "drizzle-orm";
 import fs from "node:fs";
 import git from "isomorphic-git";
-import { getCreaAppPath } from "../../paths/paths";
+import { getScalixAppPath } from "../../paths/paths";
 import { neon } from "@neondatabase/serverless";
 
 import log from "electron-log";
@@ -61,7 +61,7 @@ export async function storeDbTimestampAtCurrentVersion({
     }
 
     // 2. Get the current commit hash
-    const appPath = getCreaAppPath(app.path);
+    const appPath = getScalixAppPath(app.path);
     const currentCommitHash = await git.resolveRef({
       fs,
       dir: appPath,

@@ -27,18 +27,18 @@ export function ReleaseChannelSelector() {
         action: {
           label: "Download Stable",
           onClick: () => {
-            IpcClient.getInstance().openExternalUrl("https://crea.sh/download");
+            IpcClient.getInstance().openExternalUrl("https://scalix.world/download");
           },
         },
       });
     } else {
       toast("Using Beta release channel", {
         description:
-          "You will need to restart Crea for your settings to take effect.",
+          "You will need to restart Scalix for your settings to take effect.",
         action: {
-          label: "Restart Crea",
+          label: "Restart Scalix",
           onClick: () => {
-            IpcClient.getInstance().restartCrea();
+            IpcClient.getInstance().restartScalix();
           },
         },
       });

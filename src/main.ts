@@ -12,7 +12,7 @@ import {
   writeSettings,
 } from "./main/settings";
 import { handleSupabaseOAuthReturn } from "./supabase_admin/supabase_return_handler";
-import { handleCreaProReturn } from "./main/pro";
+import { handleScalixProReturn } from "./main/pro";
 import { IS_TEST_BUILD } from "./ipc/utils/test_utils";
 import { BackupManager } from "./backup_manager";
 import { getDatabasePath, initializeDatabase } from "./db";
@@ -39,12 +39,12 @@ if (started) {
 // https://www.electronjs.org/docs/latest/tutorial/launch-app-from-url-in-another-app#main-process-mainjs
 if (process.defaultApp) {
   if (process.argv.length >= 2) {
-    app.setAsDefaultProtocolClient("crea", process.execPath, [
+    app.setAsDefaultProtocolClient("scalix", process.execPath, [
       path.resolve(process.argv[1]),
     ]);
   }
 } else {
-  app.setAsDefaultProtocolClient("crea");
+  app.setAsDefaultProtocolClient("scalix");
 }
 
 export async function onReady() {
@@ -68,17 +68,17 @@ export async function onReady() {
     // but this is more explicit and falls back to stable if there's an unknown
     // release channel.
     const postfix = settings.releaseChannel === "beta" ? "beta" : "stable";
-    const host = `https://api.crea.ai/v1/update/${postfix}`;
+    const host = `https://api.scalix.world/v1/update/${postfix}`;
     const headers = {
-      "X-Crea-Client": "desktop-app",
-      "X-Crea-Version": process.env.npm_package_version || "1.0.0",
+      "X-Scalix-Client": "desktop-app",
+      "X-Scalix-Version": process.env.npm_package_version || "1.0.0",
     };
     logger.info("Auto-update release channel=", postfix);
     updateElectronApp({
       logger,
       updateSource: {
         type: UpdateSourceType.ElectronPublicUpdateService,
-        repo: "crea-sh/crea",
+        repo: "scalix-world/scalix",
         host,
       },
     }); // additional configuration options available
@@ -190,7 +190,7 @@ app.on("open-url", (event, url) => {
 });
 
 function handleDeepLinkReturn(url: string) {
-  // example url: "crea://supabase-oauth-return?token=a&refreshToken=b"
+  // example url: "scalix://supabase-oauth-return?token=a&refreshToken=b"
   let parsed: URL;
   try {
     parsed = new URL(url);
@@ -206,10 +206,10 @@ function handleDeepLinkReturn(url: string) {
     "hostname",
     parsed.hostname,
   );
-  if (parsed.protocol !== "crea:") {
+  if (parsed.protocol !== "scalix:") {
     dialog.showErrorBox(
       "Invalid Protocol",
-      `Expected crea://, got ${parsed.protocol}. Full URL: ${url}`,
+      `Expected scalix://, got ${parsed.protocol}. Full URL: ${url}`,
     );
     return;
   }
@@ -249,14 +249,14 @@ function handleDeepLinkReturn(url: string) {
     });
     return;
   }
-  // crea://crea-pro-return?key=123&budget_reset_at=2025-05-26T16:31:13.492000Z&max_budget=100
-  if (parsed.hostname === "crea-pro-return") {
+  // scalix://scalix-pro-return?key=123&budget_reset_at=2025-05-26T16:31:13.492000Z&max_budget=100
+  if (parsed.hostname === "scalix-pro-return") {
     const apiKey = parsed.searchParams.get("key");
     if (!apiKey) {
       dialog.showErrorBox("Invalid URL", "Expected key");
       return;
     }
-    handleCreaProReturn({
+    handleScalixProReturn({
       apiKey,
     });
     // Send message to renderer to trigger re-render

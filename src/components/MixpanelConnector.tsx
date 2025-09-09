@@ -77,7 +77,7 @@ export function MixpanelConnector() {
               await IpcClient.getInstance().fakeHandleMixpanelConnect();
             } else {
               await IpcClient.getInstance().openExternalUrl(
-                "https://oauth.crea.sh/api/integrations/mixpanel/login",
+                "https://oauth.scalix.world/api/integrations/mixpanel/login",
               );
             }
           }}

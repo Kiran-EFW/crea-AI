@@ -23,7 +23,7 @@ export function registerReleaseNoteHandlers() {
       if (IS_TEST_BUILD) {
         return { exists: false };
       }
-      const releaseNoteUrl = `https://www.crea.ai/docs/releases/${version}`;
+      const releaseNoteUrl = `https://www.scalix.world/docs/releases/${version}`;
 
       logger.debug(`Checking for release note at: ${releaseNoteUrl}`);
 

@@ -1,5 +1,5 @@
 import { db } from "../../db";
-import { getCreaAppPath } from "../../paths/paths";
+import { getScalixAppPath } from "../../paths/paths";
 import { extractCodebase } from "../../utils/codebase";
 import { validateChatContext } from "../utils/context_paths_utils";
 import log from "electron-log";
@@ -29,7 +29,7 @@ export async function extractMentionedAppsCodebases(
 
   for (const app of mentionedApps) {
     try {
-      const appPath = getCreaAppPath(app.path);
+      const appPath = getScalixAppPath(app.path);
       const chatContext = validateChatContext(app.chatContext);
 
       const { formattedOutput } = await extractCodebase({

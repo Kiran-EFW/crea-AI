@@ -33,7 +33,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
-import { CreateCustomProviderDialog } from "./CreateCustomProviderDialog";
+import { ScalixCustomProviderDialog } from "./ScalixCustomProviderDialog";
 
 export function ProviderSettingsGrid() {
   const navigate = useNavigate();
@@ -189,7 +189,7 @@ export function ProviderSettingsGrid() {
         </Card>
       </div>
 
-      <CreateCustomProviderDialog
+      <ScalixCustomProviderDialog
         isOpen={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}
         onSuccess={() => {

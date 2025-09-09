@@ -77,7 +77,7 @@ export function ResendConnector() {
               await IpcClient.getInstance().fakeHandleResendConnect();
             } else {
               await IpcClient.getInstance().openExternalUrl(
-                "https://oauth.crea.sh/api/integrations/resend/login",
+                "https://oauth.scalix.world/api/integrations/resend/login",
               );
             }
           }}

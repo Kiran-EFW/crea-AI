@@ -54,8 +54,8 @@ const config: ForgeConfig = {
   packagerConfig: {
     protocols: [
       {
-        name: "Crea",
-        schemes: ["crea"],
+        name: "Scalix",
+        schemes: ["scalix"],
       },
     ],
     icon: "./assets/icon/logo",
@@ -88,7 +88,7 @@ const config: ForgeConfig = {
     new MakerRpm({}),
     new MakerDeb({
       options: {
-        mimeType: ["x-scheme-handler/crea"],
+        mimeType: ["x-scheme-handler/scalix"],
       },
     }),
   ],
@@ -97,8 +97,8 @@ const config: ForgeConfig = {
       name: "@electron-forge/publisher-github",
       config: {
         repository: {
-          owner: "crea-ai",
-          name: "crea",
+          owner: "scalix-world",
+          name: "scalix",
         },
         draft: true,
         force: true,

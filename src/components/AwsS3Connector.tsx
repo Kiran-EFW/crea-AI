@@ -77,7 +77,7 @@ export function AwsS3Connector() {
               await IpcClient.getInstance().fakeHandleAwsS3Connect();
             } else {
               await IpcClient.getInstance().openExternalUrl(
-                "https://oauth.crea.sh/api/integrations/aws-s3/login",
+                "https://oauth.scalix.world/api/integrations/aws-s3/login",
               );
             }
           }}

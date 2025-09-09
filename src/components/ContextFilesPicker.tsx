@@ -113,7 +113,7 @@ export function ContextFilesPicker() {
   };
 
   const isSmartContextEnabled =
-    settings?.enableCreaPro && settings?.enableProSmartFilesContextMode;
+    settings?.enableScalixPro && settings?.enableProSmartFilesContextMode;
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -152,11 +152,11 @@ export function ContextFilesPicker() {
                   <TooltipContent className="max-w-[300px]">
                     {isSmartContextEnabled ? (
                       <p>
-                        With Smart Context, Crea uses the most relevant files as
+                        With Smart Context, Scalix uses the most relevant files as
                         context.
                       </p>
                     ) : (
-                      <p>By default, Crea uses your whole codebase.</p>
+                      <p>By default, Scalix uses your whole codebase.</p>
                     )}
                   </TooltipContent>
                 </Tooltip>
@@ -226,8 +226,8 @@ export function ContextFilesPicker() {
               <div className="rounded-md border border-dashed p-4 text-center">
                 <p className="text-sm text-muted-foreground">
                   {isSmartContextEnabled
-                    ? "Crea will use Smart Context to automatically find the most relevant files to use as context."
-                    : "Crea will use the entire codebase as context."}
+                    ? "Scalix will use Smart Context to automatically find the most relevant files to use as context."
+                    : "Scalix will use the entire codebase as context."}
                 </p>
               </div>
             )}

@@ -243,7 +243,7 @@ export const MessagesList = forwardRef<HTMLDivElement, MessagesListProps>(
         )}
 
         {isStreaming &&
-          !settings?.enableCreaPro &&
+          !settings?.enableScalixPro &&
           !userBudget &&
           messages.length > 0 && (
             <PromoMessage

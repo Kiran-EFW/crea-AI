@@ -1,7 +1,7 @@
 import { db } from "../../db";
 import { messages, apps, chats } from "../../db/schema";
 import { eq } from "drizzle-orm";
-import { getCreaAppPath } from "../../paths/paths";
+import { getScalixAppPath } from "../../paths/paths";
 import { executeAddDependency } from "../processors/executeAddDependency";
 import { createLoggedHandler } from "./safe_handle";
 import log from "electron-log";
@@ -43,7 +43,7 @@ export function registerDependencyHandlers() {
         .reverse()
         .find((m) =>
           m.content.includes(
-            `<crea-add-dependency packages="${packages.join(" ")}">`,
+            `<scalix-add-dependency packages="${packages.join(" ")}">`,
           ),
         );
 
@@ -56,7 +56,7 @@ export function registerDependencyHandlers() {
       executeAddDependency({
         packages,
         message,
-        appPath: getCreaAppPath(app.path),
+        appPath: getScalixAppPath(app.path),
       });
     },
   );

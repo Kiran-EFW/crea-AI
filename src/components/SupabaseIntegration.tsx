@@ -140,7 +140,7 @@ export function SupabaseIntegration() {
               await IpcClient.getInstance().fakeHandleSupabaseConnect();
             } else {
               await IpcClient.getInstance().openExternalUrl(
-                "https://oauth.crea.sh/api/integrations/supabase/login",
+                "https://oauth.scalix.world/api/integrations/supabase/login",
               );
             }
           }}

@@ -3,7 +3,7 @@ import { db } from "../../db";
 import { apps } from "../../db/schema";
 import { eq } from "drizzle-orm";
 import { generateProblemReport } from "../processors/tsc";
-import { getCreaAppPath } from "@/paths/paths";
+import { getScalixAppPath } from "@/paths/paths";
 import log from "electron-log";
 import { createLoggedHandler } from "./safe_handle";
 
@@ -23,7 +23,7 @@ export function registerProblemsHandlers() {
         throw new Error(`App not found: ${params.appId}`);
       }
 
-      const appPath = getCreaAppPath(app.path);
+      const appPath = getScalixAppPath(app.path);
 
       // Call autofix with empty full response to just run TypeScript checking
       const problemReport = await generateProblemReport({

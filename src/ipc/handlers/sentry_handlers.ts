@@ -9,7 +9,7 @@ export function registerSentryHandlers() {
     logger.info("Simulating Sentry OAuth connection for testing");
     event.sender.send("deep-link-received", {
       type: "sentry-oauth-return",
-      url: "https://oauth.crea.ai/api/integrations/sentry/login",
+      url: "https://oauth.scalix.world/api/integrations/sentry/login",
     });
     logger.info("Sent fake sentry deep-link-received event during testing.");
   });

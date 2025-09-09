@@ -1,6 +1,6 @@
 import { AwsS3Connector } from "@/components/AwsS3Connector";
 import { CloudflareR2Connector } from "@/components/CloudflareR2Connector";
-import { CreateAppDialog } from "@/components/CreateAppDialog";
+import { ScalixAppDialog } from "@/components/ScalixAppDialog";
 import { GitHubIntegration } from "@/components/GitHubIntegration";
 import { MixpanelConnector } from "@/components/MixpanelConnector";
 import { NeonConnector } from "@/components/NeonConnector";
@@ -132,7 +132,7 @@ const HubPage: React.FC = () => {
         <BackendSection />
       </div>
 
-      <CreateAppDialog
+      <ScalixAppDialog
         isOpen={isCreateDialogOpen}
         onClose={() => setIsCreateDialogOpen(false)}
         onAppCreated={(appId, chatId) => {

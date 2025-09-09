@@ -9,7 +9,7 @@ export function registerSendGridHandlers() {
     logger.info("Simulating SendGrid OAuth connection for testing");
     event.sender.send("deep-link-received", {
       type: "sendgrid-oauth-return",
-      url: "https://oauth.crea.ai/api/integrations/sendgrid/login",
+      url: "https://oauth.scalix.world/api/integrations/sendgrid/login",
     });
     logger.info("Sent fake sendgrid deep-link-received event during testing.");
   });

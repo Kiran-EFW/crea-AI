@@ -75,7 +75,7 @@ export function StripeConnector() {
               await IpcClient.getInstance().fakeHandleStripeConnect();
             } else {
               await IpcClient.getInstance().openExternalUrl(
-                "https://oauth.crea.sh/api/integrations/stripe/login",
+                "https://oauth.scalix.world/api/integrations/stripe/login",
               );
             }
           }}

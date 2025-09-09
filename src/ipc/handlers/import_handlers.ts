@@ -3,7 +3,7 @@ import fs from "fs/promises";
 import path from "path";
 import { createLoggedHandler } from "./safe_handle";
 import log from "electron-log";
-import { getCreaAppPath } from "../../paths/paths";
+import { getScalixAppPath } from "../../paths/paths";
 import { apps } from "@/db/schema";
 import { db } from "@/db";
 import { chats } from "@/db/schema";
@@ -48,7 +48,7 @@ export function registerImportHandlers() {
   // Handler for checking if an app name is already taken
   handle("check-app-name", async (_, { appName }: { appName: string }) => {
     // Check filesystem
-    const appPath = getCreaAppPath(appName);
+    const appPath = getScalixAppPath(appName);
     try {
       await fs.access(appPath);
       return { exists: true };
@@ -83,7 +83,7 @@ export function registerImportHandlers() {
         throw new Error("Source folder does not exist");
       }
 
-      const destPath = getCreaAppPath(appName);
+      const destPath = getScalixAppPath(appName);
 
       // Check if the app already exists
       const errorMessage = "An app with this name already exists";
@@ -95,7 +95,7 @@ export function registerImportHandlers() {
           throw error;
         }
       }
-      // Copy the app folder to the Crea apps directory.
+      // Copy the app folder to the Scalix apps directory.
       // Why not use fs.cp? Because we want stable ordering for
       // tests.
       await copyDirectoryRecursive(sourcePath, destPath);
@@ -122,7 +122,7 @@ export function registerImportHandlers() {
         // Create initial commit
         await gitCommit({
           path: destPath,
-          message: "Init Crea app",
+          message: "Init Scalix app",
         });
       }
 

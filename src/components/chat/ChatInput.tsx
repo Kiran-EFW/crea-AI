@@ -231,7 +231,7 @@ export function ChatInput({ chatId }: { chatId?: number }) {
         <ChatErrorBox
           onDismiss={dismissError}
           error={error}
-          isCreaProEnabled={settings.enableCreaPro ?? false}
+          isScalixProEnabled={settings.enableScalixPro ?? false}
         />
       )}
       {/* Display loading or error state for proposal */}
@@ -292,7 +292,7 @@ export function ChatInput({ chatId }: { chatId?: number }) {
               onChange={setInputValue}
               onSubmit={handleSubmit}
               onPaste={handlePaste}
-              placeholder="Ask Crea to build..."
+              placeholder="Ask Scalix to build..."
               excludeCurrentApp={true}
             />
 
@@ -449,7 +449,7 @@ function WriteCodeProperlyButton() {
       return;
     }
     streamMessage({
-      prompt: `Write the code in the previous message in the correct format using \`<crea-write>\` tags!`,
+      prompt: `Write the code in the previous message in the correct format using \`<scalix-write>\` tags!`,
       chatId,
       redo: false,
     });

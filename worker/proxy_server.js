@@ -56,30 +56,30 @@ try {
 }
 
 try {
-  const creaShimPath = path.join(__dirname, "crea-shim.js");
-  creaShimContent = fs.readFileSync(creaShimPath, "utf-8");
-  parentPort?.postMessage("[proxy-worker] crea-shim.js loaded.");
+  const scalixShimPath = path.join(__dirname, "scalix-shim.js");
+  scalixShimContent = fs.readFileSync(scalixShimPath, "utf-8");
+  parentPort?.postMessage("[proxy-worker] scalix-shim.js loaded.");
 } catch (error) {
   parentPort?.postMessage(
-    `[proxy-worker] Failed to read crea-shim.js: ${error.message}`,
+    `[proxy-worker] Failed to read scalix-shim.js: ${error.message}`,
   );
 }
 
 try {
-  const creaComponentSelectorClientPath = path.join(
+  const scalixComponentSelectorClientPath = path.join(
     __dirname,
-    "crea-component-selector-client.js",
+    "scalix-component-selector-client.js",
   );
-  creaComponentSelectorClientContent = fs.readFileSync(
-    creaComponentSelectorClientPath,
+  scalixComponentSelectorClientContent = fs.readFileSync(
+    scalixComponentSelectorClientPath,
     "utf-8",
   );
   parentPort?.postMessage(
-    "[proxy-worker] crea-component-selector-client.js loaded.",
+    "[proxy-worker] scalix-component-selector-client.js loaded.",
   );
 } catch (error) {
   parentPort?.postMessage(
-    `[proxy-worker] Failed to read crea-component-selector-client.js: ${error.message}`,
+    `[proxy-worker] Failed to read scalix-component-selector-client.js: ${error.message}`,
   );
 }
 
@@ -90,8 +90,8 @@ function needsInjection(pathname) {
 
 function injectHTML(buf) {
   let txt = buf.toString("utf8");
-  // These are strings that were used since the first version of the crea shim.
-  // If the crea shim is used from legacy apps which came pre-baked with the shim
+  // These are strings that were used since the first version of the scalix shim.
+  // If the scalix shim is used from legacy apps which came pre-baked with the shim
   // as a vite plugin, then do not inject the shim twice to avoid weird behaviors.
   const legacyAppWithShim =
     txt.includes("window-error") && txt.includes("unhandled-rejection");
@@ -111,7 +111,7 @@ function injectHTML(buf) {
       scripts.push(`<script>${creaShimContent}</script>`);
     } else {
       scripts.push(
-        '<script>console.warn("[proxy-worker] crea shim was not injected.");</script>',
+          '<script>console.warn("[proxy-worker] scalix shim was not injected.");</script>',
       );
     }
   }
@@ -119,7 +119,7 @@ function injectHTML(buf) {
     scripts.push(`<script>${creaComponentSelectorClientContent}</script>`);
   } else {
     scripts.push(
-      '<script>console.warn("[proxy-worker] crea component selector client was not injected.");</script>',
+        '<script>console.warn("[proxy-worker] scalix component selector client was not injected.");</script>',
     );
   }
   const allScripts = scripts.join("\n");

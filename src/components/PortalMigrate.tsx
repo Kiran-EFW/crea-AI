@@ -43,7 +43,7 @@ export const PortalMigrate = ({ appId }: PortalMigrateProps) => {
   const openDocs = () => {
     const ipcClient = IpcClient.getInstance();
     ipcClient.openExternalUrl(
-      "https://www.crea.sh/docs/templates/portal#create-a-database-migration",
+      "https://www.scalix.world/docs/templates/portal#create-a-database-migration",
     );
   };
 

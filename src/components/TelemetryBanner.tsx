@@ -26,14 +26,14 @@ export function PrivacyBanner() {
             Share anonymous data?
           </h4>
           <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-            Help improve Crea with anonymous usage data.
+            Help improve Scalix with anonymous usage data.
             <em className="block italic mt-0.5">
               Note: this does not log your code or messages.
             </em>
             <a
               onClick={() => {
                 IpcClient.getInstance().openExternalUrl(
-                  "https://crea.ai/docs/policies/privacy-policy",
+                  "https://scalix.world/docs/policies/privacy-policy",
                 );
               }}
               className="cursor-pointer text-sm text-blue-600 dark:text-blue-400 hover:underline"

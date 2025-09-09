@@ -122,7 +122,7 @@ export const showExtraFilesToast = ({
 }) => {
   if (error) {
     showError(
-      `Error committing files ${files.join(", ")} changed outside of Crea: ${error}`,
+      `Error committing files ${files.join(", ")} changed outside of Scalix: ${error}`,
     );
     posthog.capture("extra-files:error", {
       files: files,
@@ -130,7 +130,7 @@ export const showExtraFilesToast = ({
     });
   } else {
     showWarning(
-      `Files changed outside of Crea have automatically been committed:
+      `Files changed outside of Scalix have automatically been committed:
     \n\n${files.join("\n")}`,
     );
     posthog.capture("extra-files:warning", {

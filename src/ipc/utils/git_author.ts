@@ -5,12 +5,12 @@ export async function getGitAuthor() {
   const user = settings.githubUser;
   const author = user
     ? {
-        name: "[crea]",
+        name: "[scalix]",
         email: user.email,
       }
     : {
-        name: "[crea]",
-        email: "git@crea.ai",
+        name: "[scalix]",
+        email: "git@scalix.world",
       };
   return author;
 }

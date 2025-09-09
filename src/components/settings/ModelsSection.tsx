@@ -3,7 +3,7 @@ import { AlertTriangle, PlusIcon, TrashIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { CreateCustomModelDialog } from "@/components/CreateCustomModelDialog";
+import { ScalixCustomModelDialog } from "@/components/ScalixCustomModelDialog";
 import { EditCustomModelDialog } from "@/components/EditCustomModelDialog";
 import { useLanguageModelsForProvider } from "@/hooks/useLanguageModelsForProvider"; // Use the hook directly here
 import { useDeleteCustomModel } from "@/hooks/useDeleteCustomModel"; // Import the new hook
@@ -209,7 +209,7 @@ export function ModelsSection({ providerId }: ModelsSectionProps) {
       )}
 
       {/* Render the dialogs */}
-      <CreateCustomModelDialog
+      <ScalixCustomModelDialog
         isOpen={isCustomModelDialogOpen}
         onClose={() => setIsCustomModelDialogOpen(false)}
         onSuccess={() => {

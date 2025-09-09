@@ -17,8 +17,8 @@ async function verifyReleaseAssets() {
     console.log(`🔍 Verifying release assets for version ${version}...`);
 
     // GitHub API configuration
-    const owner = "crea-sh";
-    const repo = "crea";
+    const owner = "scalix-world";
+    const repo = "scalix";
     const token = process.env.GITHUB_TOKEN;
 
     if (!token) {
@@ -35,7 +35,7 @@ async function verifyReleaseAssets() {
       headers: {
         Authorization: `token ${token}`,
         Accept: "application/vnd.github.v3+json",
-        "User-Agent": "crea-release-verifier",
+        "User-Agent": "scalix-release-verifier",
       },
     });
 
@@ -81,12 +81,12 @@ async function verifyReleaseAssets() {
 
     // Define expected assets with platform-specific version handling
     const expectedAssets = [
-      `crea-${normalizeVersionForPlatform(version, "rpm")}-1.x86_64.rpm`,
-      `crea-${normalizeVersionForPlatform(version, "nupkg")}-full.nupkg`,
-      `crea-${version}.Setup.exe`,
-      `crea-darwin-arm64-${version}.zip`,
-      `crea-darwin-x64-${version}.zip`,
-      `crea_${normalizeVersionForPlatform(version, "deb")}_amd64.deb`,
+      `scalix-${normalizeVersionForPlatform(version, "rpm")}-1.x86_64.rpm`,
+      `scalix-${normalizeVersionForPlatform(version, "nupkg")}-full.nupkg`,
+      `scalix-${version}.Setup.exe`,
+      `scalix-darwin-arm64-${version}.zip`,
+      `scalix-darwin-x64-${version}.zip`,
+      `scalix_${normalizeVersionForPlatform(version, "deb")}_amd64.deb`,
       "RELEASES",
     ];
 

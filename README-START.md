@@ -1,8 +1,8 @@
-# Crea Development Server - Quick Start Guide
+# Scalix Development Server - Quick Start Guide
 
 ## 🚀 Getting Started
 
-Your Crea app is now ready to run! Choose the script that works best for your environment.
+Your Scalix app is now ready to run! Choose the script that works best for your environment.
 
 ## 📋 Available Scripts
 
@@ -81,4 +81,4 @@ When the app starts correctly, you'll see:
 
 ## 🎉 You're All Set!
 
-Your Crea development environment is fully configured and ready to use! 🚀
+Your Scalix development environment is fully configured and ready to use! 🚀

@@ -102,7 +102,7 @@ export function GitHubIntegration() {
               await IpcClient.getInstance().fakeHandleGithubConnect();
             } else {
               await IpcClient.getInstance().openExternalUrl(
-                "https://oauth.crea.sh/api/integrations/github/login",
+                "https://oauth.scalix.world/api/integrations/github/login",
               );
             }
           }}

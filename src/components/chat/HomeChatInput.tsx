@@ -81,7 +81,7 @@ export function HomeChatInput({
               onChange={setInputValue}
               onSubmit={handleCustomSubmit}
               onPaste={handlePaste}
-              placeholder="Ask Crea to build..."
+              placeholder="Ask Scalix to build..."
               disabled={isStreaming}
               excludeCurrentApp={false}
             />

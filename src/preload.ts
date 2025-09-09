@@ -103,7 +103,7 @@ const validInvokeChannels = [
   "open-ios",
   "open-android",
   "check-problems",
-  "restart-crea",
+  "restart-scalix",
   "get-templates",
   "portal:migrate-create",
   // Help bot

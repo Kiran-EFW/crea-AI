@@ -11,14 +11,14 @@ import path from "node:path"; // Import path for basename
 // Import tag parsers
 import { processFullResponseActions } from "../processors/response_processor";
 import {
-  getCreaWriteTags,
-  getCreaRenameTags,
-  getCreaDeleteTags,
-  getCreaExecuteSqlTags,
-  getCreaAddDependencyTags,
-  getCreaChatSummaryTag,
-  getCreaCommandTags,
-} from "../utils/crea_tag_parser";
+  getScalixWriteTags,
+  getScalixRenameTags,
+  getScalixDeleteTags,
+  getScalixExecuteSqlTags,
+  getScalixAddDependencyTags,
+  getScalixChatSummaryTag,
+  getScalixCommandTags,
+} from "../utils/scalix_tag_parser";
 import log from "electron-log";
 import { isServerFunction } from "../../supabase_admin/supabase_utils";
 import {
@@ -27,7 +27,7 @@ import {
   getContextWindow,
 } from "../utils/token_utils";
 import { extractCodebase } from "../../utils/codebase";
-import { getCreaAppPath } from "../../paths/paths";
+import { getScalixAppPath } from "../../paths/paths";
 import { withLock } from "../utils/lock_utils";
 import { createLoggedHandler } from "./safe_handle";
 import { ApproveProposalResult } from "../ipc_types";
@@ -101,7 +101,7 @@ async function getCodebaseTokenCount(
   logger.log(`Calculating codebase token count for chatId: ${chatId}`);
   const codebase = (
     await extractCodebase({
-      appPath: getCreaAppPath(appPath),
+      appPath: getScalixAppPath(appPath),
       chatContext: validateChatContext(chatContext),
     })
   ).formattedOutput;
@@ -150,13 +150,13 @@ const getProposalHandler = async (
         );
         const messageContent = latestAssistantMessage.content;
 
-        const proposalTitle = getCreaChatSummaryTag(messageContent);
+        const proposalTitle = getScalixChatSummaryTag(messageContent);
 
-        const proposalWriteFiles = getCreaWriteTags(messageContent);
-        const proposalRenameFiles = getCreaRenameTags(messageContent);
-        const proposalDeleteFiles = getCreaDeleteTags(messageContent);
-        const proposalExecuteSqlQueries = getCreaExecuteSqlTags(messageContent);
-        const packagesAdded = getCreaAddDependencyTags(messageContent);
+        const proposalWriteFiles = getScalixWriteTags(messageContent);
+        const proposalRenameFiles = getScalixRenameTags(messageContent);
+        const proposalDeleteFiles = getScalixDeleteTags(messageContent);
+        const proposalExecuteSqlQueries = getScalixExecuteSqlTags(messageContent);
+        const packagesAdded = getScalixAddDependencyTags(messageContent);
 
         const filesChanged = [
           ...proposalWriteFiles.map((tag) => ({
@@ -221,7 +221,7 @@ const getProposalHandler = async (
       }
       const actions: ActionProposal["actions"] = [];
       if (latestAssistantMessage?.content) {
-        const writeTags = getCreaWriteTags(latestAssistantMessage.content);
+        const writeTags = getScalixWriteTags(latestAssistantMessage.content);
         const refactorTarget = writeTags.reduce(
           (largest, tag) => {
             const lineCount = tag.content.split("\n").length;
@@ -248,7 +248,7 @@ const getProposalHandler = async (
         }
 
         // Check for command tags and add corresponding actions
-        const commandTags = getCreaCommandTags(latestAssistantMessage.content);
+        const commandTags = getScalixCommandTags(latestAssistantMessage.content);
         if (commandTags.includes("rebuild")) {
           actions.push({
             id: "rebuild",
@@ -359,7 +359,7 @@ const approveProposalHandler = async (
   }
 
   // 2. Process the actions defined in the message content
-  const chatSummary = getCreaChatSummaryTag(messageToApprove.content);
+  const chatSummary = getScalixChatSummaryTag(messageToApprove.content);
   const processResult = await processFullResponseActions(
     messageToApprove.content,
     chatId,

@@ -9,7 +9,7 @@ import {
   SUPABASE_AVAILABLE_SYSTEM_PROMPT,
   SUPABASE_NOT_AVAILABLE_SYSTEM_PROMPT,
 } from "../../prompts/supabase_prompt";
-import { getCreaAppPath } from "../../paths/paths";
+import { getScalixAppPath } from "../../paths/paths";
 import log from "electron-log";
 import { extractCodebase } from "../../utils/codebase";
 import { getSupabaseContext } from "../../supabase_admin/supabase_context";
@@ -61,7 +61,7 @@ export function registerTokenCountHandlers() {
 
       // Count system prompt tokens
       let systemPrompt = constructSystemPrompt({
-        aiRules: await readAiRules(getCreaAppPath(chat.app.path)),
+        aiRules: await readAiRules(getScalixAppPath(chat.app.path)),
         chatMode: settings.selectedChatMode,
       });
       let supabaseContext = "";
@@ -85,18 +85,18 @@ export function registerTokenCountHandlers() {
       let codebaseTokens = 0;
 
       if (chat.app) {
-        const appPath = getCreaAppPath(chat.app.path);
+        const appPath = getScalixAppPath(chat.app.path);
         const { formattedOutput, files } = await extractCodebase({
           appPath,
           chatContext: validateChatContext(chat.app.chatContext),
         });
         codebaseInfo = formattedOutput;
-        if (settings.enableCreaPro && settings.enableProSmartFilesContextMode) {
+        if (settings.enableScalixPro && settings.enableProSmartFilesContextMode) {
           codebaseTokens = estimateTokens(
             files
               // It doesn't need to be the exact format but it's just to get a token estimate
               .map(
-                (file) => `<crea-file=${file.path}>${file.content}</crea-file>`,
+                (file) => `<scalix-file=${file.path}>${file.content}</scalix-file>`,
               )
               .join("\n\n"),
           );

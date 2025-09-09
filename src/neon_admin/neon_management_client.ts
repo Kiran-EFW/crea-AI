@@ -41,7 +41,7 @@ export async function refreshNeonToken(): Promise<void> {
   try {
     // Make request to Neon refresh endpoint
     const response = await fetch(
-      "https://oauth.crea.ai/api/integrations/neon/refresh",
+      "https://oauth.scalix.world/api/integrations/neon/refresh",
 
       {
         method: "POST",

@@ -50,12 +50,12 @@ export function ProviderSettingsPage({ provider }: ProviderSettingsPageProps) {
   const [saveError, setSaveError] = useState<string | null>(null);
   const router = useRouter();
 
-  // Use fetched data (or defaults for Crea)
+  // Use fetched data (or defaults for Scalix)
   const providerDisplayName = isDyad
-    ? "Crea"
+    ? "Scalix"
     : (providerData?.name ?? "Unknown Provider");
   const providerWebsiteUrl = isDyad
-    ? "https://academy.crea.ai/settings"
+    ? "https://academy.scalix.world/settings"
     : providerData?.websiteUrl;
   const hasFreeTier = isDyad ? false : providerData?.hasFreeTier;
   const envVarName = isDyad ? undefined : providerData?.envVarName;
@@ -100,7 +100,7 @@ export function ProviderSettingsPage({ provider }: ProviderSettingsPageProps) {
         },
       };
       if (isDyad) {
-        settingsUpdate.enableCreaPro = true;
+        settingsUpdate.enableScalixPro = true;
       }
       await updateSettings(settingsUpdate);
       setApiKeyInput(""); // Clear input on success
@@ -136,15 +136,15 @@ export function ProviderSettingsPage({ provider }: ProviderSettingsPageProps) {
     }
   };
 
-  // --- Toggle Crea Pro Handler ---
-  const handleToggleCreaPro = async (enabled: boolean) => {
+  // --- Toggle Scalix Pro Handler ---
+  const handleToggleScalixPro = async (enabled: boolean) => {
     setIsSaving(true);
     try {
       await updateSettings({
-        enableCreaPro: enabled,
+        enableScalixPro: enabled,
       });
     } catch (error: any) {
-      showError(`Error toggling Crea Pro: ${error}`);
+      showError(`Error toggling Scalix Pro: ${error}`);
     } finally {
       setIsSaving(false);
     }
@@ -275,14 +275,14 @@ export function ProviderSettingsPage({ provider }: ProviderSettingsPageProps) {
         {isDyad && !settingsLoading && (
           <div className="mt-6 flex items-center justify-between p-4 bg-(--background-lightest) rounded-lg border">
             <div>
-              <h3 className="font-medium">Enable Crea Pro</h3>
+              <h3 className="font-medium">Enable Scalix Pro</h3>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                Toggle to enable Crea Pro
+                Toggle to enable Scalix Pro
               </p>
             </div>
             <Switch
-              checked={settings?.enableCreaPro}
-              onCheckedChange={handleToggleCreaPro}
+              checked={settings?.enableScalixPro}
+              onCheckedChange={handleToggleScalixPro}
               disabled={isSaving}
             />
           </div>

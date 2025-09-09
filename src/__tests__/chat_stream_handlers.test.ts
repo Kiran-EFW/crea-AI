@@ -1,16 +1,16 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 import {
-  getCreaWriteTags,
-  getCreaRenameTags,
-  getCreaAddDependencyTags,
-  getCreaDeleteTags,
-} from "../ipc/utils/crea_tag_parser";
+  getScalixWriteTags,
+  getScalixRenameTags,
+  getScalixAddDependencyTags,
+  getScalixDeleteTags,
+} from "../ipc/utils/scalix_tag_parser";
 
 import { processFullResponseActions } from "../ipc/processors/response_processor";
 import {
-  removeCreaTags,
-  hasUnclosedCreaWrite,
+  removeScalixTags,
+  hasUnclosedScalixWrite,
 } from "../ipc/handlers/chat_stream_handlers";
 import fs from "node:fs";
 import git from "isomorphic-git";
@@ -53,9 +53,9 @@ vi.mock("isomorphic-git", () => ({
   },
 }));
 
-// Mock paths module to control getCreaAppPath
+// Mock paths module to control getScalixAppPath
 vi.mock("../paths/paths", () => ({
-  getCreaAppPath: vi.fn().mockImplementation((appPath) => {
+  getScalixAppPath: vi.fn().mockImplementation((appPath) => {
     return `/mock/user/data/path/${appPath}`;
   }),
   getUserDataPath: vi.fn().mockReturnValue("/mock/user/data/path"),
@@ -80,52 +80,52 @@ vi.mock("../db", () => ({
   },
 }));
 
-describe("getCreaAddDependencyTags", () => {
-  it("should return an empty array when no crea-add-dependency tags are found", () => {
-    const result = getCreaAddDependencyTags("No crea-add-dependency tags here");
+describe("getScalixAddDependencyTags", () => {
+  it("should return an empty array when no scalix-add-dependency tags are found", () => {
+    const result = getScalixAddDependencyTags("No scalix-add-dependency tags here");
     expect(result).toEqual([]);
   });
 
-  it("should return an array of crea-add-dependency tags", () => {
-    const result = getCreaAddDependencyTags(
-      `<crea-add-dependency packages="uuid"></crea-add-dependency>`,
+  it("should return an array of scalix-add-dependency tags", () => {
+    const result = getScalixAddDependencyTags(
+      `<scalix-add-dependency packages="uuid"></scalix-add-dependency>`,
     );
     expect(result).toEqual(["uuid"]);
   });
 
-  it("should return all the packages in the crea-add-dependency tags", () => {
-    const result = getCreaAddDependencyTags(
-      `<crea-add-dependency packages="pkg1 pkg2"></crea-add-dependency>`,
+  it("should return all the packages in the scalix-add-dependency tags", () => {
+    const result = getScalixAddDependencyTags(
+      `<scalix-add-dependency packages="pkg1 pkg2"></scalix-add-dependency>`,
     );
     expect(result).toEqual(["pkg1", "pkg2"]);
   });
 
-  it("should return all the packages in the crea-add-dependency tags", () => {
-    const result = getCreaAddDependencyTags(
-      `txt before<crea-add-dependency packages="pkg1 pkg2"></crea-add-dependency>text after`,
+  it("should return all the packages in the scalix-add-dependency tags", () => {
+    const result = getScalixAddDependencyTags(
+      `txt before<scalix-add-dependency packages="pkg1 pkg2"></scalix-add-dependency>text after`,
     );
     expect(result).toEqual(["pkg1", "pkg2"]);
   });
 
-  it("should return all the packages in multiple crea-add-dependency tags", () => {
-    const result = getCreaAddDependencyTags(
-      `txt before<crea-add-dependency packages="pkg1 pkg2"></crea-add-dependency>txt between<crea-add-dependency packages="pkg3"></crea-add-dependency>text after`,
+  it("should return all the packages in multiple scalix-add-dependency tags", () => {
+    const result = getScalixAddDependencyTags(
+      `txt before<scalix-add-dependency packages="pkg1 pkg2"></scalix-add-dependency>txt between<scalix-add-dependency packages="pkg3"></scalix-add-dependency>text after`,
     );
     expect(result).toEqual(["pkg1", "pkg2", "pkg3"]);
   });
 });
-describe("getCreaWriteTags", () => {
-  it("should return an empty array when no crea-write tags are found", () => {
-    const result = getCreaWriteTags("No crea-write tags here");
+describe("getScalixWriteTags", () => {
+  it("should return an empty array when no scalix-write tags are found", () => {
+    const result = getScalixWriteTags("No scalix-write tags here");
     expect(result).toEqual([]);
   });
 
-  it("should return a crea-write tag", () => {
+  it("should return a scalix-write tag", () => {
     const result =
-      getCreaWriteTags(`<crea-write path="src/components/TodoItem.tsx" description="Creating a component for individual todo items">
+      getScalixWriteTags(`<scalix-write path="src/components/TodoItem.tsx" description="Creating a component for individual todo items">
 import React from "react";
 console.log("TodoItem");
-</crea-write>`);
+</scalix-write>`);
     expect(result).toEqual([
       {
         path: "src/components/TodoItem.tsx",
@@ -136,14 +136,14 @@ console.log("TodoItem");`,
     ]);
   });
 
-  it("should strip out code fence (if needed) from a crea-write tag", () => {
+  it("should strip out code fence (if needed) from a scalix-write tag", () => {
     const result =
-      getCreaWriteTags(`<crea-write path="src/components/TodoItem.tsx" description="Creating a component for individual todo items">
+      getScalixWriteTags(`<scalix-write path="src/components/TodoItem.tsx" description="Creating a component for individual todo items">
 \`\`\`tsx
 import React from "react";
 console.log("TodoItem");
 \`\`\`
-</crea-write>
+</scalix-write>
 `);
     expect(result).toEqual([
       {
@@ -156,10 +156,10 @@ console.log("TodoItem");`,
   });
 
   it("should handle missing description", () => {
-    const result = getCreaWriteTags(`
-      <crea-write path="src/pages/locations/neighborhoods/louisville/Highlands.tsx">
+    const result = getScalixWriteTags(`
+      <scalix-write path="src/pages/locations/neighborhoods/louisville/Highlands.tsx">
 import React from 'react';
-</crea-write>
+</scalix-write>
     `);
     expect(result).toEqual([
       {
@@ -171,11 +171,11 @@ import React from 'react';
   });
 
   it("should handle extra space", () => {
-    const result = getCreaWriteTags(
+    const result = getScalixWriteTags(
       cleanFullResponse(`
-      <crea-write path="src/pages/locations/neighborhoods/louisville/Highlands.tsx" description="Updating Highlands neighborhood page to use <a> tags." >
+      <scalix-write path="src/pages/locations/neighborhoods/louisville/Highlands.tsx" description="Updating Highlands neighborhood page to use <a> tags." >
 import React from 'react';
-</crea-write>
+</scalix-write>
     `),
     );
     expect(result).toEqual([
@@ -188,12 +188,12 @@ import React from 'react';
   });
 
   it("should handle nested tags", () => {
-    const result = getCreaWriteTags(
+    const result = getScalixWriteTags(
       cleanFullResponse(`
       BEFORE TAG
-  <crea-write path="src/pages/locations/neighborhoods/louisville/Highlands.tsx" description="Updating Highlands neighborhood page to use <a> tags.">
+  <scalix-write path="src/pages/locations/neighborhoods/louisville/Highlands.tsx" description="Updating Highlands neighborhood page to use <a> tags.">
 import React from 'react';
-</crea-write>
+</scalix-write>
 AFTER TAG
     `),
     );
@@ -210,15 +210,15 @@ AFTER TAG
     // Simulate the preprocessing step that cleanFullResponse would do
     const inputWithNestedTags = `
       BEFORE TAG
-  <crea-write path="src/pages/locations/neighborhoods/louisville/Highlands.tsx" description="Updating Highlands neighborhood page to use <a> tags.">
+  <scalix-write path="src/pages/locations/neighborhoods/louisville/Highlands.tsx" description="Updating Highlands neighborhood page to use <a> tags.">
 import React from 'react';
-</crea-write>
+</scalix-write>
 AFTER TAG
     `;
 
     const cleanedInput = cleanFullResponse(inputWithNestedTags);
 
-    const result = getCreaWriteTags(cleanedInput);
+    const result = getScalixWriteTags(cleanedInput);
     expect(result).toEqual([
       {
         path: "src/pages/locations/neighborhoods/louisville/Highlands.tsx",
@@ -229,11 +229,11 @@ AFTER TAG
   });
 
   it("should handle multiple nested tags after preprocessing", () => {
-    const inputWithMultipleNestedTags = `<crea-write path="src/file.tsx" description="Testing <div> and <span> and <a> tags.">content</crea-write>`;
+    const inputWithMultipleNestedTags = `<scalix-write path="src/file.tsx" description="Testing <div> and <span> and <a> tags.">content</scalix-write>`;
 
     // This simulates what cleanFullResponse should do
     const cleanedInput = cleanFullResponse(inputWithMultipleNestedTags);
-    const result = getCreaWriteTags(cleanedInput);
+    const result = getScalixWriteTags(cleanedInput);
     expect(result).toEqual([
       {
         path: "src/file.tsx",
@@ -244,12 +244,12 @@ AFTER TAG
   });
 
   it("should handle nested tags in multiple attributes", () => {
-    const inputWithNestedInMultipleAttrs = `<crea-write path="src/<component>.tsx" description="Testing <div> tags.">content</crea-write>`;
+    const inputWithNestedInMultipleAttrs = `<scalix-write path="src/<component>.tsx" description="Testing <div> tags.">content</scalix-write>`;
 
     // This simulates what cleanFullResponse should do
     const cleanedInput = cleanFullResponse(inputWithNestedInMultipleAttrs);
 
-    const result = getCreaWriteTags(cleanedInput);
+    const result = getScalixWriteTags(cleanedInput);
     expect(result).toEqual([
       {
         path: "src/＜component＞.tsx",
@@ -259,22 +259,22 @@ AFTER TAG
     ]);
   });
 
-  it("should return an array of crea-write tags", () => {
-    const result = getCreaWriteTags(
+  it("should return an array of scalix-write tags", () => {
+    const result = getScalixWriteTags(
       `I'll create a simple todo list app using React, TypeScript, and shadcn/ui components. Let's get started!
 
 First, I'll create the necessary files for our todo list application:
 
-<crea-write path="src/types/todo.ts" description="Creating types for our todo items">
+<scalix-write path="src/types/todo.ts" description="Creating types for our todo items">
 export interface Todo {
   id: string;
   text: string;
   completed: boolean;
   createdAt: Date;
 }
-</crea-write>
+</scalix-write>
 
-<crea-write path="src/components/TodoItem.tsx" description="Creating a component for individual todo items">
+<scalix-write path="src/components/TodoItem.tsx" description="Creating a component for individual todo items">
 import React from "react";
 import { Trash2, Check, X } from "lucide-react";
 import { Todo } from "../types/todo";
@@ -328,9 +328,9 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo, onToggle, onDelete }) => {
 };
 
 export default TodoItem;
-</crea-write>
+</scalix-write>
 
-<crea-write path="src/components/TodoForm.tsx" description="Creating a form component for adding new todos">
+<scalix-write path="src/components/TodoForm.tsx" description="Creating a form component for adding new todos">
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -369,9 +369,9 @@ const TodoForm: React.FC<TodoFormProps> = ({ onAddTodo }) => {
 };
 
 export default TodoForm;
-</crea-write>
+</scalix-write>
 
-<crea-write path="src/components/TodoList.tsx" description="Creating the main todo list component">
+<scalix-write path="src/components/TodoList.tsx" description="Creating the main todo list component">
 import React from "react";
 import { Todo } from "../types/todo";
 import TodoItem from "./TodoItem";
@@ -409,9 +409,9 @@ const TodoList: React.FC<TodoListProps> = ({ todos, onToggle, onDelete }) => {
 };
 
 export default TodoList;
-</crea-write>
+</scalix-write>
 
-<crea-write path="src/components/TodoStats.tsx" description="Creating a component to show todo statistics">
+<scalix-write path="src/components/TodoStats.tsx" description="Creating a component to show todo statistics">
 import React from "react";
 import { Todo } from "../types/todo";
 import { Card, CardContent } from "@/components/ui/card";
@@ -475,9 +475,9 @@ const TodoStats: React.FC<TodoStatsProps> = ({ todos }) => {
 };
 
 export default TodoStats;
-</crea-write>
+</scalix-write>
 
-<crea-write path="src/pages/Index.tsx" description="Creating the main page for our todo app">
+<scalix-write path="src/pages/Index.tsx" description="Creating the main page for our todo app">
 import React, { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { Todo } from "../types/todo";
@@ -576,15 +576,15 @@ const Index: React.FC = () => {
 };
 
 export default Index;
-</crea-write>
+</scalix-write>
 
-<crea-add-dependency packages="uuid"></crea-add-dependency>
+<scalix-add-dependency packages="uuid"></scalix-add-dependency>
 
-<crea-write path="src/types/uuid.d.ts" description="Adding type definitions for uuid">
+<scalix-write path="src/types/uuid.d.ts" description="Adding type definitions for uuid">
 declare module 'uuid' {
   export function v4(): string;
 }
-</crea-write>
+</scalix-write>
 
 I've created a complete todo list application with the ability to add, complete, and delete tasks. The app includes statistics and uses local storage to persist data.`,
     );
@@ -592,16 +592,16 @@ I've created a complete todo list application with the ability to add, complete,
   });
 });
 
-describe("getCreaRenameTags", () => {
-  it("should return an empty array when no crea-rename tags are found", () => {
-    const result = getCreaRenameTags("No crea-rename tags here");
+describe("getScalixRenameTags", () => {
+  it("should return an empty array when no scalix-rename tags are found", () => {
+    const result = getScalixRenameTags("No scalix-rename tags here");
     expect(result).toEqual([]);
   });
 
-  it("should return an array of crea-rename tags", () => {
-    const result = getCreaRenameTags(
-      `<crea-rename from="src/components/UserProfile.jsx" to="src/components/ProfileCard.jsx"></crea-rename>
-      <crea-rename from="src/utils/helpers.js" to="src/utils/utils.js"></crea-rename>`,
+  it("should return an array of scalix-rename tags", () => {
+    const result = getScalixRenameTags(
+      `<scalix-rename from="src/components/UserProfile.jsx" to="src/components/ProfileCard.jsx"></scalix-rename>
+      <scalix-rename from="src/utils/helpers.js" to="src/utils/utils.js"></scalix-rename>`,
     );
     expect(result).toEqual([
       {
@@ -613,16 +613,16 @@ describe("getCreaRenameTags", () => {
   });
 });
 
-describe("getCreaDeleteTags", () => {
-  it("should return an empty array when no crea-delete tags are found", () => {
-    const result = getCreaDeleteTags("No crea-delete tags here");
+describe("getScalixDeleteTags", () => {
+  it("should return an empty array when no scalix-delete tags are found", () => {
+    const result = getScalixDeleteTags("No scalix-delete tags here");
     expect(result).toEqual([]);
   });
 
-  it("should return an array of crea-delete paths", () => {
-    const result = getCreaDeleteTags(
-      `<crea-delete path="src/components/Analytics.jsx"></crea-delete>
-      <crea-delete path="src/utils/unused.js"></crea-delete>`,
+  it("should return an array of scalix-delete paths", () => {
+    const result = getScalixDeleteTags(
+      `<scalix-delete path="src/components/Analytics.jsx"></scalix-delete>
+      <scalix-delete path="src/utils/unused.js"></scalix-delete>`,
     );
     expect(result).toEqual([
       "src/components/Analytics.jsx",
@@ -665,9 +665,9 @@ describe("processFullResponse", () => {
     vi.mocked(fs.existsSync).mockReturnValue(true);
   });
 
-  it("should return empty object when no crea-write tags are found", async () => {
+  it("should return empty object when no scalix-write tags are found", async () => {
     const result = await processFullResponseActions(
-      "No crea-write tags here",
+      "No scalix-write tags here",
       1,
       {
         chatSummary: undefined,
@@ -683,12 +683,12 @@ describe("processFullResponse", () => {
     expect(fs.writeFileSync).not.toHaveBeenCalled();
   });
 
-  it("should process crea-write tags and create files", async () => {
+  it("should process scalix-write tags and create files", async () => {
     // Set up fs mocks to succeed
     vi.mocked(fs.mkdirSync).mockImplementation(() => undefined);
     vi.mocked(fs.writeFileSync).mockImplementation(() => undefined);
 
-    const response = `<crea-write path="src/file1.js">console.log('Hello');</crea-write>`;
+    const response = `<scalix-write path="src/file1.js">console.log('Hello');</scalix-write>`;
 
     const result = await processFullResponseActions(response, 1, {
       chatSummary: undefined,
@@ -718,7 +718,7 @@ describe("processFullResponse", () => {
       throw new Error("Mock filesystem error");
     });
 
-    const response = `<crea-write path="src/error-file.js">This will fail</crea-write>`;
+    const response = `<scalix-write path="src/error-file.js">This will fail</scalix-write>`;
 
     const result = await processFullResponseActions(response, 1, {
       chatSummary: undefined,
@@ -729,7 +729,7 @@ describe("processFullResponse", () => {
     expect(result.error).toContain("Mock filesystem error");
   });
 
-  it("should process multiple crea-write tags and commit all files", async () => {
+  it("should process multiple scalix-write tags and commit all files", async () => {
     // Clear previous mock calls
     vi.clearAllMocks();
 
@@ -738,12 +738,12 @@ describe("processFullResponse", () => {
     vi.mocked(fs.writeFileSync).mockImplementation(() => undefined);
 
     const response = `
-    <crea-write path="src/file1.js">console.log('First file');</crea-write>
-    <crea-write path="src/utils/file2.js">export const add = (a, b) => a + b;</crea-write>
-    <crea-write path="src/components/Button.tsx">
+    <scalix-write path="src/file1.js">console.log('First file');</scalix-write>
+    <scalix-write path="src/utils/file2.js">export const add = (a, b) => a + b;</scalix-write>
+    <scalix-write path="src/components/Button.tsx">
     import React from 'react';
     export const Button = ({ children }) => <button>{children}</button>;
-    </crea-write>
+    </scalix-write>
     `;
 
     const result = await processFullResponseActions(response, 1, {
@@ -804,13 +804,13 @@ describe("processFullResponse", () => {
     expect(result).toEqual({ updatedFiles: true });
   });
 
-  it("should process crea-rename tags and rename files", async () => {
+  it("should process scalix-rename tags and rename files", async () => {
     // Set up fs mocks to succeed
     vi.mocked(fs.existsSync).mockReturnValue(true);
     vi.mocked(fs.mkdirSync).mockImplementation(() => undefined);
     vi.mocked(fs.renameSync).mockImplementation(() => undefined);
 
-    const response = `<crea-rename from="src/components/OldComponent.jsx" to="src/components/NewComponent.jsx"></crea-rename>`;
+    const response = `<scalix-rename from="src/components/OldComponent.jsx" to="src/components/NewComponent.jsx"></scalix-rename>`;
 
     const result = await processFullResponseActions(response, 1, {
       chatSummary: undefined,
@@ -843,7 +843,7 @@ describe("processFullResponse", () => {
     // Set up the mock to return false for existsSync
     vi.mocked(fs.existsSync).mockReturnValue(false);
 
-    const response = `<crea-rename from="src/components/NonExistent.jsx" to="src/components/NewFile.jsx"></crea-rename>`;
+    const response = `<scalix-rename from="src/components/NonExistent.jsx" to="src/components/NewFile.jsx"></scalix-rename>`;
 
     const result = await processFullResponseActions(response, 1, {
       chatSummary: undefined,
@@ -860,12 +860,12 @@ describe("processFullResponse", () => {
     });
   });
 
-  it("should process crea-delete tags and delete files", async () => {
+  it("should process scalix-delete tags and delete files", async () => {
     // Set up fs mocks to succeed
     vi.mocked(fs.existsSync).mockReturnValue(true);
     vi.mocked(fs.unlinkSync).mockImplementation(() => undefined);
 
-    const response = `<crea-delete path="src/components/Unused.jsx"></crea-delete>`;
+    const response = `<scalix-delete path="src/components/Unused.jsx"></scalix-delete>`;
 
     const result = await processFullResponseActions(response, 1, {
       chatSummary: undefined,
@@ -888,7 +888,7 @@ describe("processFullResponse", () => {
     // Set up the mock to return false for existsSync
     vi.mocked(fs.existsSync).mockReturnValue(false);
 
-    const response = `<crea-delete path="src/components/NonExistent.jsx"></crea-delete>`;
+    const response = `<scalix-delete path="src/components/NonExistent.jsx"></scalix-delete>`;
 
     const result = await processFullResponseActions(response, 1, {
       chatSummary: undefined,
@@ -914,9 +914,9 @@ describe("processFullResponse", () => {
     vi.mocked(fs.unlinkSync).mockImplementation(() => undefined);
 
     const response = `
-    <crea-write path="src/components/NewComponent.jsx">import React from 'react'; export default () => <div>New</div>;</crea-write>
-    <crea-rename from="src/components/OldComponent.jsx" to="src/components/RenamedComponent.jsx"></crea-rename>
-    <crea-delete path="src/components/Unused.jsx"></crea-delete>
+    <scalix-write path="src/components/NewComponent.jsx">import React from 'react'; export default () => <div>New</div>;</scalix-write>
+    <scalix-rename from="src/components/OldComponent.jsx" to="src/components/RenamedComponent.jsx"></scalix-rename>
+    <scalix-delete path="src/components/Unused.jsx"></scalix-delete>
     `;
 
     const result = await processFullResponseActions(response, 1, {
@@ -958,45 +958,45 @@ describe("processFullResponse", () => {
   });
 });
 
-describe("removeCreaTags", () => {
+describe("removeScalixTags", () => {
   it("should return empty string when input is empty", () => {
-    const result = removeCreaTags("");
+    const result = removeScalixTags("");
     expect(result).toBe("");
   });
 
-  it("should return the same text when no crea tags are present", () => {
-    const text = "This is a regular text without any crea tags.";
-    const result = removeCreaTags(text);
+  it("should return the same text when no scalix tags are present", () => {
+    const text = "This is a regular text without any scalix tags.";
+    const result = removeScalixTags(text);
     expect(result).toBe(text);
   });
 
-  it("should remove a single crea-write tag", () => {
-    const text = `Before text <crea-write path="src/file.js">console.log('hello');</crea-write> After text`;
-    const result = removeCreaTags(text);
+  it("should remove a single scalix-write tag", () => {
+    const text = `Before text <scalix-write path="src/file.js">console.log('hello');</scalix-write> After text`;
+    const result = removeScalixTags(text);
     expect(result).toBe("Before text  After text");
   });
 
-  it("should remove a single crea-delete tag", () => {
-    const text = `Before text <crea-delete path="src/file.js"></crea-delete> After text`;
-    const result = removeCreaTags(text);
+  it("should remove a single scalix-delete tag", () => {
+    const text = `Before text <scalix-delete path="src/file.js"></scalix-delete> After text`;
+    const result = removeScalixTags(text);
     expect(result).toBe("Before text  After text");
   });
 
-  it("should remove a single crea-rename tag", () => {
-    const text = `Before text <crea-rename from="old.js" to="new.js"></crea-rename> After text`;
-    const result = removeCreaTags(text);
+  it("should remove a single scalix-rename tag", () => {
+    const text = `Before text <scalix-rename from="old.js" to="new.js"></scalix-rename> After text`;
+    const result = removeScalixTags(text);
     expect(result).toBe("Before text  After text");
   });
 
-  it("should remove multiple different crea tags", () => {
-    const text = `Start <crea-write path="file1.js">code here</crea-write> middle <crea-delete path="file2.js"></crea-delete> end <crea-rename from="old.js" to="new.js"></crea-rename> finish`;
-    const result = removeCreaTags(text);
+  it("should remove multiple different scalix tags", () => {
+    const text = `Start <scalix-write path="file1.js">code here</scalix-write> middle <scalix-delete path="file2.js"></scalix-delete> end <scalix-rename from="old.js" to="new.js"></scalix-rename> finish`;
+    const result = removeScalixTags(text);
     expect(result).toBe("Start  middle  end  finish");
   });
 
-  it("should remove crea tags with multiline content", () => {
+  it("should remove scalix tags with multiline content", () => {
     const text = `Before
-<crea-write path="src/component.tsx" description="A React component">
+<scalix-write path="src/component.tsx" description="A React component">
 import React from 'react';
 
 const Component = () => {
@@ -1004,124 +1004,124 @@ const Component = () => {
 };
 
 export default Component;
-</crea-write>
+</scalix-write>
 After`;
-    const result = removeCreaTags(text);
+    const result = removeScalixTags(text);
     expect(result).toBe("Before\n\nAfter");
   });
 
-  it("should handle crea tags with complex attributes", () => {
-    const text = `Text <crea-write path="src/file.js" description="Complex component with quotes" version="1.0">const x = "hello world";</crea-write> more text`;
-    const result = removeCreaTags(text);
+  it("should handle scalix tags with complex attributes", () => {
+    const text = `Text <scalix-write path="src/file.js" description="Complex component with quotes" version="1.0">const x = "hello world";</scalix-write> more text`;
+    const result = removeScalixTags(text);
     expect(result).toBe("Text  more text");
   });
 
-  it("should remove crea tags and trim whitespace", () => {
-    const text = `  <crea-write path="file.js">code</crea-write>  `;
-    const result = removeCreaTags(text);
+  it("should remove scalix tags and trim whitespace", () => {
+    const text = `  <scalix-write path="file.js">code</scalix-write>  `;
+    const result = removeScalixTags(text);
     expect(result).toBe("");
   });
 
   it("should handle nested content that looks like tags", () => {
-    const text = `<crea-write path="file.js">
+    const text = `<scalix-write path="file.js">
 const html = '<div>Hello</div>';
 const component = <Component />;
-</crea-write>`;
-    const result = removeCreaTags(text);
+</scalix-write>`;
+    const result = removeScalixTags(text);
     expect(result).toBe("");
   });
 
-  it("should handle self-closing crea tags", () => {
-    const text = `Before <crea-delete path="file.js" /> After`;
-    const result = removeCreaTags(text);
-    expect(result).toBe('Before <crea-delete path="file.js" /> After');
+  it("should handle self-closing scalix tags", () => {
+    const text = `Before <scalix-delete path="file.js" /> After`;
+    const result = removeScalixTags(text);
+    expect(result).toBe('Before <scalix-delete path="file.js" /> After');
   });
 
-  it("should handle malformed crea tags gracefully", () => {
-    const text = `Before <crea-write path="file.js">unclosed tag After`;
-    const result = removeCreaTags(text);
-    expect(result).toBe('Before <crea-write path="file.js">unclosed tag After');
+  it("should handle malformed scalix tags gracefully", () => {
+    const text = `Before <scalix-write path="file.js">unclosed tag After`;
+    const result = removeScalixTags(text);
+    expect(result).toBe('Before <scalix-write path="file.js">unclosed tag After');
   });
 
-  it("should handle crea tags with special characters in content", () => {
-    const text = `<crea-write path="file.js">
+  it("should handle scalix tags with special characters in content", () => {
+    const text = `<scalix-write path="file.js">
 const regex = /<div[^>]*>.*?</div>/g;
 const special = "Special chars: @#$%^&*()[]{}|\\";
-</crea-write>`;
-    const result = removeCreaTags(text);
+</scalix-write>`;
+    const result = removeScalixTags(text);
     expect(result).toBe("");
   });
 
-  it("should handle multiple crea tags of the same type", () => {
-    const text = `<crea-write path="file1.js">code1</crea-write> between <crea-write path="file2.js">code2</crea-write>`;
-    const result = removeCreaTags(text);
+  it("should handle multiple scalix tags of the same type", () => {
+    const text = `<scalix-write path="file1.js">code1</scalix-write> between <scalix-write path="file2.js">code2</scalix-write>`;
+    const result = removeScalixTags(text);
     expect(result).toBe("between");
   });
 
-  it("should handle crea tags with custom tag names", () => {
-    const text = `Before <crea-custom-action param="value">content</crea-custom-action> After`;
-    const result = removeCreaTags(text);
+  it("should handle scalix tags with custom tag names", () => {
+    const text = `Before <scalix-custom-action param="value">content</scalix-custom-action> After`;
+    const result = removeScalixTags(text);
     expect(result).toBe("Before  After");
   });
 });
 
-describe("hasUnclosedCreaWrite", () => {
-  it("should return false when there are no crea-write tags", () => {
-    const text = "This is just regular text without any crea tags.";
-    const result = hasUnclosedCreaWrite(text);
+describe("hasUnclosedScalixWrite", () => {
+  it("should return false when there are no scalix-write tags", () => {
+    const text = "This is just regular text without any scalix tags.";
+    const result = hasUnclosedScalixWrite(text);
     expect(result).toBe(false);
   });
 
-  it("should return false when crea-write tag is properly closed", () => {
-    const text = `<crea-write path="src/file.js">console.log('hello');</crea-write>`;
-    const result = hasUnclosedCreaWrite(text);
+  it("should return false when scalix-write tag is properly closed", () => {
+    const text = `<scalix-write path="src/file.js">console.log('hello');</scalix-write>`;
+    const result = hasUnclosedScalixWrite(text);
     expect(result).toBe(false);
   });
 
-  it("should return true when crea-write tag is not closed", () => {
-    const text = `<crea-write path="src/file.js">console.log('hello');`;
-    const result = hasUnclosedCreaWrite(text);
+  it("should return true when scalix-write tag is not closed", () => {
+    const text = `<scalix-write path="src/file.js">console.log('hello');`;
+    const result = hasUnclosedScalixWrite(text);
     expect(result).toBe(true);
   });
 
-  it("should return false when crea-write tag with attributes is properly closed", () => {
-    const text = `<crea-write path="src/file.js" description="A test file">console.log('hello');</crea-write>`;
-    const result = hasUnclosedCreaWrite(text);
+  it("should return false when scalix-write tag with attributes is properly closed", () => {
+    const text = `<scalix-write path="src/file.js" description="A test file">console.log('hello');</scalix-write>`;
+    const result = hasUnclosedScalixWrite(text);
     expect(result).toBe(false);
   });
 
-  it("should return true when crea-write tag with attributes is not closed", () => {
-    const text = `<crea-write path="src/file.js" description="A test file">console.log('hello');`;
-    const result = hasUnclosedCreaWrite(text);
+  it("should return true when scalix-write tag with attributes is not closed", () => {
+    const text = `<scalix-write path="src/file.js" description="A test file">console.log('hello');`;
+    const result = hasUnclosedScalixWrite(text);
     expect(result).toBe(true);
   });
 
-  it("should return false when there are multiple closed crea-write tags", () => {
-    const text = `<crea-write path="src/file1.js">code1</crea-write>
+  it("should return false when there are multiple closed scalix-write tags", () => {
+    const text = `<scalix-write path="src/file1.js">code1</scalix-write>
     Some text in between
-    <crea-write path="src/file2.js">code2</crea-write>`;
-    const result = hasUnclosedCreaWrite(text);
+    <scalix-write path="src/file2.js">code2</scalix-write>`;
+    const result = hasUnclosedScalixWrite(text);
     expect(result).toBe(false);
   });
 
-  it("should return true when the last crea-write tag is unclosed", () => {
-    const text = `<crea-write path="src/file1.js">code1</crea-write>
+  it("should return true when the last scalix-write tag is unclosed", () => {
+    const text = `<scalix-write path="src/file1.js">code1</scalix-write>
     Some text in between
-    <crea-write path="src/file2.js">code2`;
-    const result = hasUnclosedCreaWrite(text);
+    <scalix-write path="src/file2.js">code2`;
+    const result = hasUnclosedScalixWrite(text);
     expect(result).toBe(true);
   });
 
   it("should return false when first tag is unclosed but last tag is closed", () => {
-    const text = `<crea-write path="src/file1.js">code1
+    const text = `<scalix-write path="src/file1.js">code1
     Some text in between
-    <crea-write path="src/file2.js">code2</crea-write>`;
-    const result = hasUnclosedCreaWrite(text);
+    <scalix-write path="src/file2.js">code2</scalix-write>`;
+    const result = hasUnclosedScalixWrite(text);
     expect(result).toBe(false);
   });
 
   it("should handle multiline content correctly", () => {
-    const text = `<crea-write path="src/component.tsx" description="React component">
+    const text = `<scalix-write path="src/component.tsx" description="React component">
 import React from 'react';
 
 const Component = () => {
@@ -1133,13 +1133,13 @@ const Component = () => {
 };
 
 export default Component;
-</crea-write>`;
-    const result = hasUnclosedCreaWrite(text);
+</scalix-write>`;
+    const result = hasUnclosedScalixWrite(text);
     expect(result).toBe(false);
   });
 
   it("should handle multiline unclosed content correctly", () => {
-    const text = `<crea-write path="src/component.tsx" description="React component">
+    const text = `<scalix-write path="src/component.tsx" description="React component">
 import React from 'react';
 
 const Component = () => {
@@ -1151,58 +1151,58 @@ const Component = () => {
 };
 
 export default Component;`;
-    const result = hasUnclosedCreaWrite(text);
+    const result = hasUnclosedScalixWrite(text);
     expect(result).toBe(true);
   });
 
   it("should handle complex attributes correctly", () => {
-    const text = `<crea-write path="src/file.js" description="File with quotes and special chars" version="1.0" author="test">
+    const text = `<scalix-write path="src/file.js" description="File with quotes and special chars" version="1.0" author="test">
 const message = "Hello 'world'";
 const regex = /<div[^>]*>/g;
-</crea-write>`;
-    const result = hasUnclosedCreaWrite(text);
+</scalix-write>`;
+    const result = hasUnclosedScalixWrite(text);
     expect(result).toBe(false);
   });
 
-  it("should handle text before and after crea-write tags", () => {
+  it("should handle text before and after scalix-write tags", () => {
     const text = `Some text before the tag
-<crea-write path="src/file.js">console.log('hello');</crea-write>
+<scalix-write path="src/file.js">console.log('hello');</scalix-write>
 Some text after the tag`;
-    const result = hasUnclosedCreaWrite(text);
+    const result = hasUnclosedScalixWrite(text);
     expect(result).toBe(false);
   });
 
   it("should handle unclosed tag with text after", () => {
     const text = `Some text before the tag
-<crea-write path="src/file.js">console.log('hello');
+<scalix-write path="src/file.js">console.log('hello');
 Some text after the unclosed tag`;
-    const result = hasUnclosedCreaWrite(text);
+    const result = hasUnclosedScalixWrite(text);
     expect(result).toBe(true);
   });
 
-  it("should handle empty crea-write tags", () => {
-    const text = `<crea-write path="src/file.js"></crea-write>`;
-    const result = hasUnclosedCreaWrite(text);
+  it("should handle empty scalix-write tags", () => {
+    const text = `<scalix-write path="src/file.js"></scalix-write>`;
+    const result = hasUnclosedScalixWrite(text);
     expect(result).toBe(false);
   });
 
-  it("should handle unclosed empty crea-write tags", () => {
-    const text = `<crea-write path="src/file.js">`;
-    const result = hasUnclosedCreaWrite(text);
+  it("should handle unclosed empty scalix-write tags", () => {
+    const text = `<scalix-write path="src/file.js">`;
+    const result = hasUnclosedScalixWrite(text);
     expect(result).toBe(true);
   });
 
   it("should focus on the last opening tag when there are mixed states", () => {
-    const text = `<crea-write path="src/file1.js">completed content</crea-write>
-    <crea-write path="src/file2.js">unclosed content
-    <crea-write path="src/file3.js">final content</crea-write>`;
-    const result = hasUnclosedCreaWrite(text);
+    const text = `<scalix-write path="src/file1.js">completed content</scalix-write>
+    <scalix-write path="src/file2.js">unclosed content
+    <scalix-write path="src/file3.js">final content</scalix-write>`;
+    const result = hasUnclosedScalixWrite(text);
     expect(result).toBe(false);
   });
 
   it("should handle tags with special characters in attributes", () => {
-    const text = `<crea-write path="src/file-name_with.special@chars.js" description="File with special chars in path">content</crea-write>`;
-    const result = hasUnclosedCreaWrite(text);
+    const text = `<scalix-write path="src/file-name_with.special@chars.js" description="File with special chars in path">content</scalix-write>`;
+    const result = hasUnclosedScalixWrite(text);
     expect(result).toBe(false);
   });
 });

@@ -207,7 +207,7 @@ export function SupabaseConnector({ appId }: { appId: number }) {
               await IpcClient.getInstance().fakeHandleSupabaseConnect();
             } else {
               await IpcClient.getInstance().openExternalUrl(
-                "https://supabase-oauth.crea.sh/api/connect-supabase/login",
+                "https://supabase-oauth.scalix.world/api/connect-supabase/login",
               );
             }
           }}

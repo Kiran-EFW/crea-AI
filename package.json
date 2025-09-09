@@ -1,12 +1,12 @@
 {
-  "name": "crea",
-  "productName": "crea",
+  "name": "scalix",
+  "productName": "scalix",
   "version": "0.19.0",
   "description": "Free, local, open-source AI app builder",
   "main": ".vite/build/main.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/crea-ai/crea.git"
+    "url": "https://github.com/scalix-world/scalix.git"
   },
   "engines": {
     "node": ">=20"
@@ -14,9 +14,9 @@
   "scripts": {
     "clean": "rm -rf out && rm -rf scaffold/node_modules",
     "start": "electron-forge start",
-    "dev:engine": "CREA_ENGINE_URL=http://localhost:8080/v1 npm start",
-    "staging:engine": "CREA_ENGINE_URL=https://staging---crea-llm-engine-kq7pivehnq-uc.a.run.app/v1 npm start",
-    "staging:gateway": "CREA_GATEWAY_URL=https://staging---litellm-gcp-cloud-run-kq7pivehnq-uc.a.run.app/v1 npm start",
+    "dev:engine": "SCALIX_ENGINE_URL=http://localhost:8080/v1 npm start",
+    "staging:engine": "SCALIX_ENGINE_URL=https://staging---scalix-llm-engine-kq7pivehnq-uc.a.run.app/v1 npm start",
+    "staging:gateway": "SCALIX_GATEWAY_URL=https://staging---scalix-litellm-gcp-cloud-run-kq7pivehnq-uc.a.run.app/v1 npm start",
     "package": "npm run clean && electron-forge package",
     "make": "npm run clean && electron-forge make",
     "publish": "npm run clean && electron-forge publish",
@@ -44,7 +44,7 @@
   "keywords": [],
   "author": {
     "name": "Kiran Ravi",
-    "email": "kirankailas@gmail.com"
+    "email": "kirankailas7@gmail.com"
   },
   "license": "MIT",
   "devDependencies": {
@@ -91,7 +91,6 @@
     "@ai-sdk/openai-compatible": "^1.0.8",
     "@ai-sdk/provider-utils": "^3.0.3",
     "@biomejs/biome": "^1.9.4",
-    "@crea-ai/supabase-management-js": "v1.0.0",
     "@lexical/react": "^0.33.1",
     "@monaco-editor/react": "^4.7.0-rc.0",
     "@neondatabase/api-client": "^2.1.0",

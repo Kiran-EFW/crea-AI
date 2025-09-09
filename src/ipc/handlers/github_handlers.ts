@@ -10,7 +10,7 @@ export function registerGithubHandlers() {
     logger.info("Simulating GitHub OAuth connection for testing");
     event.sender.send("deep-link-received", {
       type: "github-oauth-return",
-      url: "https://oauth.crea.ai/api/integrations/github/login",
+      url: "https://oauth.scalix.world/api/integrations/github/login",
     });
     logger.info("Sent fake github deep-link-received event during testing.");
   });

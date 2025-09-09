@@ -10,11 +10,11 @@ const { _electron: electron } = require("playwright");
 (async () => {
   const browser = await electron.launch({
     args: [
-      "../../out/crea-darwin-arm64/crea.app/Contents/Resources/app.asar/.vite/build/main.js",
+        "../../out/scalix-darwin-arm64/scalix.app/Contents/Resources/app.asar/.vite/build/main.js",
       "--enable-logging",
-      "--user-data-dir=/tmp/crea-e2e-tests",
+      "--user-data-dir=/tmp/scalix-e2e-tests",
     ],
-    executablePath: "../../out/crea-darwin-arm64/crea.app/Contents/MacOS/crea",
+    executablePath: "../../out/scalix-darwin-arm64/scalix.app/Contents/MacOS/scalix",
   });
   const context = await browser.context();
   await context.route("**/*", (route) => route.continue());

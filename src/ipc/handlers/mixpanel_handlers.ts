@@ -9,7 +9,7 @@ export function registerMixpanelHandlers() {
     logger.info("Simulating Mixpanel OAuth connection for testing");
     event.sender.send("deep-link-received", {
       type: "mixpanel-oauth-return",
-      url: "https://oauth.crea.ai/api/integrations/mixpanel/login",
+      url: "https://oauth.scalix.world/api/integrations/mixpanel/login",
     });
     logger.info("Sent fake mixpanel deep-link-received event during testing.");
   });

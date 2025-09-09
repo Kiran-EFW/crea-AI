@@ -9,7 +9,7 @@ export function registerCloudflareR2Handlers() {
     logger.info("Simulating Cloudflare R2 OAuth connection for testing");
     event.sender.send("deep-link-received", {
       type: "cloudflare-r2-oauth-return",
-      url: "https://oauth.crea.ai/api/integrations/cloudflare-r2/login",
+      url: "https://oauth.scalix.world/api/integrations/cloudflare-r2/login",
     });
     logger.info("Sent fake cloudflare-r2 deep-link-received event during testing.");
   });

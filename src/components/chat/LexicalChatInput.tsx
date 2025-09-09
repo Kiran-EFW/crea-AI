@@ -236,7 +236,7 @@ export function LexicalChatInput({
   onSubmit,
   onPaste,
   excludeCurrentApp,
-  placeholder = "Ask Crea to build...",
+  placeholder = "Ask Scalix to build...",
   disabled = false,
 }: LexicalChatInputProps) {
   const { apps } = useLoadApps();

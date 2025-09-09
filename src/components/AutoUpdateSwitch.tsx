@@ -20,11 +20,11 @@ export function AutoUpdateSwitch() {
           updateSettings({ enableAutoUpdate: checked });
           toast("Auto-update settings changed", {
             description:
-              "You will need to restart Crea for your settings to take effect.",
+              "You will need to restart Scalix for your settings to take effect.",
             action: {
-              label: "Restart Crea",
+              label: "Restart Scalix",
               onClick: () => {
-                IpcClient.getInstance().restartCrea();
+                IpcClient.getInstance().restartScalix();
               },
             },
           });

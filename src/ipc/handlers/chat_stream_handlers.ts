@@ -19,7 +19,7 @@ import {
   SUPABASE_AVAILABLE_SYSTEM_PROMPT,
   SUPABASE_NOT_AVAILABLE_SYSTEM_PROMPT,
 } from "../../prompts/supabase_prompt";
-import { getCreaAppPath } from "../../paths/paths";
+import { getScalixAppPath } from "../../paths/paths";
 import { readSettings } from "../../main/settings";
 import type { ChatResponseEnd, ChatStreamParams } from "../ipc_types";
 import { extractCodebase, readFileWithCache } from "../../utils/codebase";
@@ -51,11 +51,11 @@ import { generateProblemReport } from "../processors/tsc";
 import { createProblemFixPrompt } from "@/shared/problem_prompt";
 import { AsyncVirtualFileSystem } from "../../../shared/VirtualFilesystem";
 import {
-  getCreaAddDependencyTags,
-  getCreaWriteTags,
-  getCreaDeleteTags,
-  getCreaRenameTags,
-} from "../utils/crea_tag_parser";
+  getScalixAddDependencyTags,
+  getScalixWriteTags,
+  getScalixDeleteTags,
+  getScalixRenameTags,
+} from "../utils/scalix_tag_parser";
 import { fileExists } from "../utils/file_utils";
 import { FileUploadsState } from "../utils/file_uploads_state";
 import { OpenAIResponsesProviderOptions } from "@ai-sdk/openai";
@@ -76,7 +76,7 @@ const activeStreams = new Map<number, AbortController>();
 const partialResponses = new Map<number, string>();
 
 // Directory for storing temporary files
-const TEMP_DIR = path.join(os.tmpdir(), "crea-attachments");
+const TEMP_DIR = path.join(os.tmpdir(), "scalix-attachments");
 
 // Common helper functions
 const TEXT_FILE_EXTENSIONS = [
@@ -141,7 +141,7 @@ async function processStreamChunks({
         inThinkingBlock = true;
       }
 
-      chunk += escapeCreaTags(part.text);
+      chunk += escapeScalixTags(part.text);
     }
 
     if (!chunk) {
@@ -249,14 +249,14 @@ export function registerChatStreamHandlers() {
 
           if (attachment.attachmentType === "upload-to-codebase") {
             // For upload-to-codebase, create a unique file ID and store the mapping
-            const fileId = `DYAD_ATTACHMENT_${index}`;
+            const fileId = `SCALIX_ATTACHMENT_${index}`;
 
             fileUploadsState.addFileUpload(fileId, {
               filePath,
               originalName: attachment.name,
             });
 
-            // Add instruction for AI to use crea-write tag
+            // Add instruction for AI to use scalix-write tag
             attachmentInfo += `\n\nFile to upload to codebase: ${attachment.name} (file id: ${fileId})\n`;
           } else {
             // For chat-context, use the existing logic
@@ -264,8 +264,8 @@ export function registerChatStreamHandlers() {
             // If it's a text-based file, try to include the content
             if (await isTextFile(filePath)) {
               try {
-                attachmentInfo += `<crea-text-attachment filename="${attachment.name}" type="${attachment.type}" path="${filePath}">
-                </crea-text-attachment>
+                attachmentInfo += `<scalix-text-attachment filename="${attachment.name}" type="${attachment.type}" path="${filePath}">
+                </scalix-text-attachment>
                 \n\n`;
               } catch (err) {
                 logger.error(`Error reading file content: ${err}`);
@@ -302,7 +302,7 @@ export function registerChatStreamHandlers() {
         try {
           const componentFileContent = await readFile(
             path.join(
-              getCreaAppPath(chat.app.path),
+              getScalixAppPath(chat.app.path),
               req.selectedComponent.relativePath,
             ),
             "utf8",
@@ -393,7 +393,7 @@ ${componentSnippet}
         // Normal AI processing for non-test prompts
         const settings = readSettings();
 
-        const appPath = getCreaAppPath(updatedChat.app.path);
+        const appPath = getScalixAppPath(updatedChat.app.path);
         const chatContext = req.selectedComponent
           ? {
               contextPaths: [
@@ -495,7 +495,7 @@ ${componentSnippet}
         }
 
         let systemPrompt = constructSystemPrompt({
-          aiRules: await readAiRules(getCreaAppPath(updatedChat.app.path)),
+          aiRules: await readAiRules(getScalixAppPath(updatedChat.app.path)),
           chatMode: settings.selectedChatMode,
         });
 
@@ -545,7 +545,7 @@ ${componentSnippet}
           );
         // If there's mixed attachments (e.g. some upload to codebase attachments and some upload images as chat context attachemnts)
         // we will just include the file upload system prompt, otherwise the AI gets confused and doesn't reliably
-        // print out the crea-write tags.
+        // print out the scalix-write tags.
         // Usually, AI models will want to use the image as reference to generate code (e.g. UI mockups) anyways, so
         // it's not that critical to include the image analysis instructions.
         if (hasUploadedAttachments) {
@@ -553,14 +553,14 @@ ${componentSnippet}
   
 When files are attached to this conversation, upload them to the codebase using this exact format:
 
-<crea-write path="path/to/destination/filename.ext" description="Upload file to codebase">
-DYAD_ATTACHMENT_X
-</crea-write>
+<scalix-write path="path/to/destination/filename.ext" description="Upload file to codebase">
+SCALIX_ATTACHMENT_X
+</scalix-write>
 
-Example for file with id of DYAD_ATTACHMENT_0:
-<crea-write path="src/components/Button.jsx" description="Upload file to codebase">
-DYAD_ATTACHMENT_0
-</crea-write>
+Example for file with id of SCALIX_ATTACHMENT_0:
+<scalix-write path="src/components/Button.jsx" description="Upload file to codebase">
+SCALIX_ATTACHMENT_0
+</scalix-write>
 
   `;
         } else if (hasImageAttachments) {
@@ -613,7 +613,7 @@ This conversation includes one or more image attachments. When the user uploads 
             // and eats up extra tokens.
             content:
               settings.selectedChatMode === "ask"
-                ? removeCreaTags(removeNonEssentialTags(msg.content))
+                ? removeScalixTags(removeNonEssentialTags(msg.content))
                 : removeNonEssentialTags(msg.content),
           })),
         ];
@@ -658,11 +658,11 @@ This conversation includes one or more image attachments. When the user uploads 
           chatMessages: ModelMessage[];
           modelClient: ModelClient;
         }) => {
-          const creaRequestId = uuidv4();
+          const scalixRequestId = uuidv4();
           if (isEngineEnabled) {
             logger.log(
               "sending AI request to engine with request id:",
-              creaRequestId,
+              scalixRequestId,
             );
           } else {
             logger.log("sending AI request");
@@ -673,10 +673,10 @@ This conversation includes one or more image attachments. When the user uploads 
             maxRetries: 2,
             model: modelClient.model,
             providerOptions: {
-              "crea-engine": {
-                creaRequestId,
+              "scalix-engine": {
+                scalixRequestId,
               },
-              "crea-gateway": getExtraProviderOptions(
+              "scalix-gateway": getExtraProviderOptions(
                 modelClient.builtinProviderId,
                 settings,
               ),
@@ -700,7 +700,7 @@ This conversation includes one or more image attachments. When the user uploads 
               }
               const message = errorMessage || JSON.stringify(error);
               const requestIdPrefix = isEngineEnabled
-                ? `[Request ID: ${creaRequestId}] `
+                ? `[Request ID: ${scalixRequestId}] `
                 : "";
               event.sender.send(
                 "chat:response:error",
@@ -779,7 +779,7 @@ This conversation includes one or more image attachments. When the user uploads 
               !abortController.signal.aborted
             ) {
               logger.warn(
-                `Received unclosed crea-write tag, attempting to continue, attempt #${continuationAttempts + 1}`,
+                `Received unclosed scalix-write tag, attempting to continue, attempt #${continuationAttempts + 1}`,
               );
               continuationAttempts++;
 
@@ -806,7 +806,7 @@ This conversation includes one or more image attachments. When the user uploads 
               }
             }
           }
-          const addDependencies = getCreaAddDependencyTags(fullResponse);
+          const addDependencies = getScalixAddDependencyTags(fullResponse);
           if (
             !abortController.signal.aborted &&
             // If there are dependencies, we don't want to auto-fix problems
@@ -820,7 +820,7 @@ This conversation includes one or more image attachments. When the user uploads 
               // IF auto-fix is enabled
               let problemReport = await generateProblemReport({
                 fullResponse,
-                appPath: getCreaAppPath(updatedChat.app.path),
+                appPath: getScalixAppPath(updatedChat.app.path),
               });
 
               let autoFixAttempts = 0;
@@ -831,14 +831,14 @@ This conversation includes one or more image attachments. When the user uploads 
                 autoFixAttempts < 2 &&
                 !abortController.signal.aborted
               ) {
-                fullResponse += `<crea-problem-report summary="${problemReport.problems.length} problems">
+                fullResponse += `<scalix-problem-report summary="${problemReport.problems.length} problems">
 ${problemReport.problems
   .map(
     (problem) =>
       `<problem file="${escapeXml(problem.file)}" line="${problem.line}" column="${problem.column}" code="${problem.code}">${escapeXml(problem.message)}</problem>`,
   )
   .join("\n")}
-</crea-problem-report>`;
+</scalix-problem-report>`;
 
                 logger.info(
                   `Attempting to auto-fix problems, attempt #${autoFixAttempts + 1}`,
@@ -847,15 +847,15 @@ ${problemReport.problems
                 const problemFixPrompt = createProblemFixPrompt(problemReport);
 
                 const virtualFileSystem = new AsyncVirtualFileSystem(
-                  getCreaAppPath(updatedChat.app.path),
+                  getScalixAppPath(updatedChat.app.path),
                   {
                     fileExists: (fileName: string) => fileExists(fileName),
                     readFile: (fileName: string) => readFileWithCache(fileName),
                   },
                 );
-                const writeTags = getCreaWriteTags(fullResponse);
-                const renameTags = getCreaRenameTags(fullResponse);
-                const deletePaths = getCreaDeleteTags(fullResponse);
+                const writeTags = getScalixWriteTags(fullResponse);
+                const renameTags = getScalixRenameTags(fullResponse);
+                const deletePaths = getScalixDeleteTags(fullResponse);
                 virtualFileSystem.applyResponseChanges({
                   deletePaths,
                   renameTags,
@@ -918,7 +918,7 @@ ${problemReport.problems
 
                 problemReport = await generateProblemReport({
                   fullResponse,
-                  appPath: getCreaAppPath(updatedChat.app.path),
+                  appPath: getScalixAppPath(updatedChat.app.path),
                 });
               }
             } catch (error) {
@@ -966,9 +966,9 @@ ${problemReport.problems
 
       // Only save the response and process it if we weren't aborted
       if (!abortController.signal.aborted && fullResponse) {
-        // Scrape from: <crea-chat-summary>Renaming profile file</crea-chat-title>
+        // Scrape from: <scalix-chat-summary>Renaming profile file</scalix-chat-title>
         const chatTitle = fullResponse.match(
-          /<crea-chat-summary>(.*?)<\/crea-chat-summary>/,
+          /<scalix-chat-summary>(.*?)<\/scalix-chat-summary>/,
         );
         if (chatTitle) {
           await db
@@ -1138,7 +1138,7 @@ async function replaceTextAttachmentWithContent(
       // Replace the placeholder tag with the full content
       const escapedPath = filePath.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
       const tagPattern = new RegExp(
-        `<crea-text-attachment filename="[^"]*" type="[^"]*" path="${escapedPath}">\\s*<\\/crea-text-attachment>`,
+        `<scalix-text-attachment filename="[^"]*" type="[^"]*" path="${escapedPath}">\\s*<\\/scalix-text-attachment>`,
         "g",
       );
 
@@ -1231,18 +1231,18 @@ function removeThinkingTags(text: string): string {
 
 export function removeProblemReportTags(text: string): string {
   const problemReportRegex =
-    /<crea-problem-report[^>]*>[\s\S]*?<\/crea-problem-report>/g;
+    /<scalix-problem-report[^>]*>[\s\S]*?<\/scalix-problem-report>/g;
   return text.replace(problemReportRegex, "").trim();
 }
 
-export function removeCreaTags(text: string): string {
-  const creaRegex = /<crea-[^>]*>[\s\S]*?<\/crea-[^>]*>/g;
-  return text.replace(creaRegex, "").trim();
+export function removeScalixTags(text: string): string {
+  const scalixRegex = /<scalix-[^>]*>[\s\S]*?<\/scalix-[^>]*>/g;
+  return text.replace(scalixRegex, "").trim();
 }
 
-export function hasUnclosedCreaWrite(text: string): boolean {
-  // Find the last opening crea-write tag
-  const openRegex = /<crea-write[^>]*>/g;
+export function hasUnclosedScalixWrite(text: string): boolean {
+  // Find the last opening scalix-write tag
+  const openRegex = /<scalix-write[^>]*>/g;
   let lastOpenIndex = -1;
   let match;
 
@@ -1257,19 +1257,19 @@ export function hasUnclosedCreaWrite(text: string): boolean {
 
   // Look for a closing tag after the last opening tag
   const textAfterLastOpen = text.substring(lastOpenIndex);
-  const hasClosingTag = /<\/crea-write>/.test(textAfterLastOpen);
+  const hasClosingTag = /<\/scalix-write>/.test(textAfterLastOpen);
 
   return !hasClosingTag;
 }
 
-function escapeCreaTags(text: string): string {
-  // Escape crea tags in reasoning content
+function escapeScalixTags(text: string): string {
+  // Escape scalix tags in reasoning content
   // We are replacing the opening tag with a look-alike character
-  // to avoid issues where thinking content includes crea tags
+  // to avoid issues where thinking content includes scalix tags
   // and are mishandled by:
   // 1. FE markdown parser
   // 2. Main process response processor
-  return text.replace(/<crea/g, "＜crea").replace(/<\/crea/g, "＜/crea");
+  return text.replace(/<scalix/g, "＜scalix").replace(/<\/scalix/g, "＜/scalix");
 }
 
 const CODEBASE_PROMPT_PREFIX = "This is my codebase.";

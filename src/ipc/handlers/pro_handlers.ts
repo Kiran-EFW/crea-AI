@@ -3,7 +3,7 @@ import { createLoggedHandler } from "./safe_handle";
 import { readSettings } from "../../main/settings"; // Assuming settings are read this way
 import { UserBudgetInfo, UserBudgetInfoSchema } from "../ipc_types";
 import { IS_TEST_BUILD } from "../utils/test_utils";
-import { getCreaUserInfo, CREA_API_ENDPOINTS } from "../utils/crea_auth";
+import { getScalixUserInfo, SCALIX_API_ENDPOINTS } from "../utils/scalix_auth";
 
 const logger = log.scope("pro_handlers");
 const handle = createLoggedHandler(logger);
@@ -18,32 +18,32 @@ export function registerProHandlers() {
       // Avoid spamming the API in E2E tests.
       return null;
     }
-    logger.info("Attempting to fetch user budget information from Crea API.");
+    logger.info("Attempting to fetch user budget information from Scalix API.");
 
     const settings = readSettings();
 
-    const creaApiKey = settings.providerSettings?.auto?.apiKey?.value;
+    const scalixApiKey = settings.providerSettings?.auto?.apiKey?.value;
 
-    if (!creaApiKey) {
-      logger.error("Crea Pro API key is not configured.");
+    if (!scalixApiKey) {
+      logger.error("Scalix Pro API key is not configured.");
       return null;
     }
 
     try {
-      // Use the new Crea authentication system
-      const userInfoResponse = await getCreaUserInfo({
-        apiKey: creaApiKey,
+      // Use the new Scalix authentication system
+      const userInfoResponse = await getScalixUserInfo({
+        apiKey: scalixApiKey,
         timeout: 10000,
         retries: 3,
       });
 
       if (!userInfoResponse || !userInfoResponse.user_info) {
-        logger.error("Invalid response format from Crea API");
+        logger.error("Invalid response format from Scalix API");
         return null;
       }
 
       const userInfoData = userInfoResponse.user_info;
-      logger.info("Successfully fetched user budget information from Crea API.");
+      logger.info("Successfully fetched user budget information from Scalix API.");
 
       return UserBudgetInfoSchema.parse({
         usedCredits: userInfoData.spend * CONVERSION_RATIO,
@@ -52,7 +52,7 @@ export function registerProHandlers() {
       });
 
     } catch (error: any) {
-      logger.error(`Error fetching user budget from Crea API: ${error.message}`, error);
+      logger.error(`Error fetching user budget from Scalix API: ${error.message}`, error);
       return null;
     }
   });

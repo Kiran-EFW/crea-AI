@@ -6,8 +6,8 @@ import { type UserSettings } from "@/lib/schemas";
 import { usePostHog } from "posthog-js/react";
 import { useAppVersion } from "./useAppVersion";
 
-const TELEMETRY_CONSENT_KEY = "creaTelemetryConsent";
-const TELEMETRY_USER_ID_KEY = "creaTelemetryUserId";
+const TELEMETRY_CONSENT_KEY = "scalixTelemetryConsent";
+const TELEMETRY_USER_ID_KEY = "scalixTelemetryUserId";
 
 export function isTelemetryOptedIn() {
   return window.localStorage.getItem(TELEMETRY_CONSENT_KEY) === "opted_in";

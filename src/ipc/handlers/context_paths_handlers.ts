@@ -10,7 +10,7 @@ import {
 import { estimateTokens } from "../utils/token_utils";
 import { createLoggedHandler } from "./safe_handle";
 import log from "electron-log";
-import { getCreaAppPath } from "@/paths/paths";
+import { getScalixAppPath } from "@/paths/paths";
 import { extractCodebase } from "@/utils/codebase";
 import { validateChatContext } from "../utils/context_paths_utils";
 
@@ -34,7 +34,7 @@ export function registerContextPathsHandlers() {
       if (!app.path) {
         throw new Error("App path not set");
       }
-      const appPath = getCreaAppPath(app.path);
+      const appPath = getScalixAppPath(app.path);
 
       const results: ContextPathResults = {
         contextPaths: [],

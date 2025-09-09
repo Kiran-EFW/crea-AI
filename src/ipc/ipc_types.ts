@@ -130,7 +130,7 @@ export interface SystemDebugInfo {
   telemetryId: string;
   telemetryConsent: string;
   telemetryUrl: string;
-  creaVersion: string;
+  scalixVersion: string;
   platform: string;
   architecture: string;
   logs: string;

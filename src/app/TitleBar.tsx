@@ -10,7 +10,7 @@ import { providerSettingsRoute } from "@/routes/settings/providers/$provider";
 import { cn } from "@/lib/utils";
 import { useDeepLink } from "@/contexts/DeepLinkContext";
 import { useEffect, useState } from "react";
-import { CreaProSuccessDialog } from "@/components/CreaProSuccessDialog";
+import { ScalixProSuccessDialog } from "@/components/ScalixProSuccessDialog";
 import { useTheme } from "@/contexts/ThemeContext";
 import { IpcClient } from "@/ipc/ipc_client";
 import { useUserBudgetInfo } from "@/hooks/useUserBudgetInfo";
@@ -45,16 +45,16 @@ export const TitleBar = () => {
     checkPlatform();
   }, []);
 
-  const showCreaProSuccessDialog = () => {
+  const showScalixProSuccessDialog = () => {
     setIsSuccessDialogOpen(true);
   };
 
   const { lastDeepLink } = useDeepLink();
   useEffect(() => {
     const handleDeepLink = async () => {
-      if (lastDeepLink?.type === "crea-pro-return") {
+      if (lastDeepLink?.type === "scalix-pro-return") {
         await refreshSettings();
-        showCreaProSuccessDialog();
+        showScalixProSuccessDialog();
       }
     };
     handleDeepLink();
@@ -72,15 +72,15 @@ export const TitleBar = () => {
     }
   };
 
-  const isCreaPro = !!settings?.providerSettings?.auto?.apiKey?.value;
-  const isCreaProEnabled = Boolean(settings?.enableCreaPro);
+  const isScalixPro = !!settings?.providerSettings?.auto?.apiKey?.value;
+  const isScalixProEnabled = Boolean(settings?.enableScalixPro);
 
   return (
     <>
       <div className="@container z-11 w-full h-11 bg-(--sidebar) absolute top-0 left-0 app-region-drag flex items-center">
         <div className={`${showWindowControls ? "pl-2" : "pl-18"}`}></div>
 
-        <img src={logo} alt="Crea Logo" className="w-6 h-6 mr-0.5" />
+        <img src={logo} alt="Scalix Logo" className="w-6 h-6 mr-0.5" />
         <Button
           data-testid="title-bar-app-name-button"
           variant="outline"
@@ -92,7 +92,7 @@ export const TitleBar = () => {
         >
           {displayText}
         </Button>
-        {isCreaPro && <CreaProButton isCreaProEnabled={isCreaProEnabled} />}
+        {isScalixPro && <ScalixProButton isScalixProEnabled={isScalixProEnabled} />}
 
         {/* Preview Header */}
         {location.pathname === "/chat" && (
@@ -104,7 +104,7 @@ export const TitleBar = () => {
         {showWindowControls && <WindowsControls />}
       </div>
 
-      <CreaProSuccessDialog
+      <ScalixProSuccessDialog
         isOpen={isSuccessDialogOpen}
         onClose={() => setIsSuccessDialogOpen(false)}
       />
@@ -193,16 +193,16 @@ function WindowsControls() {
   );
 }
 
-export function CreaProButton({
-  isCreaProEnabled,
+export function ScalixProButton({
+  isScalixProEnabled,
 }: {
-  isCreaProEnabled: boolean;
+  isScalixProEnabled: boolean;
 }) {
   const { navigate } = useRouter();
   const { userBudget } = useUserBudgetInfo();
   return (
     <Button
-      data-testid="title-bar-crea-pro-button"
+      data-testid="title-bar-scalix-pro-button"
       onClick={() => {
         navigate({
           to: providerSettingsRoute.id,
@@ -212,12 +212,12 @@ export function CreaProButton({
       variant="outline"
       className={cn(
         "hidden @2xl:block ml-1 no-app-region-drag h-7 bg-indigo-600 text-white dark:bg-indigo-600 dark:text-white text-xs px-2 pt-1 pb-1",
-        !isCreaProEnabled && "bg-zinc-600 dark:bg-zinc-600",
+        !isScalixProEnabled && "bg-zinc-600 dark:bg-zinc-600",
       )}
       size="sm"
     >
-      {isCreaProEnabled ? "Pro" : "Pro (off)"}
-      {userBudget && isCreaProEnabled && (
+      {isScalixProEnabled ? "Pro" : "Pro (off)"}
+      {userBudget && isScalixProEnabled && (
         <AICreditStatus userBudget={userBudget} />
       )}
     </Button>

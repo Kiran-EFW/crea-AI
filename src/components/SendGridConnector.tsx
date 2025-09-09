@@ -77,7 +77,7 @@ export function SendGridConnector() {
               await IpcClient.getInstance().fakeHandleSendGridConnect();
             } else {
               await IpcClient.getInstance().openExternalUrl(
-                "https://oauth.crea.sh/api/integrations/sendgrid/login",
+                "https://oauth.scalix.world/api/integrations/sendgrid/login",
               );
             }
           }}

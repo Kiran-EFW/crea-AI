@@ -144,22 +144,22 @@ export function TokenBar({ chatId }: TokenBarProps) {
       </TooltipProvider>
       {error && <div className="text-red-500 text-xs mt-1">{error}</div>}
       {(!settings?.enableProSmartFilesContextMode ||
-        !settings?.enableCreaPro) && (
+        !settings?.enableScalixPro) && (
         <div className="text-xs text-center text-muted-foreground mt-2">
           Optimize your tokens with{" "}
           <a
             onClick={() =>
-              settings?.enableCreaPro
+              settings?.enableScalixPro
                 ? IpcClient.getInstance().openExternalUrl(
-                    "https://www.crea.sh/docs/guides/ai-models/pro-modes#smart-context",
+                    "https://www.scalix.world/docs/guides/ai-models/pro-modes#smart-context",
                   )
                 : IpcClient.getInstance().openExternalUrl(
-                    "https://crea.sh/pro#ai",
+                    "https://scalix.world/pro#ai",
                   )
             }
             className="text-blue-500 dark:text-blue-400 cursor-pointer hover:underline"
           >
-            Crea Pro's Smart Context
+            Scalix Pro's Smart Context
           </a>
         </div>
       )}

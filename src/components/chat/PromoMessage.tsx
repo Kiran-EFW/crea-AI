@@ -56,7 +56,7 @@ export function Message({ spans }: MessageConfig) {
 export const TURBO_EDITS_PROMO_MESSAGE: MessageConfig = {
   spans: [
     { type: "text", content: "Tired of waiting on AI?" },
-    { type: "link", content: " Get Crea Pro", url: "https://crea.ai/pro#ai" },
+    { type: "link", content: " Get Scalix Pro", url: "https://scalix.world/pro#ai" },
     { type: "text", content: " for faster edits with Turbo Edits." },
   ],
 };
@@ -66,8 +66,8 @@ export const SMART_CONTEXT_PROMO_MESSAGE: MessageConfig = {
     { type: "text", content: "Save up to 5x on AI costs with " },
     {
       type: "link",
-      content: "Crea Pro's Smart Context",
-      url: "https://crea.ai/pro#ai",
+      content: "Scalix Pro's Smart Context",
+      url: "https://scalix.world/pro#ai",
     },
   ],
 };
@@ -90,8 +90,8 @@ export const REDDIT_TIP: MessageConfig = {
     },
     {
       type: "link",
-      content: "Crea subreddit",
-      url: "https://www.reddit.com/r/creabuilders/",
+      content: "Scalix subreddit",
+      url: "https://www.reddit.com/r/scalixbuilders/",
     },
   ],
 };
@@ -124,7 +124,7 @@ export const BUILD_A_BIBLE_APP_TIP: MessageConfig = {
     },
     {
       type: "text",
-      content: " the creator of Crea build a Bible app step-by-step",
+      content: " the creator of Scalix build a Bible app step-by-step",
     },
   ],
 };
@@ -138,12 +138,12 @@ export const DEBUGGING_TIPS_TIP: MessageConfig = {
     {
       type: "link",
       content: "debugging tips",
-      url: "https://www.crea.ai/docs/guides/debugging",
+      url: "https://www.scalix.world/docs/guides/debugging",
     },
   ],
 };
 
-// Advanced tip: Customize your AI rules https://www.crea.ai/docs/guides/ai-rules
+// Advanced tip: Customize your AI rules https://www.scalix.world/docs/guides/ai-rules
 export const AI_RULES_TIP: MessageConfig = {
   spans: [
     {
@@ -153,7 +153,7 @@ export const AI_RULES_TIP: MessageConfig = {
     {
       type: "link",
       content: "AI rules",
-      url: "https://www.crea.ai/docs/guides/ai-rules",
+      url: "https://www.scalix.world/docs/guides/ai-rules",
     },
   ],
 };
@@ -167,7 +167,7 @@ export const NEW_CHAT_TIP: MessageConfig = {
   ],
 };
 
-// Want to know what's next? Checkout our roadmap https://www.crea.ai/docs/roadmap
+// Want to know what's next? Checkout our roadmap https://www.scalix.world/docs/roadmap
 export const ROADMAP_TIP: MessageConfig = {
   spans: [
     {
@@ -177,22 +177,22 @@ export const ROADMAP_TIP: MessageConfig = {
     {
       type: "link",
       content: "roadmap",
-      url: "https://www.crea.ai/docs/roadmap",
+      url: "https://www.scalix.world/docs/roadmap",
     },
   ],
 };
 
-// Like Crea? Star it on GitHub https://github.com/Kiran-EFW/crea-AI/
+// Like Scalix? Star it on GitHub https://github.com/scalix-world/scalix/
 export const GITHUB_TIP: MessageConfig = {
   spans: [
     {
       type: "text",
-      content: "Like Crea? Star it on ",
+      content: "Like Scalix? Star it on ",
     },
     {
       type: "link",
       content: "GitHub",
-      url: "https://github.com/Kiran-EFW/crea-AI",
+      url: "https://github.com/scalix-world/scalix",
     },
   ],
 };

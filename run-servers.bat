@@ -1,6 +1,6 @@
 @echo off
-REM Crea Development Server Runner - Batch Version
-REM Simple batch script for running Crea application
+REM Scalix Development Server Runner - Batch Version
+REM Simple batch script for running Scalix application
 
 REM Parse command line arguments
 set CLEAN=0
@@ -26,7 +26,7 @@ if %HELP%==1 goto :show_help
 
 REM Header
 echo ======================================
-echo     Crea Development Server
+echo     Scalix Development Server
 echo ======================================
 echo.
 
@@ -87,7 +87,7 @@ if %VERBOSE%==1 (
     call npm start
 ) else (
     echo   Starting server...
-    start "Crea Development Server" cmd /c "npm start"
+    start "Scalix Development Server" cmd /c "npm start"
     timeout /t 5 /nobreak >nul
     echo   [OK] Server startup initiated
     echo   [INFO] Open http://localhost:5173
@@ -99,7 +99,7 @@ goto :end
 
 :show_help
 echo ======================================
-echo     Crea Development Server Runner
+echo     Scalix Development Server Runner
 echo ======================================
 echo.
 echo USAGE:

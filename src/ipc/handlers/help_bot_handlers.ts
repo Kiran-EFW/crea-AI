@@ -47,7 +47,7 @@ export function registerHelpBotHandlers() {
         const settings = await readSettings();
         const apiKey = settings.providerSettings?.["auto"]?.apiKey?.value;
         const provider = createOpenAI({
-          baseURL: "https://helpchat.crea.ai/v1",
+          baseURL: "https://helpchat.scalix.world/v1",
           apiKey,
         });
 

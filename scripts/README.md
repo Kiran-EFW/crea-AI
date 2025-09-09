@@ -48,12 +48,12 @@ node scripts/verify-release-assets.js
 
 The script verifies the presence of these 7 assets for each release:
 
-1. `crea-{version}-1.x86_64.rpm` (Linux RPM)
-2. `crea-{version}-full.nupkg` (Windows NuGet package)
-3. `crea-{version}.Setup.exe` (Windows installer)
-4. `crea-darwin-arm64-{version}.zip` (macOS Apple Silicon)
-5. `crea-darwin-x64-{version}.zip` (macOS Intel)
-6. `crea_{version}_amd64.deb` (Linux DEB)
+1. `scalix-{version}-1.x86_64.rpm` (Linux RPM)
+2. `scalix-{version}-full.nupkg` (Windows NuGet package)
+3. `scalix-{version}.Setup.exe` (Windows installer)
+4. `scalix-darwin-arm64-{version}.zip` (macOS Apple Silicon)
+5. `scalix-darwin-x64-{version}.zip` (macOS Intel)
+6. `scalix_{version}_amd64.deb` (Linux DEB)
 7. `RELEASES` (Windows update manifest)
 
 ### Features

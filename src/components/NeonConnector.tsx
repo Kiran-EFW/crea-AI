@@ -69,7 +69,7 @@ export function NeonConnector() {
               await IpcClient.getInstance().fakeHandleNeonConnect();
             } else {
               await IpcClient.getInstance().openExternalUrl(
-                "https://oauth.crea.sh/api/integrations/neon/login",
+                "https://oauth.scalix.world/api/integrations/neon/login",
               );
             }
           }}

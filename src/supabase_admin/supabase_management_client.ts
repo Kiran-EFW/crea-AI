@@ -1,6 +1,6 @@
 import { withLock } from "../ipc/utils/lock_utils";
 import { readSettings, writeSettings } from "../main/settings";
-// Temporary mock implementation until @crea-ai/supabase-management-js is available
+// Temporary mock implementation until @scalix-ai/supabase-management-js is available
 class SupabaseManagementAPIError extends Error {
   constructor(message: string) {
     super(message);
@@ -103,7 +103,7 @@ export async function refreshSupabaseToken(): Promise<void> {
   try {
     // Make request to Supabase refresh endpoint
     const response = await fetch(
-      "https://supabase-oauth.crea.ai/api/connect-supabase/refresh",
+      "https://supabase-oauth.scalix.world/api/connect-supabase/refresh",
       {
         method: "POST",
         headers: {
@@ -240,7 +240,7 @@ export async function deploySupabaseFunctions({
     JSON.stringify({
       entrypoint_path: "index.ts",
       name: functionName,
-      // See: https://github.com/Kiran-EFW/crea-AI/issues/1010
+      // See: https://github.com/scalix-world/scalix/issues/1010
       verify_jwt: false,
     }),
   );

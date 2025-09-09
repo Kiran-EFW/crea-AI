@@ -1,6 +1,6 @@
 # Test Documentation
 
-This directory contains unit tests for the Crea application.
+  This directory contains unit tests for the Scalix application.
 
 ## Testing Setup
 

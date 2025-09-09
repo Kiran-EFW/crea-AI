@@ -1,15 +1,15 @@
-# @crea-ai/nextjs-webpack-component-tagger
+# @scalix-ai/nextjs-webpack-component-tagger
 
-A webpack loader for Next.js that automatically adds `data-crea-id` and `data-crea-name` attributes to your React components. This is useful for identifying components in the DOM, for example for testing or analytics.
+A webpack loader for Next.js that automatically adds `data-scalix-id` and `data-scalix-name` attributes to your React components. This is useful for identifying components in the DOM, for example for testing or analytics.
 
 ## Installation
 
 ```bash
-npm install @crea-ai/nextjs-webpack-component-tagger
+npm install @scalix-ai/nextjs-webpack-component-tagger
 # or
-yarn add @crea-ai/nextjs-webpack-component-tagger
+yarn add @scalix-ai/nextjs-webpack-component-tagger
 # or
-pnpm add @crea-ai/nextjs-webpack-component-tagger
+pnpm add @scalix-ai/nextjs-webpack-component-tagger
 ```
 
 ## Usage

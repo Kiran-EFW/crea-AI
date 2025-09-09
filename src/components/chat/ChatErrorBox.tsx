@@ -6,19 +6,19 @@ import remarkGfm from "remark-gfm";
 export function ChatErrorBox({
   onDismiss,
   error,
-  isCreaProEnabled,
+  isScalixProEnabled,
 }: {
   onDismiss: () => void;
   error: string;
-  isCreaProEnabled: boolean;
+  isScalixProEnabled: boolean;
 }) {
   if (error.includes("doesn't have a free quota tier")) {
     return (
       <ChatErrorContainer onDismiss={onDismiss}>
         {error}
         <span className="ml-1">
-          <ExternalLink href="https://crea.ai/pro">
-            Access with Crea Pro
+          <ExternalLink href="https://scalix.world/pro">
+            Access with Scalix Pro
           </ExternalLink>
         </span>{" "}
         or switch to another model.
@@ -36,13 +36,13 @@ export function ChatErrorBox({
       <ChatErrorContainer onDismiss={onDismiss}>
         {error}
         <span className="ml-1">
-          <ExternalLink href="https://crea.ai/pro">
-            Upgrade to Crea Pro
+          <ExternalLink href="https://scalix.world/pro">
+            Upgrade to Scalix Pro
           </ExternalLink>
         </span>{" "}
         or read the
         <span className="ml-1">
-          <ExternalLink href="https://crea.ai/docs/help/ai-rate-limit">
+          <ExternalLink href="https://scalix.world/docs/help/ai-rate-limit">
             Rate limit troubleshooting guide.
           </ExternalLink>
         </span>
@@ -54,22 +54,22 @@ export function ChatErrorBox({
     return (
       <ChatInfoContainer onDismiss={onDismiss}>
         <span>
-          Looks like you don't have a valid Crea Pro key.{" "}
-          <ExternalLink href="https://crea.ai/pro">
-            Upgrade to Crea Pro
+          Looks like you don't have a valid Scalix Pro key.{" "}
+          <ExternalLink href="https://scalix.world/pro">
+            Upgrade to Scalix Pro
           </ExternalLink>{" "}
           today.
         </span>
       </ChatInfoContainer>
     );
   }
-  if (isCreaProEnabled && error.includes("ExceededBudget:")) {
+  if (isScalixProEnabled && error.includes("ExceededBudget:")) {
     return (
       <ChatInfoContainer onDismiss={onDismiss}>
         <span>
-          You have used all of your Crea AI credits this month.{" "}
-          <ExternalLink href="https://academy.crea.ai/subscription">
-            Upgrade to Crea Max
+          You have used all of your Scalix AI credits this month.{" "}
+          <ExternalLink href="https://academy.scalix.world/subscription">
+            Upgrade to Scalix Max
           </ExternalLink>{" "}
           and get more AI credits
         </span>

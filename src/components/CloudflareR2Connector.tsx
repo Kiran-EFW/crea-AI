@@ -77,7 +77,7 @@ export function CloudflareR2Connector() {
               await IpcClient.getInstance().fakeHandleCloudflareR2Connect();
             } else {
               await IpcClient.getInstance().openExternalUrl(
-                "https://oauth.crea.sh/api/integrations/cloudflare-r2/login",
+                "https://oauth.scalix.world/api/integrations/cloudflare-r2/login",
               );
             }
           }}

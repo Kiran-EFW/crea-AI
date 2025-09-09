@@ -101,7 +101,7 @@ export function SetupBanner() {
   if (itemsNeedAction.length === 0) {
     return (
       <h1 className="text-6xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-gray-100 dark:to-gray-400 tracking-tight text-center">
-        Turn imagination into reality with Crea
+        Turn imagination into reality with Scalix
       </h1>
     );
   }
@@ -125,7 +125,7 @@ export function SetupBanner() {
   return (
     <>
       <p className="text-xl text-zinc-700 dark:text-zinc-300 p-4">
-        Follow these steps and you'll be ready to start building with Crea...
+        Follow these steps and you'll be ready to start building with Scalix...
       </p>
       <div className={bannerClasses}>
         <Accordion
@@ -290,7 +290,7 @@ function NodeJsHelpCallout() {
         <a
           onClick={() => {
             IpcClient.getInstance().openExternalUrl(
-              "https://www.crea.sh/docs/help/nodejs",
+              "https://www.scalix.world/docs/help/nodejs",
             );
           }}
           className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
@@ -343,7 +343,7 @@ function NodeInstallButton({
     case "finished-checking":
       return (
         <div className="mt-3 text-sm text-red-600 dark:text-red-400">
-          Node.js not detected. Closing and re-opening Crea usually fixes this.
+          Node.js not detected. Closing and re-opening Scalix usually fixes this.
         </div>
       );
     default:

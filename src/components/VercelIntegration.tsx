@@ -107,7 +107,7 @@ export function VercelIntegration() {
               await IpcClient.getInstance().fakeHandleVercelConnect();
             } else {
               await IpcClient.getInstance().openExternalUrl(
-                "https://oauth.crea.sh/api/integrations/vercel/login",
+                "https://oauth.scalix.world/api/integrations/vercel/login",
               );
             }
           }}

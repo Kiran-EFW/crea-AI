@@ -29,14 +29,14 @@ export async function executeAddDependency({
   // Update the message content with the installation results
   const updatedContent = message.content.replace(
     new RegExp(
-      `<crea-add-dependency packages="${packages.join(
+      `<scalix-add-dependency packages="${packages.join(
         " ",
-      )}">[^<]*</crea-add-dependency>`,
+      )}">[^<]*</scalix-add-dependency>`,
       "g",
     ),
-    `<crea-add-dependency packages="${packages.join(
+    `<scalix-add-dependency packages="${packages.join(
       " ",
-    )}">${installResults}</crea-add-dependency>`,
+    )}">${installResults}</scalix-add-dependency>`,
   );
 
   // Save the updated message back to the database

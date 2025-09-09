@@ -1,43 +1,43 @@
 import { safeSend } from "../utils/safe_sender";
 import { cleanFullResponse } from "../utils/cleanFullResponse";
 
-// e.g. [crea-qa=add-dep]
+// e.g. [scalix-qa=add-dep]
 // Canned responses for test prompts
 const TEST_RESPONSES: Record<string, string> = {
   "ts-error": `This will get a TypeScript error.
   
-  <crea-write path="src/bad-file.ts" description="This will get a TypeScript error.">
+  <scalix-write path="src/bad-file.ts" description="This will get a TypeScript error.">
   import NonExistentClass from 'non-existent-class';
 
   const x = new Object();
   x.nonExistentMethod();
-  </crea-write>
+  </scalix-write>
   
   EOM`,
   "add-dep": `I'll add that dependency for you.
   
-  <crea-add-dependency packages="deno"></crea-add-dependency>
+  <scalix-add-dependency packages="deno"></scalix-add-dependency>
   
   EOM`,
   "add-non-existing-dep": `I'll add that dependency for you.
   
-  <crea-add-dependency packages="@angular/does-not-exist"></crea-add-dependency>
+  <scalix-add-dependency packages="@angular/does-not-exist"></scalix-add-dependency>
   
   EOM`,
   "add-multiple-deps": `I'll add that dependency for you.
   
-  <crea-add-dependency packages="react-router-dom react-query"></crea-add-dependency>
+  <scalix-add-dependency packages="react-router-dom react-query"></scalix-add-dependency>
   
   EOM`,
   write: `Hello world
-  <crea-write path="src/hello.ts" content="Hello world">
+  <scalix-write path="src/hello.ts" content="Hello world">
   console.log("Hello world");
-  </crea-write>
+  </scalix-write>
   EOM`,
   "string-literal-leak": `BEFORE TAG
-  <crea-write path="src/pages/locations/neighborhoods/louisville/Highlands.tsx" description="Updating Highlands neighborhood page to use <a> tags.">
+  <scalix-write path="src/pages/locations/neighborhoods/louisville/Highlands.tsx" description="Updating Highlands neighborhood page to use <a> tags.">
 import React from 'react';
-</crea-write>
+</scalix-write>
 AFTER TAG
 `,
 };
@@ -48,7 +48,7 @@ AFTER TAG
  * @returns The canned response if it's a test prompt, null otherwise
  */
 export function getTestResponse(prompt: string): string | null {
-  const match = prompt.match(/\[crea-qa=([^\]]+)\]/);
+  const match = prompt.match(/\[scalix-qa=([^\]]+)\]/);
   if (match) {
     const testKey = match[1];
     return TEST_RESPONSES[testKey] || null;

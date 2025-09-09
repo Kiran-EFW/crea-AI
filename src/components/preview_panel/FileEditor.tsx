@@ -124,7 +124,7 @@ export const FileEditor = ({ appId, filePath }: FileEditorProps) => {
     theme === "dark" ||
     (theme === "system" &&
       window.matchMedia("(prefers-color-scheme: dark)").matches);
-  const editorTheme = isDarkMode ? "crea-dark" : "crea-light";
+  const editorTheme = isDarkMode ? "scalix-dark" : "scalix-light";
 
   // Handle editor mount
   const handleEditorDidMount: OnMount = (editor) => {

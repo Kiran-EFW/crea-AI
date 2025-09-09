@@ -1,5 +1,5 @@
-# Crea Development Server Runner
-# Simple PowerShell script for the Crea application
+# Scalix Development Server Runner
+# Simple PowerShell script for the Scalix application
 
 param(
     [switch]$Clean,
@@ -28,7 +28,7 @@ function Write-Step {
 
 function Show-Help {
     Write-Color "=====================================" $Cyan
-    Write-Color "    Crea Development Server Runner" $Cyan
+    Write-Color "    Scalix Development Server Runner" $Cyan
     Write-Color "=====================================" $Cyan
     Write-Host
     Write-Color "USAGE:" $Cyan
@@ -94,7 +94,7 @@ function Fix-NativeDeps {
 }
 
 function Start-Server {
-    Write-Step "START" "Starting Crea development server..."
+    Write-Step "START" "Starting Scalix development server..."
 
     if ($Verbose) {
         Write-Color "  Running in verbose mode..." $Yellow
@@ -106,7 +106,7 @@ function Start-Server {
         Start-Sleep -Seconds 5
 
         if ($job.State -eq "Running") {
-            Write-Color "  ✅ Server started successfully" $Green
+            Write-Color "  ✅ Scalix server started successfully" $Green
             Write-Color "  📱 Open http://localhost:5173" $Cyan
         } else {
             Write-Color "  ❌ Server failed to start" $Red
@@ -122,7 +122,7 @@ if ($Help) {
 }
 
 Write-Color "=====================================" $Cyan
-Write-Color "    Crea Development Server" $Cyan
+Write-Color "    Scalix Development Server" $Cyan
 Write-Color "=====================================" $Cyan
 Write-Host
 

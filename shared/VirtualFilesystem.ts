@@ -59,7 +59,7 @@ export abstract class BaseVirtualFileSystem {
   }
 
   /**
-   * Apply changes from a response containing crea tags
+   * Apply changes from a response containing scalix tags
    */
   public applyResponseChanges({
     deletePaths,

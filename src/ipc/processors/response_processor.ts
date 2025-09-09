@@ -2,7 +2,7 @@ import { db } from "../../db";
 import { chats, messages } from "../../db/schema";
 import { and, eq } from "drizzle-orm";
 import fs from "node:fs";
-import { getCreaAppPath } from "../../paths/paths";
+import { getScalixAppPath } from "../../paths/paths";
 import path from "node:path";
 import git from "isomorphic-git";
 import { safeJoin } from "../utils/path_utils";
@@ -20,12 +20,12 @@ import { gitCommit } from "../utils/git_utils";
 import { readSettings } from "@/main/settings";
 import { writeMigrationFile } from "../utils/file_utils";
 import {
-  getCreaWriteTags,
-  getCreaRenameTags,
-  getCreaDeleteTags,
-  getCreaAddDependencyTags,
-  getCreaExecuteSqlTags,
-} from "../utils/crea_tag_parser";
+  getScalixWriteTags,
+  getScalixRenameTags,
+  getScalixDeleteTags,
+  getScalixAddDependencyTags,
+  getScalixExecuteSqlTags,
+} from "../utils/scalix_tag_parser";
 import { storeDbTimestampAtCurrentVersion } from "../utils/neon_timestamp_utils";
 
 import { FileUploadsState } from "../utils/file_uploads_state";
@@ -100,7 +100,7 @@ export async function processFullResponseActions(
   }
 
   const settings: UserSettings = readSettings();
-  const appPath = getCreaAppPath(chatWithApp.app.path);
+  const appPath = getScalixAppPath(chatWithApp.app.path);
   const writtenFiles: string[] = [];
   const renamedFiles: string[] = [];
   const deletedFiles: string[] = [];
@@ -111,12 +111,12 @@ export async function processFullResponseActions(
 
   try {
     // Extract all tags
-    const creaWriteTags = getCreaWriteTags(fullResponse);
-    const creaRenameTags = getCreaRenameTags(fullResponse);
-    const creaDeletePaths = getCreaDeleteTags(fullResponse);
-    const creaAddDependencyPackages = getCreaAddDependencyTags(fullResponse);
-    const creaExecuteSqlQueries = chatWithApp.app.supabaseProjectId
-      ? getCreaExecuteSqlTags(fullResponse)
+    const scalixWriteTags = getScalixWriteTags(fullResponse);
+    const scalixRenameTags = getScalixRenameTags(fullResponse);
+    const scalixDeletePaths = getScalixDeleteTags(fullResponse);
+    const scalixAddDependencyPackages = getScalixAddDependencyTags(fullResponse);
+    const scalixExecuteSqlQueries = chatWithApp.app.supabaseProjectId
+      ? getScalixExecuteSqlTags(fullResponse)
       : [];
 
     const message = await db.query.messages.findFirst({
@@ -133,8 +133,8 @@ export async function processFullResponseActions(
     }
 
     // Handle SQL execution tags
-    if (creaExecuteSqlQueries.length > 0) {
-      for (const query of creaExecuteSqlQueries) {
+    if (scalixExecuteSqlQueries.length > 0) {
+      for (const query of scalixExecuteSqlQueries) {
         try {
           await executeSupabaseSql({
             supabaseProjectId: chatWithApp.app.supabaseProjectId!,
@@ -164,20 +164,20 @@ export async function processFullResponseActions(
           });
         }
       }
-      logger.log(`Executed ${creaExecuteSqlQueries.length} SQL queries`);
+      logger.log(`Executed ${scalixExecuteSqlQueries.length} SQL queries`);
     }
 
     // TODO: Handle add dependency tags
-    if (creaAddDependencyPackages.length > 0) {
+    if (scalixAddDependencyPackages.length > 0) {
       try {
         await executeAddDependency({
-          packages: creaAddDependencyPackages,
+          packages: scalixAddDependencyPackages,
           message: message,
           appPath,
         });
       } catch (error) {
         errors.push({
-          message: `Failed to add dependencies: ${creaAddDependencyPackages.join(
+          message: `Failed to add dependencies: ${scalixAddDependencyPackages.join(
             ", ",
           )}`,
           error: error,
@@ -207,7 +207,7 @@ export async function processFullResponseActions(
     //////////////////////
 
     // Process all file deletions
-    for (const filePath of creaDeletePaths) {
+    for (const filePath of scalixDeletePaths) {
       const fullFilePath = safeJoin(appPath, filePath);
 
       // Delete the file if it exists
@@ -250,7 +250,7 @@ export async function processFullResponseActions(
     }
 
     // Process all file renames
-    for (const tag of creaRenameTags) {
+    for (const tag of scalixRenameTags) {
       const fromPath = safeJoin(appPath, tag.from);
       const toPath = safeJoin(appPath, tag.to);
 
@@ -313,7 +313,7 @@ export async function processFullResponseActions(
     }
 
     // Process all file writes
-    for (const tag of creaWriteTags) {
+    for (const tag of scalixWriteTags) {
       const filePath = tag.path;
       let content: string | Buffer = tag.content;
       const fullFilePath = safeJoin(appPath, filePath);
@@ -371,7 +371,7 @@ export async function processFullResponseActions(
       writtenFiles.length > 0 ||
       renamedFiles.length > 0 ||
       deletedFiles.length > 0 ||
-      creaAddDependencyPackages.length > 0;
+      scalixAddDependencyPackages.length > 0;
 
     let uncommittedFiles: string[] = [];
     let extraFilesError: string | undefined;
@@ -394,16 +394,16 @@ export async function processFullResponseActions(
         changes.push(`renamed ${renamedFiles.length} file(s)`);
       if (deletedFiles.length > 0)
         changes.push(`deleted ${deletedFiles.length} file(s)`);
-      if (creaAddDependencyPackages.length > 0)
+      if (scalixAddDependencyPackages.length > 0)
         changes.push(
-          `added ${creaAddDependencyPackages.join(", ")} package(s)`,
+          `added ${scalixAddDependencyPackages.join(", ")} package(s)`,
         );
-      if (creaExecuteSqlQueries.length > 0)
-        changes.push(`executed ${creaExecuteSqlQueries.length} SQL queries`);
+      if (scalixExecuteSqlQueries.length > 0)
+        changes.push(`executed ${scalixExecuteSqlQueries.length} SQL queries`);
 
       let message = chatSummary
-        ? `[crea] ${chatSummary} - ${changes.join(", ")}`
-        : `[crea] ${changes.join(", ")}`;
+        ? `[scalix] ${chatSummary} - ${changes.join(", ")}`
+        : `[scalix] ${changes.join(", ")}`;
       // Use chat summary, if provided, or default for commit message
       let commitHash = await gitCommit({
         path: appPath,
@@ -427,17 +427,17 @@ export async function processFullResponseActions(
         try {
           commitHash = await gitCommit({
             path: appPath,
-            message: message + " + extra files edited outside of Crea",
+            message: message + " + extra files edited outside of Scalix",
             amend: true,
           });
           logger.log(
-            `Amend commit with changes outside of crea: ${uncommittedFiles.join(", ")}`,
+            `Amend commit with changes outside of scalix: ${uncommittedFiles.join(", ")}`,
           );
         } catch (error) {
           // Just log, but don't throw an error because the user can still
-          // commit these changes outside of Crea if needed.
+          // commit these changes outside of Scalix if needed.
           logger.error(
-            `Failed to commit changes outside of crea: ${uncommittedFiles.join(
+            `Failed to commit changes outside of scalix: ${uncommittedFiles.join(
               ", ",
             )}`,
           );
@@ -475,13 +475,13 @@ export async function processFullResponseActions(
     ${warnings
       .map(
         (warning) =>
-          `<crea-output type="warning" message="${warning.message}">${warning.error}</crea-output>`,
+          `<scalix-output type="warning" message="${warning.message}">${warning.error}</scalix-output>`,
       )
       .join("\n")}
     ${errors
       .map(
         (error) =>
-          `<crea-output type="error" message="${error.message}">${error.error}</crea-output>`,
+          `<scalix-output type="error" message="${error.message}">${error.error}</scalix-output>`,
       )
       .join("\n")}
     `;

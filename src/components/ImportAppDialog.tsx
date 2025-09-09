@@ -104,7 +104,7 @@ export function ImportAppDialog({ isOpen, onClose }: ImportAppDialogProps) {
     onSuccess: async (result) => {
       showSuccess(
         !hasAiRules
-          ? "App imported successfully. Crea will automatically generate an AI_RULES.md now."
+          ? "App imported successfully. Scalix will automatically generate an AI_RULES.md now."
           : "App imported successfully",
       );
       onClose();
@@ -162,7 +162,7 @@ export function ImportAppDialog({ isOpen, onClose }: ImportAppDialogProps) {
         <DialogHeader>
           <DialogTitle>Import App</DialogTitle>
           <DialogDescription>
-            Select an existing app folder to import into Crea.
+            Select an existing app folder to import into Scalix.
           </DialogDescription>
         </DialogHeader>
 
@@ -281,14 +281,14 @@ export function ImportAppDialog({ isOpen, onClose }: ImportAppDialogProps) {
                       </TooltipTrigger>
                       <TooltipContent>
                         <p>
-                          AI_RULES.md lets Crea know which tech stack to use for
+                          AI_RULES.md lets Scalix know which tech stack to use for
                           editing the app
                         </p>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
                   <AlertDescription>
-                    No AI_RULES.md found. Crea will automatically generate one
+                    No AI_RULES.md found. Scalix will automatically generate one
                     after importing.
                   </AlertDescription>
                 </Alert>

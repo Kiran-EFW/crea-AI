@@ -240,8 +240,8 @@ export class IpcClient {
     return IpcClient.instance;
   }
 
-  public async restartCrea(): Promise<void> {
-    await this.ipcRenderer.invoke("restart-crea");
+  public async restartScalix(): Promise<void> {
+    await this.ipcRenderer.invoke("restart-scalix");
   }
 
   public async reloadEnvPath(): Promise<void> {

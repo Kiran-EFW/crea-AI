@@ -4,7 +4,7 @@ import { AppUpgrade } from "../ipc_types";
 import { db } from "../../db";
 import { apps } from "../../db/schema";
 import { eq } from "drizzle-orm";
-import { getCreaAppPath } from "../../paths/paths";
+import { getScalixAppPath } from "../../paths/paths";
 import fs from "node:fs";
 import path from "node:path";
 import { spawn } from "node:child_process";
@@ -19,15 +19,15 @@ const availableUpgrades: Omit<AppUpgrade, "isNeeded">[] = [
     id: "component-tagger",
     title: "Enable select component to edit",
     description:
-      "Installs the Crea component tagger Vite plugin and its dependencies.",
-    manualUpgradeUrl: "https://crea.ai/docs/upgrades/select-component",
+      "Installs the Scalix component tagger Vite plugin and its dependencies.",
+    manualUpgradeUrl: "https://scalix.world/docs/upgrades/select-component",
   },
   {
     id: "capacitor",
     title: "Upgrade to hybrid mobile app with Capacitor",
     description:
       "Adds Capacitor to your app lets it run on iOS and Android in addition to the web.",
-    manualUpgradeUrl: "https://crea.ai/docs/guides/mobile-app#upgrade-your-app",
+    manualUpgradeUrl: "https://scalix.world/docs/guides/mobile-app#upgrade-your-app",
   },
 ];
 
@@ -63,7 +63,7 @@ function isComponentTaggerUpgradeNeeded(appPath: string): boolean {
 
   try {
     const viteConfigContent = fs.readFileSync(viteConfigPath, "utf-8");
-    return !viteConfigContent.includes("@crea-ai/react-vite-component-tagger");
+    return !viteConfigContent.includes("@scalix-ai/react-vite-component-tagger");
   } catch (e) {
     logger.error("Error reading vite config", e);
     return false;
@@ -111,7 +111,7 @@ async function applyComponentTagger(appPath: string) {
   // Add import statement if not present
   if (
     !content.includes(
-      "import creaComponentTagger from '@crea-ai/react-vite-component-tagger';",
+      "import scalixComponentTagger from '@scalix-ai/react-vite-component-tagger';",
     )
   ) {
     // Add it after the last import statement
@@ -126,17 +126,17 @@ async function applyComponentTagger(appPath: string) {
     lines.splice(
       lastImportIndex + 1,
       0,
-      "import creaComponentTagger from '@crea-ai/react-vite-component-tagger';",
+      "import scalixComponentTagger from '@scalix-ai/react-vite-component-tagger';",
     );
     content = lines.join("\n");
   }
 
   // Add plugin to plugins array
   if (content.includes("plugins: [")) {
-    if (!content.includes("creaComponentTagger()")) {
+    if (!content.includes("scalixComponentTagger()")) {
       content = content.replace(
         "plugins: [",
-        "plugins: [creaComponentTagger(), ",
+        "plugins: [scalixComponentTagger(), ",
       );
     }
   } else {
@@ -151,7 +151,7 @@ async function applyComponentTagger(appPath: string) {
   await new Promise<void>((resolve, reject) => {
     logger.info("Installing component-tagger dependency");
     // Temporarily skip component tagger installation due to unpublished package
-    logger.warn("Skipping @crea-ai/react-vite-component-tagger installation - package not published yet");
+    logger.warn("Skipping @scalix-ai/react-vite-component-tagger installation - package not published yet");
     // TODO: Re-enable when package is published to npm
 
     // For now, just resolve immediately without installing the package
@@ -165,7 +165,7 @@ async function applyComponentTagger(appPath: string) {
     await gitAddAll({ path: appPath });
     await gitCommit({
       path: appPath,
-      message: "[crea] add Crea component tagger",
+      message: "[scalix] add Scalix component tagger",
     });
     logger.info("Successfully committed changes");
   } catch (err) {
@@ -214,7 +214,7 @@ async function applyCapacitor({
     await gitAddAll({ path: appPath });
     await gitCommit({
       path: appPath,
-      message: "[crea] add Capacitor for mobile app support",
+      message: "[scalix] add Capacitor for mobile app support",
     });
     logger.info("Successfully committed Capacitor changes");
   } catch (err) {
@@ -234,7 +234,7 @@ export function registerAppUpgradeHandlers() {
     "get-app-upgrades",
     async (_, { appId }: { appId: number }): Promise<AppUpgrade[]> => {
       const app = await getApp(appId);
-      const appPath = getCreaAppPath(app.path);
+      const appPath = getScalixAppPath(app.path);
 
       const upgradesWithStatus = availableUpgrades.map((upgrade) => {
         let isNeeded = false;
@@ -258,7 +258,7 @@ export function registerAppUpgradeHandlers() {
       }
 
       const app = await getApp(appId);
-      const appPath = getCreaAppPath(app.path);
+      const appPath = getScalixAppPath(app.path);
 
       if (upgradeId === "component-tagger") {
         await applyComponentTagger(appPath);

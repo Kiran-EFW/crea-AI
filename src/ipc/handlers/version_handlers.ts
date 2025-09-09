@@ -9,7 +9,7 @@ import type {
 } from "../ipc_types";
 import fs from "node:fs";
 import path from "node:path";
-import { getCreaAppPath } from "../../paths/paths";
+import { getScalixAppPath } from "../../paths/paths";
 import git, { type ReadCommitResult } from "isomorphic-git";
 import { withLock } from "../utils/lock_utils";
 import log from "electron-log";
@@ -72,7 +72,7 @@ export function registerVersionHandlers() {
       return [];
     }
 
-    const appPath = getCreaAppPath(app.path);
+    const appPath = getScalixAppPath(app.path);
 
     // Just return an empty array if the app is not a git repo.
     if (!fs.existsSync(path.join(appPath, ".git"))) {
@@ -125,7 +125,7 @@ export function registerVersionHandlers() {
         throw new Error("App not found");
       }
 
-      const appPath = getCreaAppPath(app.path);
+      const appPath = getScalixAppPath(app.path);
 
       // Return appropriate result if the app is not a git repo
       if (!fs.existsSync(path.join(appPath, ".git"))) {
@@ -166,7 +166,7 @@ export function registerVersionHandlers() {
           throw new Error("App not found");
         }
 
-        const appPath = getCreaAppPath(app.path);
+        const appPath = getScalixAppPath(app.path);
         // Get the current commit hash before reverting
         const currentCommitHash = await git.resolveRef({
           fs,
@@ -397,7 +397,7 @@ export function registerVersionHandlers() {
             }
           }
         }
-        const fullAppPath = getCreaAppPath(app.path);
+        const fullAppPath = getScalixAppPath(app.path);
         await gitCheckout({
           path: fullAppPath,
           ref: gitRef,

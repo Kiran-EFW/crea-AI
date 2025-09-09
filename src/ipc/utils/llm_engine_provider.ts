@@ -8,7 +8,7 @@ import {
 import log from "electron-log";
 import { getExtraProviderOptions } from "./thinking_utils";
 import type { UserSettings } from "../../lib/schemas";
-import { createCreaAuthHeaders, loadCreaApiKey, CREA_API_ENDPOINTS } from "./crea_auth";
+import { createScalixAuthHeaders, loadScalixApiKey, SCALIX_API_ENDPOINTS } from "./scalix_auth";
 
 const logger = log.scope("llm_engine_provider");
 
@@ -41,7 +41,7 @@ or to provide a custom fetch implementation for e.g. testing.
   fetch?: FetchFunction;
 
   originalProviderId: string;
-  creaOptions: {
+  scalixOptions: {
     enableLazyEdits?: boolean;
     enableSmartFilesContext?: boolean;
     smartContextMode?: "balanced";
@@ -49,7 +49,7 @@ or to provide a custom fetch implementation for e.g. testing.
   settings: UserSettings;
 }
 
-export interface CreaEngineProvider {
+export interface ScalixEngineProvider {
   /**
 Creates a model for text generation.
 */
@@ -64,18 +64,18 @@ Creates a chat model for text generation.
   ): LanguageModel;
 }
 
-export function createCreaEngine(
+export function createScalixEngine(
   options: ExampleProviderSettings,
-): CreaEngineProvider {
+): ScalixEngineProvider {
   const baseURL = withoutTrailingSlash(options.baseURL);
-  logger.info("creating crea engine with baseURL", baseURL);
+  logger.info("creating scalix engine with baseURL", baseURL);
 
   // Track request ID attempts
   const requestIdAttempts = new Map<string, number>();
 
   const getHeaders = () => {
     try {
-      const authHeaders = createCreaAuthHeaders({
+      const authHeaders = createScalixAuthHeaders({
         apiKey: options.apiKey,
       });
 
@@ -84,7 +84,7 @@ export function createCreaEngine(
         ...options.headers,
       };
     } catch (error) {
-      logger.error("Failed to create Crea authentication headers:", error);
+      logger.error("Failed to create Scalix authentication headers:", error);
       throw error;
     }
   };
@@ -97,10 +97,10 @@ export function createCreaEngine(
   }
 
   const getCommonModelConfig = (): CommonModelConfig => ({
-    provider: `crea-engine`,
+    provider: `scalix-engine`,
     url: ({ path }) => {
-      // Use Crea Engine endpoint if not overridden
-      const endpointUrl = baseURL || CREA_API_ENDPOINTS.ENGINE;
+      // Use Scalix Engine endpoint if not overridden
+      const endpointUrl = baseURL || SCALIX_API_ENDPOINTS.ENGINE;
       const url = new URL(`${endpointUrl}${path}`);
       if (options.queryParams) {
         url.search = new URLSearchParams(options.queryParams).toString();
@@ -139,9 +139,9 @@ export function createCreaEngine(
               options.settings,
             ),
           };
-          const requestId = parsedBody.creaRequestId;
-          if ("creaRequestId" in parsedBody) {
-            delete parsedBody.creaRequestId;
+          const requestId = parsedBody.scalixRequestId;
+          if ("scalixRequestId" in parsedBody) {
+            delete parsedBody.scalixRequestId;
           }
 
           // Track and modify requestId with attempt number
@@ -154,12 +154,12 @@ export function createCreaEngine(
 
           // Add files to the request if they exist
           if (files?.length) {
-            parsedBody.crea_options = {
+            parsedBody.scalix_options = {
               files,
-              enable_lazy_edits: options.creaOptions.enableLazyEdits,
+              enable_lazy_edits: options.scalixOptions.enableLazyEdits,
               enable_smart_files_context:
-                options.creaOptions.enableSmartFilesContext,
-              smart_context_mode: options.creaOptions.smartContextMode,
+                options.scalixOptions.enableSmartFilesContext,
+              smart_context_mode: options.scalixOptions.smartContextMode,
             };
           }
 
@@ -169,7 +169,7 @@ export function createCreaEngine(
             headers: {
               ...init.headers,
               ...(modifiedRequestId && {
-                "X-Crea-Request-Id": modifiedRequestId,
+                "X-Scalix-Request-Id": modifiedRequestId,
               }),
             },
             body: JSON.stringify(parsedBody),

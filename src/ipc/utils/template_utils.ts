@@ -51,11 +51,11 @@ export async function fetchApiTemplates(forceRefresh: boolean = false): Promise<
   // Start new fetch
   apiTemplatesFetchPromise = (async (): Promise<Template[]> => {
     try {
-      const response = await fetch("https://api.crea.ai/v1/templates", {
+      const response = await fetch("https://api.scalix.world/v1/templates", {
         headers: {
           "Content-Type": "application/json",
-          "X-Crea-Client": "desktop-app",
-          "X-Crea-Version": process.env.npm_package_version || "1.0.0",
+          "X-Scalix-Client": "desktop-app",
+          "X-Scalix-Version": process.env.npm_package_version || "1.0.0",
         },
       });
       if (!response.ok) {

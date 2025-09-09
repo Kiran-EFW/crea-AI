@@ -2,21 +2,21 @@ import { normalizePath } from "../../../shared/normalizePath";
 import log from "electron-log";
 import { SqlQuery } from "../../lib/schemas";
 
-const logger = log.scope("crea_tag_parser");
+const logger = log.scope("scalix_tag_parser");
 
-export function getCreaWriteTags(fullResponse: string): {
+export function getScalixWriteTags(fullResponse: string): {
   path: string;
   content: string;
   description?: string;
 }[] {
-  const creaWriteRegex = /<crea-write([^>]*)>([\s\S]*?)<\/crea-write>/gi;
+  const scalixWriteRegex = /<scalix-write([^>]*)>([\s\S]*?)<\/scalix-write>/gi;
   const pathRegex = /path="([^"]+)"/;
   const descriptionRegex = /description="([^"]+)"/;
 
   let match;
   const tags: { path: string; content: string; description?: string }[] = [];
 
-  while ((match = creaWriteRegex.exec(fullResponse)) !== null) {
+  while ((match = scalixWriteRegex.exec(fullResponse)) !== null) {
     const attributesString = match[1];
     let content = match[2].trim();
 
@@ -39,7 +39,7 @@ export function getCreaWriteTags(fullResponse: string): {
       tags.push({ path: normalizePath(path), content, description });
     } else {
       logger.warn(
-        "Found <crea-write> tag without a valid 'path' attribute:",
+        "Found <scalix-write> tag without a valid 'path' attribute:",
         match[0],
       );
     }
@@ -47,15 +47,15 @@ export function getCreaWriteTags(fullResponse: string): {
   return tags;
 }
 
-export function getCreaRenameTags(fullResponse: string): {
+export function getScalixRenameTags(fullResponse: string): {
   from: string;
   to: string;
 }[] {
-  const creaRenameRegex =
-    /<crea-rename from="([^"]+)" to="([^"]+)"[^>]*>([\s\S]*?)<\/crea-rename>/g;
+  const scalixRenameRegex =
+    /<scalix-rename from="([^"]+)" to="([^"]+)"[^>]*>([\s\S]*?)<\/scalix-rename>/g;
   let match;
   const tags: { from: string; to: string }[] = [];
-  while ((match = creaRenameRegex.exec(fullResponse)) !== null) {
+  while ((match = scalixRenameRegex.exec(fullResponse)) !== null) {
     tags.push({
       from: normalizePath(match[1]),
       to: normalizePath(match[2]),
@@ -64,46 +64,46 @@ export function getCreaRenameTags(fullResponse: string): {
   return tags;
 }
 
-export function getCreaDeleteTags(fullResponse: string): string[] {
-  const creaDeleteRegex =
-    /<crea-delete path="([^"]+)"[^>]*>([\s\S]*?)<\/crea-delete>/g;
+export function getScalixDeleteTags(fullResponse: string): string[] {
+  const scalixDeleteRegex =
+    /<scalix-delete path="([^"]+)"[^>]*>([\s\S]*?)<\/scalix-delete>/g;
   let match;
   const paths: string[] = [];
-  while ((match = creaDeleteRegex.exec(fullResponse)) !== null) {
+  while ((match = scalixDeleteRegex.exec(fullResponse)) !== null) {
     paths.push(normalizePath(match[1]));
   }
   return paths;
 }
 
-export function getCreaAddDependencyTags(fullResponse: string): string[] {
-  const creaAddDependencyRegex =
-    /<crea-add-dependency packages="([^"]+)">[^<]*<\/crea-add-dependency>/g;
+export function getScalixAddDependencyTags(fullResponse: string): string[] {
+  const scalixAddDependencyRegex =
+    /<scalix-add-dependency packages="([^"]+)">[^<]*<\/scalix-add-dependency>/g;
   let match;
   const packages: string[] = [];
-  while ((match = creaAddDependencyRegex.exec(fullResponse)) !== null) {
+  while ((match = scalixAddDependencyRegex.exec(fullResponse)) !== null) {
     packages.push(...match[1].split(" "));
   }
   return packages;
 }
 
-export function getCreaChatSummaryTag(fullResponse: string): string | null {
-  const creaChatSummaryRegex =
-    /<crea-chat-summary>([\s\S]*?)<\/crea-chat-summary>/g;
-  const match = creaChatSummaryRegex.exec(fullResponse);
+export function getScalixChatSummaryTag(fullResponse: string): string | null {
+  const scalixChatSummaryRegex =
+    /<scalix-chat-summary>([\s\S]*?)<\/scalix-chat-summary>/g;
+  const match = scalixChatSummaryRegex.exec(fullResponse);
   if (match && match[1]) {
     return match[1].trim();
   }
   return null;
 }
 
-export function getCreaExecuteSqlTags(fullResponse: string): SqlQuery[] {
-  const creaExecuteSqlRegex =
-    /<crea-execute-sql([^>]*)>([\s\S]*?)<\/crea-execute-sql>/g;
+export function getScalixExecuteSqlTags(fullResponse: string): SqlQuery[] {
+  const scalixExecuteSqlRegex =
+    /<scalix-execute-sql([^>]*)>([\s\S]*?)<\/scalix-execute-sql>/g;
   const descriptionRegex = /description="([^"]+)"/;
   let match;
   const queries: { content: string; description?: string }[] = [];
 
-  while ((match = creaExecuteSqlRegex.exec(fullResponse)) !== null) {
+  while ((match = scalixExecuteSqlRegex.exec(fullResponse)) !== null) {
     const attributesString = match[1] || "";
     let content = match[2].trim();
     const descriptionMatch = descriptionRegex.exec(attributesString);
@@ -125,13 +125,13 @@ export function getCreaExecuteSqlTags(fullResponse: string): SqlQuery[] {
   return queries;
 }
 
-export function getCreaCommandTags(fullResponse: string): string[] {
-  const creaCommandRegex =
-    /<crea-command type="([^"]+)"[^>]*><\/crea-command>/g;
+export function getScalixCommandTags(fullResponse: string): string[] {
+  const scalixCommandRegex =
+    /<scalix-command type="([^"]+)"[^>]*><\/scalix-command>/g;
   let match;
   const commands: string[] = [];
 
-  while ((match = creaCommandRegex.exec(fullResponse)) !== null) {
+  while ((match = scalixCommandRegex.exec(fullResponse)) !== null) {
     commands.push(match[1]);
   }
 

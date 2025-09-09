@@ -77,7 +77,7 @@ export function SentryConnector() {
               await IpcClient.getInstance().fakeHandleSentryConnect();
             } else {
               await IpcClient.getInstance().openExternalUrl(
-                "https://oauth.crea.sh/api/integrations/sentry/login",
+                "https://oauth.scalix.world/api/integrations/sentry/login",
               );
             }
           }}
