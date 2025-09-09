@@ -770,11 +770,11 @@ This conversation includes one or more image attachments. When the user uploads 
           if (
             !abortController.signal.aborted &&
             settings.selectedChatMode !== "ask" &&
-            hasUnclosedCreaWrite(fullResponse)
+            hasUnclosedScalixWrite(fullResponse)
           ) {
             let continuationAttempts = 0;
             while (
-              hasUnclosedCreaWrite(fullResponse) &&
+              hasUnclosedScalixWrite(fullResponse) &&
               continuationAttempts < 2 &&
               !abortController.signal.aborted
             ) {

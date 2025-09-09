@@ -26,7 +26,7 @@ const nextConfig: NextConfig = {
         test: /\.(jsx|tsx)$/,
         exclude: /node_modules/,
         enforce: "pre",
-          use: "@scalix-ai/nextjs-webpack-component-tagger",
+        use: "@crea-ai/nextjs-webpack-component-tagger",
       });
     }
     return config;
@@ -36,20 +36,20 @@ const nextConfig: NextConfig = {
 export default nextConfig;
 ```
 
-The loader will automatically add `data-scalix-id` and `data-scalix-name` to all your React components.
+The loader will automatically add `data-crea-id` and `data-crea-name` to all your React components.
 
-The `data-scalix-id` will be a unique identifier for each component instance, in the format `path/to/file.tsx:line:column`.
+The `data-crea-id` will be a unique identifier for each component instance, in the format `path/to/file.tsx:line:column`.
 
-The `data-scalix-name` will be the name of the component.
+The `data-crea-name` will be the name of the component.
 
 ## Testing & Publishing
 
-  Bump it to an alpha version and test in Scalix app, eg. `"version": "0.0.1-alpha.0",`
+Bump it to an alpha version and test in Crea app, eg. `"version": "0.0.1-alpha.0",`
 
 Then publish it:
 
 ```sh
-cd packages/@scalix-ai/nextjs-webpack-component-tagger/ && npm run prepublishOnly && npm publish
+cd packages/@crea-ai/nextjs-webpack-component-tagger/ && npm run prepublishOnly && npm publish
 ```
 
 Update the package version in the nextjs-template repo in your personal fork.
@@ -62,4 +62,4 @@ githubUrl: "https://github.com/kirankailas/nextjs-template",
 
 Run the E2E tests and make sure it passes.
 
-  Then, bump to a normal version, e.g. "0.1.0" and then re-publish. We'll try to match the main Scalix app version where possible.
+Then, bump to a normal version, e.g. "0.1.0" and then re-publish. We'll try to match the main Crea app version where possible.
